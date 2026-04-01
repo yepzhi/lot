@@ -8,6 +8,8 @@
 <meta name="description" content="Marketplace de clasificados en Hermosillo y México. Carros, teléfonos, servicios y más.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<script src="/visitors/tracker.js"></script>
+<script src="lang.js"></script>
 <style>
 :root{--bg:#050810;--glass:rgba(255,255,255,0.05);--glass-border:rgba(255,255,255,0.10);--glass-hover:rgba(255,255,255,0.09);--accent:#7DF9FF;--accent2:#FF6BF8;--accent3:#FFD166;--text:#F0F4FF;--muted:rgba(240,244,255,0.45);--card-shadow:0 8px 32px rgba(0,0,0,0.45);--blur:blur(18px);--r:18px;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -22,14 +24,20 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
 .wrapper{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:0 24px}
 header{position:sticky;top:0;z-index:100;background:rgba(5,8,16,.65);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-bottom:1px solid var(--glass-border)}
 .header-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;max-width:1280px;margin:0 auto}
-.logo{font-family:var(--font-head);font-size:26px;font-weight:800;letter-spacing:-1px;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none;cursor:pointer}
+.header-right{display:flex;align-items:center;gap:12px}
+.lang-switch{display:flex;gap:4px;font-size:11px;font-weight:700;color:var(--muted);cursor:pointer;user-select:none}
+.lang-btn{transition:opacity .2s}
+.lang-btn:hover{opacity:1!important;color:var(--text)}
+.btn-myads{background:rgba(255,255,255,0.05);color:var(--text);border:1px solid var(--glass-border);padding:6px 12px;border-radius:50px;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;}
+.btn-myads:hover{background:rgba(255,255,255,0.1);border-color:var(--accent);color:var(--accent)}
+.logo{font-family:var(--font-head);font-size:26px;font-weight:800;letter-spacing:-1px;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none;cursor:pointer}
 .logo span{color:var(--muted);-webkit-text-fill-color:var(--muted);font-weight:400;font-size:13px;margin-left:4px}
-.btn-post{flex-shrink:0;padding:10px 22px;border-radius:50px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#050810;font-family:var(--font-head);font-weight:700;font-size:13px;border:none;cursor:pointer;box-shadow:0 0 20px rgba(125,249,255,.3);transition:transform .15s,box-shadow .15s;white-space:nowrap}
-.btn-post:hover{transform:scale(1.04);box-shadow:0 0 30px rgba(125,249,255,.5)}
+.btn-post{flex-shrink:0;padding:10px 22px;border-radius:50px;background:linear-gradient(135deg,#FF3366,#FF0033);color:#fff;font-family:var(--font-head);font-weight:700;font-size:13px;border:none;cursor:pointer;box-shadow:0 0 20px rgba(255,51,102,.3);transition:transform .15s,box-shadow .15s;white-space:nowrap}
+.btn-post:hover{transform:scale(1.04);box-shadow:0 0 30px rgba(255,51,102,.5)}
 .hero{padding:64px 0 32px;text-align:center}
 .hero-tag{display:inline-block;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--accent);border:1px solid rgba(125,249,255,.3);padding:4px 14px;border-radius:50px;background:rgba(125,249,255,.07);margin-bottom:20px;animation:fadeUp .6s ease both}
 .hero h1{font-family:var(--font-head);font-size:clamp(36px,6vw,72px);font-weight:800;line-height:1.05;letter-spacing:-2px;animation:fadeUp .6s .1s ease both}
-.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .hero p{color:var(--muted);font-size:16px;margin-top:14px;animation:fadeUp .6s .2s ease both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 .hero-search-wrap{margin:24px auto 0;max-width:500px;animation:fadeUp .6s .25s ease both}
@@ -38,14 +46,14 @@ header{position:sticky;top:0;z-index:100;background:rgba(5,8,16,.65);backdrop-fi
 .search-bar input:focus{border-color:var(--accent);background:rgba(125,249,255,.06);box-shadow:0 0 0 3px rgba(125,249,255,.08)}
 .search-bar input::placeholder{color:var(--muted)}
 .search-bar .ic{position:absolute;left:17px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
-.section-label{font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;padding:0 2px}
-.cats-grid{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px}
+.section-label{font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;padding:0 2px;text-align:center;}
+.cats-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:12px}
 .cat-pill{display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:50px;background:var(--glass);border:1px solid var(--glass-border);backdrop-filter:var(--blur);cursor:pointer;transition:all .2s;font-size:13px;font-weight:500;color:var(--text);user-select:none}
 .cat-pill:hover,.cat-pill.active{background:var(--glass-hover);border-color:var(--accent);color:var(--accent);box-shadow:0 0 16px rgba(125,249,255,.15)}
 .cat-pill .icon{font-size:16px}
 .cat-count{font-size:10px;background:rgba(255,255,255,.1);padding:1px 7px;border-radius:20px;color:var(--muted)}
 .cat-pill.active .cat-count{background:rgba(125,249,255,.2);color:var(--accent)}
-.otros-drawer{display:none;flex-wrap:wrap;gap:8px;background:rgba(12,16,30,.7);border:1px solid var(--glass-border);border-radius:14px;padding:14px 16px;margin-top:-32px;margin-bottom:20px;backdrop-filter:var(--blur);animation:fadeUp .2s ease both}
+.otros-drawer{display:none;flex-wrap:wrap;justify-content:center;gap:8px;background:rgba(12,16,30,.7);border:1px solid var(--glass-border);border-radius:14px;padding:14px 16px;margin-top:-32px;margin-bottom:20px;backdrop-filter:var(--blur);animation:fadeUp .2s ease both}
 .otros-drawer.open{display:flex}
 .otros-drawer-label{width:100%;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
 .otros-sub{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:50px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);cursor:pointer;font-size:12px;font-weight:500;color:var(--muted);transition:all .15s;user-select:none}
@@ -68,7 +76,7 @@ header{position:sticky;top:0;z-index:100;background:rgba(5,8,16,.65);backdrop-fi
 .card-body{padding:14px 16px 16px}
 .card-price{font-family:var(--font-head);font-size:20px;font-weight:700;color:var(--accent);margin-bottom:4px}
 .card-price.free{color:#A8FF78}
-.card-title{font-size:14px;font-weight:500;line-height:1.4;margin-bottom:8px;color:var(--text);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card-title{font-size:14px;font-weight:500;line-height:1.4;margin-bottom:8px;color:var(--text);display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .card-meta{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--muted)}
 .card-fav{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;color:var(--muted);font-size:14px;transition:color .2s,background .2s;z-index:2}
 .card-fav:hover,.card-fav.active{color:var(--accent2);background:rgba(255,107,248,.15)}
@@ -86,10 +94,10 @@ header{position:sticky;top:0;z-index:100;background:rgba(5,8,16,.65);backdrop-fi
 .modal-close{position:absolute;top:18px;right:18px;width:34px;height:34px;border-radius:50%;background:var(--glass);border:1px solid var(--glass-border);color:var(--muted);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:color .2s,border-color .2s}
 .modal-close:hover{color:var(--text);border-color:var(--accent)}
 .modal h2{font-family:var(--font-head);font-size:22px;font-weight:700;margin-bottom:24px;letter-spacing:-.5px}
-.modal h2 em{font-style:normal;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.modal h2 em{font-style:normal;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .form-group{margin-bottom:18px}
 .form-group label{display:block;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
-.form-group input,.form-group select,.form-group textarea{width:100%;padding:11px 16px;background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;color:var(--text);font-family:var(--font-body);font-size:14px;outline:none;transition:border .2s,background .2s;-webkit-appearance:none}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:11px 16px;background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;color:var(--text);font-family:var(--font-body);font-size:14px;outline:none;transition:border .2s,background .2s;-webkit-appearance:none;appearance:none}
 .form-group select option{background:#0c101e}
 .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent);background:rgba(125,249,255,.04)}
 .form-group textarea{resize:vertical;min-height:90px}
@@ -108,8 +116,8 @@ header{position:sticky;top:0;z-index:100;background:rgba(5,8,16,.65);backdrop-fi
 /* Content warning */
 .content-warning{background:rgba(255,100,100,.08);border:1px solid rgba(255,100,100,.25);border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:12px;color:rgba(255,180,180,.9);display:flex;gap:10px;align-items:flex-start;line-height:1.5}
 .content-warning strong{color:#FF6B6B}
-.btn-submit{width:100%;padding:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#050810;font-family:var(--font-head);font-weight:700;font-size:15px;border:none;border-radius:14px;cursor:pointer;margin-top:8px;box-shadow:0 0 24px rgba(125,249,255,.25);transition:transform .15s,box-shadow .15s,opacity .2s;letter-spacing:.3px}
-.btn-submit:hover:not(:disabled){transform:scale(1.01);box-shadow:0 0 34px rgba(125,249,255,.4)}
+.btn-submit{width:100%;padding:14px;background:linear-gradient(135deg,#FF3366,#FF0033);color:#fff;font-family:var(--font-head);font-weight:700;font-size:15px;border:none;border-radius:14px;cursor:pointer;margin-top:8px;box-shadow:0 0 24px rgba(255,51,102,.25);transition:transform .15s,box-shadow .15s,opacity .2s;letter-spacing:.3px}
+.btn-submit:hover:not(:disabled){transform:scale(1.01);box-shadow:0 0 34px rgba(255,51,102,.4)}
 .btn-submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
 /* Detail */
 .detail-imgs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
@@ -127,9 +135,10 @@ header{position:sticky;top:0;z-index:100;background:rgba(5,8,16,.65);backdrop-fi
 .btn-share:hover{border-color:var(--accent);color:var(--accent)}
 .btn-report{background:none;border:none;color:rgba(255,100,100,.5);font-size:11px;cursor:pointer;padding:6px 0;width:100%;text-align:center;transition:color .2s}
 .btn-report:hover{color:#FF6B6B}
-footer{border-top:1px solid var(--glass-border);padding:24px;text-align:center;font-size:12px;color:var(--muted)}
-footer a{color:var(--accent);text-decoration:none}
-@media(max-width:640px){.hero{padding:44px 0 24px}.hero h1{font-size:38px}.modal{padding:8px 18px 40px}}
+footer{border-top:1px solid #111;background:#03050a;padding:32px 24px;text-align:center;font-size:12px;color:#666}
+footer a{color:#888;text-decoration:none;transition:color .2s}
+footer a:hover{color:var(--text)}
+@media(max-width:640px){.hero{padding:44px 0 24px}.hero h1{font-size:38px}.modal{padding:8px 18px 40px}.logo{font-size:34px}.logo span{font-size:15px}}
 ::-webkit-scrollbar{width:6px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:rgba(125,249,255,.2);border-radius:3px}
@@ -152,24 +161,30 @@ footer a{color:var(--accent);text-decoration:none}
 <header>
   <div class="header-inner">
     <a class="logo" id="logoBtn" href="https://yepzhi.com/lot/">LOT<span>by yepzhi</span></a>
-    <button class="btn-post" id="btnPost">+ Publicar</button>
+    <div class="header-right">
+      <div class="lang-switch">
+        <span class="lang-btn" data-lang="en" onclick="setLang('en')">EN</span> / <span class="lang-btn" data-lang="es" onclick="setLang('es')">ES</span>
+      </div>
+      <button class="btn-myads" onclick="openMyAds()" data-i18n="btn_my_ads">Mis Anuncios</button>
+      <button class="btn-post" id="btnPost" data-i18n="btn_post">+ Publicar</button>
+    </div>
   </div>
 </header>
 
 <div class="wrapper">
   <section class="hero">
-    <div class="hero-tag">✦ Marketplace Hermosillo &amp; México</div>
-    <h1>Compra. Vende.<br><em>Conecta.</em></h1>
-    <p>Anuncios actualizados en tiempo real — gratuito y sin registro.</p>
+    <div class="hero-tag" data-i18n="hero_tag">✦ Marketplace Hermosillo &amp; México</div>
+    <h1 data-i18n="hero_title">Compra. Vende.<br><em>Conecta.</em></h1>
+    <p data-i18n="hero_desc">Anuncios locales gratuitos. Trato directo sin intermediarios.<br>Las publicaciones duran automáticamente 6 meses.</p>
     <div class="hero-search-wrap">
       <div class="search-bar">
         <svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        <input type="text" id="searchInput" placeholder="Busca carros, iphones, servicios…" autocomplete="off">
+        <input type="text" id="searchInput" autocomplete="off" data-i18n="search_ph" placeholder="Busca carros, iphones, servicios…">
       </div>
     </div>
   </section>
 
-  <div class="section-label">Categorías</div>
+  <div class="section-label" data-i18n="lbl_cat">Categorías</div>
   <div class="cats-grid" id="catsGrid"></div>
   <div class="otros-drawer" id="otrosDrawer"></div>
 
@@ -180,24 +195,25 @@ footer a{color:var(--accent);text-decoration:none}
 </div>
 
 <footer>
-  <div>© 2025 <a href="https://yepzhi.com">yepzhi.com</a>/lot — Los anuncios son responsabilidad del publicante. <a href="#" onclick="reportGeneral()">Reportar contenido</a></div>
+  <div><span data-i18n="footer_text">© 2026, creado por yepzhi.com — Los anuncios son responsabilidad del publicante.</span> <a href="privacy.html" data-i18n="privacy">Aviso de privacidad</a>.</div>
 </footer>
+
 
 <!-- POST MODAL -->
 <div class="overlay" id="postOverlay">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('postOverlay')">✕</button>
-    <h2>Nuevo <em>Anuncio</em></h2>
+    <h2 data-i18n="post_title_new">Nuevo <em>Anuncio</em></h2>
 
     <div class="content-warning">
       <span>⚠️</span>
-      <div><strong>Aviso de contenido:</strong> Queda estrictamente prohibido publicar imágenes con desnudos, contenido sexual o violento. Las fotos pasan por verificación automática. Anuncios inapropiados serán eliminados y el número de WhatsApp bloqueado.</div>
+      <div><strong data-i18n="post_warn_title">Aviso de contenido:</strong> <span data-i18n="post_warning">Queda estrictamente prohibido publicar imágenes con desnudos, contenido sexual o violento. Las fotos pasan por verificación automática.</span></div>
     </div>
 
     <div class="form-group">
-      <label>Categoría</label>
+      <label data-i18n="lbl_cat">Categoría</label>
       <select id="postCat">
-        <option value="">— Selecciona —</option>
+        <option value="" data-i18n="opt_sel">— Selecciona —</option>
         <option value="carros">🚗 Carros</option>
         <option value="fiestas">🎉 Fiestas / Eventos</option>
         <option value="servicios">🔧 Servicios</option>
@@ -214,28 +230,28 @@ footer a{color:var(--accent);text-decoration:none}
     </div>
 
     <div class="form-group">
-      <label>Título del anuncio</label>
-      <input type="text" id="postTitle" placeholder="Ej: iPhone 15 Pro 256GB negro" maxlength="80">
+      <label data-i18n="lbl_title">Título del anuncio</label>
+      <input type="text" id="postTitle" data-i18n="ph_title" placeholder="Ej: iPhone 15 Pro 256GB negro" maxlength="80">
     </div>
 
     <div class="price-row">
       <div class="form-group">
-        <label>Precio (MXN) — 0 = Gratis</label>
+        <label data-i18n="lbl_price">Precio (MXN) — 0 = Gratis</label>
         <input type="number" id="postPrice" placeholder="0" min="0">
       </div>
       <div class="form-group">
-        <label>Ciudad</label>
-        <input type="text" id="postCity" placeholder="Hermosillo, Son." maxlength="40">
+        <label data-i18n="lbl_city">Ciudad</label>
+        <input type="text" id="postCity" data-i18n="ph_city" placeholder="Hermosillo, Son." maxlength="40">
       </div>
     </div>
 
     <div class="form-group">
-      <label>Descripción</label>
-      <textarea id="postDesc" placeholder="Describe el artículo, estado, detalles…" maxlength="1000"></textarea>
+      <label data-i18n="lbl_desc">Descripción</label>
+      <textarea id="postDesc" data-i18n="ph_desc" placeholder="Describe el artículo, estado, detalles…" maxlength="1000"></textarea>
     </div>
 
     <div class="form-group">
-      <label>Fotos (máx. 4 — se optimizan automáticamente)</label>
+      <label data-i18n="lbl_img">Fotos (máx. 4 — se optimizan automáticamente)</label>
       <div class="photo-grid" id="photoGrid">
         <div class="photo-slot" data-idx="0">
           <input type="file" accept="image/*" onchange="handlePhoto(this,0)">
@@ -248,17 +264,17 @@ footer a{color:var(--accent);text-decoration:none}
       </div>
       <div class="photo-hint">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-        Imágenes optimizadas automáticamente · <span>WebP · max 0.5MB · verificación de contenido activa</span>
+        <span data-i18n="img_hint">Imágenes optimizadas automáticamente · WebP · max 0.5MB</span>
       </div>
     </div>
 
     <div class="form-group">
-      <label>WhatsApp (10 dígitos — para contacto y seguimiento)</label>
+      <label data-i18n="lbl_wa">WhatsApp (10 dígitos — para contacto y seguimiento)</label>
       <input type="tel" id="postContact" placeholder="6621234567" maxlength="10" pattern="[0-9]{10}" inputmode="numeric">
-      <div style="font-size:10px;color:var(--muted);margin-top:6px">📋 El número se usa para rastrear publicaciones. Tu anuncio expira en 6 meses automáticamente.</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:6px" data-i18n="wa_hint">📋 El número se usa para rastrear publicaciones y/o borrarlas.</div>
     </div>
 
-    <button class="btn-submit" id="btnSubmit" onclick="submitPost()">Publicar Anuncio ✦</button>
+    <button class="btn-submit" id="btnSubmit" onclick="submitPost()" data-i18n="btn_publish">Publicar Anuncio ✦</button>
   </div>
 </div>
 
@@ -267,6 +283,24 @@ footer a{color:var(--accent);text-decoration:none}
   <div class="modal" id="detailModal">
     <button class="modal-close" onclick="closeModal('detailOverlay')">✕</button>
     <div id="detailContent"></div>
+  </div>
+</div>
+
+<!-- MY ADS MODAL -->
+<div class="overlay" id="myAdsOverlay">
+  <div class="modal" id="myAdsModal">
+    <button class="modal-close" onclick="closeModal('myAdsOverlay')">✕</button>
+    <h2 data-i18n="my_ads_title">Mis <em>Anuncios</em></h2>
+    <p style="color:var(--muted); font-size:14px; margin-bottom:16px;" data-i18n="my_ads_desc">Ingresa el número con el que publicaste los anuncios para administrarlos.</p>
+    
+    <div class="form-group">
+      <label data-i18n="lbl_wa">WhatsApp (10 dígitos)</label>
+      <input type="tel" id="myAdsPhone" placeholder="6621234567" maxlength="10" pattern="[0-9]{10}" inputmode="numeric">
+    </div>
+    
+    <button class="btn-submit" id="btnSearchMyAds" onclick="fetchMyAds()" data-i18n="btn_search_ads">Buscar mis anuncios</button>
+
+    <div id="myAdsResults" style="margin-top:24px; display:flex; flex-direction:column; gap:12px;"></div>
   </div>
 </div>
 
@@ -358,6 +392,69 @@ function daysLeft(expiresAtMs) {
 
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 function closeOnBg(e, id) { if (e.target.id === id) closeModal(id); }
+
+// ─── MY ADS (DELETION) ───────────────────────────────────────
+function openMyAds() {
+  document.getElementById('myAdsPhone').value = '';
+  document.getElementById('myAdsResults').innerHTML = '';
+  document.getElementById('myAdsOverlay').classList.add('open');
+}
+
+async function fetchMyAds() {
+  const phone = document.getElementById('myAdsPhone').value.replace(/\D/g, '');
+  if (phone.length !== 10) return showToast('El número debe tener 10 dígitos', true);
+  
+  const btn = document.getElementById('btnSearchMyAds');
+  btn.disabled = true;
+  document.getElementById('myAdsResults').innerHTML = `<div style="text-align:center;color:var(--muted)">${i18n[currentLang]?.loading || 'Cargando…'}</div>`;
+  
+  try {
+    const snap = await db.collection('listings')
+      .where('contact', '==', phone)
+      .where('status', '==', 'active')
+      .get();
+      
+    if (snap.empty) {
+      document.getElementById('myAdsResults').innerHTML = `<div style="text-align:center;color:var(--muted)">${i18n[currentLang]?.ads_not_found || 'No se encontraron anuncios.'}</div>`;
+      return;
+    }
+    
+    let html = '';
+    snap.forEach(doc => {
+      const data = doc.data();
+      const txtDel = i18n[currentLang]?.btn_delete || 'X Borrar Anuncio';
+      html += `
+        <div style="background:var(--glass); border:1px solid var(--glass-border); padding:12px; border-radius:12px; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-size:14px; font-weight:600; color:var(--text);">${data.title}</div>
+            <div style="font-size:12px; color:var(--muted);">$${data.price}</div>
+          </div>
+          <button onclick="deleteMyAd('${doc.id}')" style="background:rgba(255,100,100,0.1); border:1px solid rgba(255,100,100,0.3); color:#FF6B6B; padding:6px 10px; border-radius:8px; font-size:11px; cursor:pointer;">${txtDel}</button>
+        </div>
+      `;
+    });
+    document.getElementById('myAdsResults').innerHTML = html;
+  } catch (err) {
+    showToast('Error al buscar anuncios', true);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function deleteMyAd(id) {
+  if (!confirm('¿Seguro que deseas eliminar este anuncio?')) return;
+  try {
+    await db.collection('listings').doc(id).update({
+      status: 'deleted',
+      deletedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    showToast(i18n[currentLang]?.ad_deleted || 'Anuncio eliminado');
+    fetchMyAds(); // Refresh list
+    loadListings(); // Refresh main feed
+  } catch (err) {
+    showToast('Error al eliminar', true);
+  }
+}
 
 function showToast(msg, isError = false) {
   const t = document.getElementById('toast');
@@ -691,9 +788,12 @@ function renderCats() {
       ? (activeCat === 'otros' || otrosIds.includes(activeCat))
       : activeCat === c.id;
 
+    const catKey = c.id === 'all' ? 'cat_all' : c.id === 'otros' ? 'cat_others' : `cat_${c.id}`;
+    const txtLabel = i18n[currentLang]?.[catKey] || c.label;
+    
     const div = document.createElement('div');
     div.className = 'cat-pill' + (isActive ? ' active' : '');
-    div.innerHTML = `<span class="icon">${c.icon}</span>${c.label}<span class="cat-count">${count}</span>`;
+    div.innerHTML = `<span class="icon">${c.icon}</span>${txtLabel}<span class="cat-count">${count}</span>`;
 
     if (c.id === 'otros') {
       div.onclick = () => {
@@ -719,9 +819,10 @@ function renderCats() {
     drawer.innerHTML = '<div class="otros-drawer-label">Más categorías</div>';
     OTROS_SUBCATS.forEach(s => {
       const count = listings.filter(l => l.cat === s.id).length;
+      const subLabel = i18n[currentLang]?.[`sub_${s.id}`] || s.label;
       const pill = document.createElement('div');
       pill.className = 'otros-sub' + (activeSubCat === s.id ? ' active' : '');
-      pill.innerHTML = `${s.icon} ${s.label} <span class="cat-count" style="margin-left:4px">${count}</span>`;
+      pill.innerHTML = `${s.icon} ${subLabel} <span class="cat-count" style="margin-left:4px">${count}</span>`;
       pill.onclick = () => {
         activeCat = s.id; activeSubCat = s.id;
         drawer.querySelectorAll('.otros-sub').forEach(p => p.classList.remove('active'));
@@ -744,7 +845,9 @@ function renderListings() {
     : `Mostrando <strong>${list.length}</strong> anuncio${list.length !== 1 ? 's' : ''}`;
 
   if (!list.length) {
-    grid.innerHTML = `<div class="empty"><div class="empty-icon">🔍</div><h3>Sin resultados</h3><p>Intenta con otras palabras o categoría.</p></div>`;
+    const txtTitle = i18n[currentLang]?.empty_title || 'No hay anuncios aquí';
+    const txtDesc = i18n[currentLang]?.empty_desc || 'Sé el primero en publicar en esta categoría';
+    grid.innerHTML = `<div class="empty"><div class="empty-icon">🔍</div><h3>${txtTitle}</h3><p>${txtDesc}</p></div>`;
     return;
   }
 
@@ -755,9 +858,10 @@ function renderListings() {
     card.className = 'card';
     card.style.animationDelay = (i * 0.035) + 's';
 
-    const priceStr = item.price === 0 ? 'Gratis' : '$' + item.price.toLocaleString('es-MX');
+    const priceStr = item.price === 0 ? (i18n[currentLang]?.lbl_price?.includes('Free') ? 'Free' : 'Gratis') : '$' + item.price.toLocaleString('es-MX');
     const priceClass = item.price === 0 ? 'card-price free' : 'card-price';
-    const catLabel = allCatsList.find(c => c.id === item.cat)?.label || item.cat;
+    const isSub = OTROS_SUBCATS.find(c => c.id === item.cat);
+    const catLabel = isSub ? (i18n[currentLang]?.[`sub_${item.cat}`] || isSub.label) : (i18n[currentLang]?.[`cat_${item.cat}`] || item.cat);
     const ago = timeAgo(item.createdAt?.toMillis?.() || Date.now());
     const expMsLeft = item.expiresAt?.toMillis?.() || Date.now();
     const expBadge = daysLeft(expMsLeft);
@@ -792,9 +896,10 @@ function renderAll() { renderCats(); renderListings(); }
 
 // ─── DETAIL ──────────────────────────────────────────────────
 function openDetail(item) {
-  const priceStr = item.price === 0 ? 'Gratis' : '$' + item.price.toLocaleString('es-MX');
+  const priceStr = item.price === 0 ? (i18n[currentLang]?.lbl_price?.includes('Free') ? 'Free' : 'Gratis') : '$' + item.price.toLocaleString('es-MX');
   const allCatsList = [...CATS, ...OTROS_SUBCATS];
-  const catLabel = allCatsList.find(c => c.id === item.cat)?.label || item.cat;
+  const isSub = OTROS_SUBCATS.find(c => c.id === item.cat);
+  const catLabel = isSub ? (i18n[currentLang]?.[`sub_${item.cat}`] || isSub.label) : (i18n[currentLang]?.[`cat_${item.cat}`] || item.cat);
   const ago = timeAgo(item.createdAt?.toMillis?.() || Date.now());
 
   const imgs = (item.images || []).length
@@ -814,9 +919,9 @@ function openDetail(item) {
       <span>🏷️ ${catLabel}</span>
       ${item.views > 0 ? `<span>👁 ${item.views}</span>` : ''}
     </div>
-    <button class="btn-contact" onclick="contactSeller('${item.contact}')">💬 Contactar por WhatsApp</button>
-    <button class="btn-share" onclick="shareItem('${item.id}','${item.title.replace(/'/g,"\\'")}')">↗ Compartir anuncio</button>
-    <button class="btn-report" onclick="reportListing('${item.id}')">🚩 Reportar contenido inapropiado</button>
+    <button class="btn-contact" onclick="contactSeller('${item.contact}')">${i18n[currentLang]?.btn_contact || '💬 Contactar por WhatsApp'}</button>
+    <button class="btn-share" onclick="shareItem('${item.id}','${item.title.replace(/'/g,"\\'")}')">${i18n[currentLang]?.btn_share || '↗ Compartir anuncio'}</button>
+    <button class="btn-report" onclick="reportListing('${item.id}')">${i18n[currentLang]?.btn_report || '🚩 Reportar contenido inapropiado'}</button>
   `;
 
   document.getElementById('detailOverlay').classList.add('open');
