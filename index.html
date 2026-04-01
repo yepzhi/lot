@@ -240,11 +240,13 @@ footer a:hover{color:var(--text)}
     <div class="price-row">
       <div class="form-group">
         <label data-i18n="lbl_price">Precio (MXN) — 0 = Gratis</label>
-        <input type="number" id="postPrice" placeholder="0" min="0">
+        <input type="text" id="postPrice" placeholder="0" oninput="formatPriceInput(this)">
       </div>
       <div class="form-group">
         <label data-i18n="lbl_city">Ciudad</label>
-        <input type="text" id="postCity" data-i18n="ph_city" placeholder="Hermosillo, Son." maxlength="40">
+        <select id="postCity">
+          <option value="Hermosillo">Hermosillo, Sonora</option>
+        </select>
       </div>
     </div>
 
@@ -274,7 +276,13 @@ footer a:hover{color:var(--text)}
     <div class="form-group" style="display:flex; gap:16px;">
       <div style="flex:1;">
         <label data-i18n="lbl_wa">WhatsApp (10 dígitos — para contacto y seguimiento)</label>
-        <input type="tel" id="postContact" placeholder="6621234567" maxlength="10" pattern="[0-9]{10}" inputmode="numeric">
+        <div style="display:flex; gap:8px;">
+          <select id="postCountry" style="width:85px; flex-shrink:0;">
+            <option value="52">🇲🇽 +52</option>
+            <option value="1">🇺🇸 +1</option>
+          </select>
+          <input type="tel" id="postContact" placeholder="6621234567" maxlength="10" pattern="[0-9]{10}" inputmode="numeric">
+        </div>
         <div style="font-size:10px;color:var(--muted);margin-top:6px" data-i18n="wa_hint">📋 El número se usa para rastrear publicaciones y/o borrarlas.</div>
       </div>
       <div style="flex:1;">
@@ -403,6 +411,19 @@ function daysLeft(expiresAtMs) {
 
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 function closeOnBg(e, id) { if (e.target.id === id) closeModal(id); }
+
+function formatPriceInput(input) {
+  let v = input.value.replace(/\D/g, '');
+  if (v === '') { input.value = ''; return; }
+  input.value = Number(v).toLocaleString('en-US');
+}
+
+function formatDateShort(ts) {
+  if (!ts) return '';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  const months = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+  return `${d.getDate()}/${months[d.getMonth()]}`;
+}
 
 function togglePhotoGrid() {
   const cat = document.getElementById('postCat').value;
@@ -638,7 +659,7 @@ async function handlePhoto(input, idx) {
         await new Promise(r => { tempImg.onload = r; tempImg.onerror = r; });
 
         const isNSFW = await checkNSFW(tempImg);
-        URL.revokeObjectURL(objUrl);
+        URL.revokeObjectURL(objUrl); // Clean up check img URL
         indicator.remove();
 
         if (isNSFW) {
@@ -656,6 +677,7 @@ async function handlePhoto(input, idx) {
           slot.insertBefore(previewImg, slot.firstChild);
         }
         previewImg.src = URL.createObjectURL(blob);
+        previewImg.style.display = 'block'; // Ensure visible
 
         let rm = slot.querySelector('.rm-btn');
         if (!rm) {
@@ -696,10 +718,11 @@ async function uploadToCloudinary(blob) {
 async function submitPost() {
   const cat     = document.getElementById('postCat').value;
   const title   = document.getElementById('postTitle').value.trim();
-  const price   = parseFloat(document.getElementById('postPrice').value) || 0;
-  const city    = document.getElementById('postCity').value.trim() || 'México';
+  const price   = parseFloat(document.getElementById('postPrice').value.replace(/,/g, '')) || 0;
+  const city    = document.getElementById('postCity').value.trim() || 'Hermosillo';
   const desc    = document.getElementById('postDesc').value.trim();
-  const contact = document.getElementById('postContact').value.trim();
+  const country = document.getElementById('postCountry').value;
+  const contact = country + document.getElementById('postContact').value.trim();
   const pin     = document.getElementById('postPin').value.trim();
 
   if (!cat || !title) { showToast('⚠️ Completa categoría y título', true); return; }
@@ -926,6 +949,8 @@ function renderListings() {
       ? `<img src="${item.images[0]}" alt="${item.title}" loading="lazy">`
       : `<div class="card-img-placeholder">📷</div>`;
 
+    const dateShort = formatDateShort(item.createdAt);
+
     card.innerHTML = `
       <div class="card-img-wrap">
         ${imgEl}
@@ -938,8 +963,9 @@ function renderListings() {
         <div class="${priceClass}">${priceStr}</div>
         <div class="card-title">${item.title}</div>
         <div class="card-meta">
-          <span>📍 ${item.city}</span>
-          <span>${ago}</span>
+          <span>📍 Hermosillo, MX</span>
+          <span>📅 ${dateShort}</span>
+          <span>🏷️ ${catLabel}</span>
         </div>
       </div>`;
 
@@ -970,8 +996,8 @@ function openDetail(item) {
     <div class="detail-title">${item.title}</div>
     <div class="detail-desc">${(item.desc || '').replace(/</g,'&lt;')}</div>
     <div class="detail-meta">
-      <span>📍 ${item.city}</span>
-      <span>🕐 ${ago}</span>
+      <span>📍 Hermosillo, MX</span>
+      <span>📅 ${formatDateShort(item.createdAt)}</span>
       <span>🏷️ ${catLabel}</span>
       ${item.views > 0 ? `<span>👁 ${item.views}</span>` : ''}
     </div>
@@ -989,8 +1015,7 @@ function openDetail(item) {
 }
 
 function contactSeller(c) {
-  const digits = c.replace(/\D/g, '');
-  const wa = digits.length === 10 ? '52' + digits : digits;
+  const wa = c.replace(/\D/g, ''); // Use digits only, it already includes country code
   window.open(`https://wa.me/${wa}`, '_blank');
 }
 
