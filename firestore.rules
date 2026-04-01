@@ -57,6 +57,14 @@ service cloud.firestore {
                     && request.resource.data.phone.matches('[0-9]{10}');
       allow update, delete: if false;
     }
+    
+    // ── TRAFFIC TRACKER (visits) ──────────────────────────────
+    // Public: create-only (auth-less tracking)
+    // No read/update/delete allowed from client for privacy/security
+    match /visits/{visitId} {
+      allow create: if request.resource.data.keys().hasAll(['site', 'path', 'timestamp']);
+      allow read, update, delete: if false;
+    }
   }
 
   function validateListing(data) {

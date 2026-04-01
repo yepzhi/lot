@@ -670,14 +670,20 @@ async function handlePhoto(input, idx) {
 
         // Save blob and show preview
         photoBlobs[idx] = blob;
-        slot.classList.add('has-img');
-        let previewImg = slot.querySelector('img');
-        if (!previewImg) {
-          previewImg = document.createElement('img');
-          slot.insertBefore(previewImg, slot.firstChild);
-        }
-        previewImg.src = URL.createObjectURL(blob);
-        previewImg.style.display = 'block'; // Ensure visible
+        
+        // Use FileReader to bypass CSP blob: restrictions by using Data URI (Base64)
+        const readerPreview = new FileReader();
+        readerPreview.onload = ePreview => {
+          slot.classList.add('has-img');
+          let previewImg = slot.querySelector('img');
+          if (!previewImg) {
+            previewImg = document.createElement('img');
+            slot.insertBefore(previewImg, slot.firstChild);
+          }
+          previewImg.src = ePreview.target.result;
+          previewImg.style.display = 'block';
+        };
+        readerPreview.readAsDataURL(blob);
 
         let rm = slot.querySelector('.rm-btn');
         if (!rm) {
