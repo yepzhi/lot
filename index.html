@@ -200,7 +200,7 @@ footer a:hover{color:var(--text)}
 
 <footer>
   <div><span data-i18n="footer_text">© 2026, creado por yepzhi.com — Los anuncios son responsabilidad del publicante.</span> <a href="privacy.html" data-i18n="privacy">Aviso de privacidad</a>.</div>
-  <div style="font-size:10px; margin-top:6px; opacity:0.5; font-family:var(--font-head); letter-spacing:1px;">LOT v3.0.0</div>
+  <div style="font-size:10px; margin-top:6px; opacity:0.5; font-family:var(--font-head); letter-spacing:1px;">LOT v3.1.0</div>
 </footer>
 
 
@@ -1002,7 +1002,7 @@ function renderListings() {
         <div class="card-meta">
           <span>📍 Hermosillo, MX</span>
           <span>📅 ${dateShort}</span>
-          <span>🏷️ ${catLabel}</span>
+          <span>👁 ${item.views || 0}</span>
         </div>
       </div>`;
 
@@ -1159,6 +1159,34 @@ document.addEventListener('keydown', e => {
 
 // ─── INIT ────────────────────────────────────────────────────
 loadListings();
+
+// ─── TRAFFIC TRACKER (Sync with Visitors Dashboard) ─────────
+async function fetchGeo() {
+  const empty = { city: 'Unknown', country: 'Unknown', country_code: '??' };
+  try {
+    const res = await fetch('https://ipapi.co/json/');
+    const data = await res.json();
+    return { city: data.city || empty.city, country: data.country_name || empty.country, country_code: data.country_code || empty.country_code };
+  } catch { return empty; }
+}
+
+async function trackVisit() {
+  try {
+    const geo = await fetchGeo();
+    await db.collection('visits').add({
+      site: 'lot',
+      path: window.location.pathname,
+      full_url: window.location.href,
+      referrer: document.referrer || 'direct',
+      city: geo.city,
+      country: geo.country,
+      country_code: geo.country_code,
+      createdAt: firebase.firestore.Timestamp.now(),
+      userAgent: navigator.userAgent
+    });
+  } catch(e) {}
+}
+trackVisit();
 
 // Pre-cargar modelo NSFW cuando el usuario abre el modal de publicación
 // Así está listo cuando seleccione la primera foto
