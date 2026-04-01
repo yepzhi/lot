@@ -200,7 +200,7 @@ footer a:hover{color:var(--text)}
 
 <footer>
   <div><span data-i18n="footer_text">© 2026, creado por yepzhi.com — Los anuncios son responsabilidad del publicante.</span> <a href="privacy.html" data-i18n="privacy">Aviso de privacidad</a>.</div>
-  <div style="font-size:10px; margin-top:6px; opacity:0.5; font-family:var(--font-head); letter-spacing:1px;">LOT v2.8.9</div>
+  <div style="font-size:10px; margin-top:6px; opacity:0.5; font-family:var(--font-head); letter-spacing:1px;">LOT v2.9.0</div>
 </footer>
 
 
@@ -212,92 +212,102 @@ footer a:hover{color:var(--text)}
 
 
 
-    <div class="form-group">
-      <label data-i18n="lbl_cat">Categoría</label>
-      <select id="postCat" onchange="togglePhotoGrid()">
-        <option value="" data-i18n="opt_sel">— Selecciona —</option>
-        <option value="carros">🚗 Carros</option>
-        <option value="telefonos">📱 Teléfonos</option>
-        <option value="fiestas">🎉 Fiestas / Eventos</option>
-        <option value="servicios">🔧 Servicios</option>
-        <optgroup label="── Otros ──">
-          <option value="casas">🏠 Casas / Inmuebles</option>
-          <option value="computacion">💻 Computación</option>
-          <option value="pantallas">📺 Pantallas / TV</option>
-          <option value="ropa">👕 Ropa</option>
-          <option value="zapatos">👟 Tenis / Zapatos</option>
-          <option value="love">❤️ Love</option>
-          <option value="otros">📦 Otros</option>
-        </optgroup>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label data-i18n="lbl_title">Título del anuncio</label>
-      <input type="text" id="postTitle" data-i18n="ph_title" placeholder="Ej: iPhone 15 Pro 256GB negro" maxlength="80">
-    </div>
-
-    <div class="price-row" style="align-items: flex-start;">
+    <div id="postForm">
       <div class="form-group">
-        <label data-i18n="lbl_price">Precio (MXN)</label>
-        <input type="text" id="postPrice" placeholder="0" oninput="formatPriceInput(this)">
-        <div style="font-size:10px;color:var(--muted);margin-top:6px" data-i18n="price_hint">👀 Favor de colocar precios reales. (0 = Gratis)</div>
-      </div>
-      <div class="form-group">
-        <label data-i18n="lbl_city">Ciudad</label>
-        <select id="postCity">
-          <option value="Hermosillo">Hermosillo, Sonora</option>
+        <label data-i18n="lbl_cat">Categoría</label>
+        <select id="postCat" onchange="togglePhotoGrid()">
+          <option value="" data-i18n="opt_sel">— Selecciona —</option>
+          <option value="carros">🚗 Carros</option>
+          <option value="telefonos">📱 Teléfonos</option>
+          <option value="fiestas">🎉 Fiestas / Eventos</option>
+          <option value="servicios">🔧 Servicios</option>
+          <optgroup label="── Otros ──">
+            <option value="casas">🏠 Casas / Inmuebles</option>
+            <option value="computacion">💻 Computación</option>
+            <option value="pantallas">📺 Pantallas / TV</option>
+            <option value="ropa">👕 Ropa</option>
+            <option value="zapatos">👟 Tenis / Zapatos</option>
+            <option value="love">❤️ Love</option>
+            <option value="otros">📦 Otros</option>
+          </optgroup>
         </select>
       </div>
-    </div>
 
-    <div class="form-group">
-      <label data-i18n="lbl_desc">Descripción</label>
-      <textarea id="postDesc" data-i18n="ph_desc" placeholder="Describe el artículo, estado, detalles…" maxlength="1000"></textarea>
-    </div>
+      <div class="form-group">
+        <label data-i18n="lbl_title">Título del anuncio</label>
+        <input type="text" id="postTitle" data-i18n="ph_title" placeholder="Ej: iPhone 15 Pro 256GB negro" maxlength="80">
+      </div>
 
-    <div class="form-group" id="photoGroup">
-      <label data-i18n="lbl_img">Fotos (máx. 4 — se optimizan automáticamente)</label>
-      <div class="photo-grid" id="photoGrid">
-        <div class="photo-slot" data-idx="0">
-          <input type="file" accept="image/*" onchange="handlePhoto(this,0)">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          Principal
+      <div class="price-row" style="align-items: flex-start;">
+        <div class="form-group">
+          <label data-i18n="lbl_price">Precio (MXN)</label>
+          <input type="text" id="postPrice" placeholder="0" oninput="formatPriceInput(this)">
+          <div style="font-size:10px;color:var(--muted);margin-top:6px" data-i18n="price_hint">👀 Favor de colocar precios reales. (0 = Gratis)</div>
         </div>
-        <div class="photo-slot" data-idx="1"><input type="file" accept="image/*" onchange="handlePhoto(this,1)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
-        <div class="photo-slot" data-idx="2"><input type="file" accept="image/*" onchange="handlePhoto(this,2)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
-        <div class="photo-slot" data-idx="3"><input type="file" accept="image/*" onchange="handlePhoto(this,3)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
-      </div>
-      <div class="photo-hint">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-        <span data-i18n="img_hint">Imágenes optimizadas automáticamente · WebP · max 0.5MB</span>
-      </div>
-    </div>
-
-    <div class="form-group" style="display:flex; gap:16px;">
-      <div style="flex:1;">
-        <label data-i18n="lbl_wa">WhatsApp (10 dígitos — para contacto y seguimiento)</label>
-        <div style="display:flex; gap:8px;">
-          <select id="postCountry" style="width:85px; flex-shrink:0; font-size:12px; padding:11px 4px 11px 12px; background-position:right 8px center;">
-            <option value="52">🇲🇽 +52</option>
-            <option value="1">🇺🇸 +1</option>
+        <div class="form-group">
+          <label data-i18n="lbl_city">Ciudad</label>
+          <select id="postCity">
+            <option value="Hermosillo">Hermosillo, Sonora</option>
           </select>
-          <input type="tel" id="postContact" placeholder="6621234567" maxlength="10" pattern="[0-9]{10}" inputmode="numeric">
         </div>
-        <div style="font-size:10px;color:var(--muted);margin-top:6px" data-i18n="wa_hint">📋 El número se usa para rastrear publicaciones y/o borrarlas.</div>
       </div>
-      <div style="flex:1;">
-        <label data-i18n="lbl_pin" style="color:#FFD166;">PIN de Seguridad (4 dígitos)</label>
-        <input type="password" id="postPin" data-i18n="ph_pin" placeholder="Ej: 1234" maxlength="4" pattern="[0-9]{4}" inputmode="numeric" style="border-color:rgba(255,209,102,0.3);">
-        <div style="font-size:10px;color:var(--muted);margin-top:6px" data-i18n="pin_hint">🔒 Memorízalo: si borras tu caché, necesitarás este PIN para poder eliminar el anuncio antes de los 6 meses.</div>
+
+      <div class="form-group">
+        <label data-i18n="lbl_desc">Descripción</label>
+        <textarea id="postDesc" data-i18n="ph_desc" placeholder="Describe el artículo, estado, detalles…" maxlength="1000"></textarea>
+      </div>
+
+      <div class="form-group" id="photoGroup">
+        <label data-i18n="lbl_img">Fotos (máx. 4 — se optimizan automáticamente)</label>
+        <div class="photo-grid" id="photoGrid">
+          <div class="photo-slot" data-idx="0">
+            <input type="file" accept="image/*" onchange="handlePhoto(this,0)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Principal
+          </div>
+          <div class="photo-slot" data-idx="1"><input type="file" accept="image/*" onchange="handlePhoto(this,1)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+          <div class="photo-slot" data-idx="2"><input type="file" accept="image/*" onchange="handlePhoto(this,2)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+          <div class="photo-slot" data-idx="3"><input type="file" accept="image/*" onchange="handlePhoto(this,3)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+        </div>
+        <div class="photo-hint">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+          <span data-i18n="img_hint">Imágenes optimizadas automáticamente · WebP · max 0.5MB</span>
+        </div>
+      </div>
+
+      <div class="form-group" style="display:flex; gap:16px;">
+        <div style="flex:1;">
+          <label data-i18n="lbl_wa">WhatsApp (10 dígitos — para contacto y seguimiento)</label>
+          <div style="display:flex; gap:8px;">
+            <select id="postCountry" style="width:85px; flex-shrink:0; font-size:12px; padding:11px 4px 11px 12px; background-position:right 8px center;">
+              <option value="52">🇲🇽 +52</option>
+              <option value="1">🇺🇸 +1</option>
+            </select>
+            <input type="tel" id="postContact" placeholder="6621234567" maxlength="10" pattern="[0-9]{10}" inputmode="numeric">
+          </div>
+          <div style="font-size:10px;color:var(--muted);margin-top:6px" data-i18n="wa_hint">📋 El número se usa para rastrear publicaciones y/o borrarlas.</div>
+        </div>
+        <div style="flex:1;">
+          <label data-i18n="lbl_pin" style="color:#FFD166;">PIN de Seguridad (4 dígitos)</label>
+          <input type="password" id="postPin" data-i18n="ph_pin" placeholder="Ej: 1234" maxlength="4" pattern="[0-9]{4}" inputmode="numeric" style="border-color:rgba(255,209,102,0.3);">
+          <div style="font-size:10px;color:var(--muted);margin-top:6px" data-i18n="pin_hint">🔒 Memorízalo: si borras tu caché, necesitarás este PIN para poder eliminar el anuncio antes de los 6 meses.</div>
+        </div>
+      </div>
+
+      <button class="btn-submit" id="btnSubmit" onclick="submitPost()" data-i18n="btn_publish">Publicar Anuncio ✦</button>
+
+      <div class="content-warning">
+        <span>⚠️</span>
+        <div><strong data-i18n="post_warn_title">Aviso de contenido:</strong> <span data-i18n="post_warning">Queda estrictamente prohibido publicar imágenes con desnudos, contenido sexual o violento. Las fotos pasan por verificación automática.</span></div>
       </div>
     </div>
 
-    <button class="btn-submit" id="btnSubmit" onclick="submitPost()" data-i18n="btn_publish">Publicar Anuncio ✦</button>
-
-    <div class="content-warning">
-      <span>⚠️</span>
-      <div><strong data-i18n="post_warn_title">Aviso de contenido:</strong> <span data-i18n="post_warning">Queda estrictamente prohibido publicar imágenes con desnudos, contenido sexual o violento. Las fotos pasan por verificación automática.</span></div>
+    <div id="postSuccess" style="display:none; text-align:center; padding:30px 0;">
+      <div style="font-size:64px; margin-bottom:20px;">🚀</div>
+      <h2 data-i18n="post_success_title" style="margin-bottom:10px;">¡Anuncio Publicado!</h2>
+      <p data-i18n="post_success_desc" style="color:var(--muted); margin-bottom:30px;">Tu anuncio ya está en línea. ¡Compártelo para vender más rápido!</p>
+      <button class="btn-contact" id="btnSuccessWA" style="margin-bottom:12px;">💬 Compartir en WhatsApp</button>
+      <button class="btn-share" id="btnSuccessCopy" style="background:var(--accent); color:#050810; font-weight:700;" data-i18n="btn_copy_link">Copiar Enlace</button>
     </div>
   </div>
 </div>
@@ -778,8 +788,21 @@ async function submitPost() {
     myAds[docRef.id] = pin;
     localStorage.setItem('lot_my_ads', JSON.stringify(myAds));
 
-    closeModal('postOverlay');
-    showToast('✦ Anuncio publicado — válido 6 meses');
+    // Show Success UI
+    document.getElementById('postForm').style.display = 'none';
+    const successDiv = document.getElementById('postSuccess');
+    successDiv.style.display = 'block';
+    
+    const adUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}?ad=${docRef.id}`;
+    
+    document.getElementById('btnSuccessWA').onclick = () => {
+      const msg = `¡Mira lo que acabo de publicar en LOT!%0A${title}%0A%0A${adUrl}`;
+      window.open(`https://wa.me/?text=${msg}`, '_blank');
+    };
+    document.getElementById('btnSuccessCopy').onclick = () => {
+      navigator.clipboard.writeText(adUrl).then(() => showToast('🔗 Enlace copiado'));
+    };
+
     resetForm();
     loadListings();
 
@@ -820,6 +843,7 @@ async function loadListings() {
       .filter(l => l.expiresAt && l.expiresAt.toMillis() > now);
 
     renderAll();
+    checkDeepLink();
   } catch (err) {
     console.error('Firestore error:', err);
     // Mostrar mensaje útil si faltan índices
@@ -827,10 +851,16 @@ async function loadListings() {
       document.getElementById('listingGrid').innerHTML =
         `<div class="empty"><div class="empty-icon">⚙️</div><h3>Configurando base de datos</h3><p>Crea el <strong>índice compuesto</strong> en Firebase Console:<br><code>status ASC + createdAt DESC</code></p></div>`;
       document.getElementById('resultsInfo').textContent = '';
-    } else {
-      showToast('⚠️ Error al cargar anuncios', true);
-      renderAll();
     }
+  }
+}
+
+function checkDeepLink() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const adId = urlParams.get('ad');
+  if (adId) {
+    const item = listings.find(l => l.id === adId);
+    if (item) openDetail(item);
   }
 }
 
@@ -1014,6 +1044,7 @@ function openDetail(item) {
   `;
 
   document.getElementById('detailOverlay').classList.add('open');
+  history.replaceState(null, '', `?ad=${item.id}`);
 
   // Increment view count (fire and forget)
   db.collection('listings').doc(item.id).update({
@@ -1031,7 +1062,7 @@ function openFullImg(url) {
 }
 
 async function shareItem(id, title) {
-  const url = `https://yepzhi.com/lot/`;
+  const url = `${window.location.protocol}//${window.location.host}${window.location.pathname}?ad=${id}`;
   if (navigator.share) {
     try { await navigator.share({ title, url }); } catch(e) {}
   } else {
@@ -1132,8 +1163,11 @@ loadListings();
 // Pre-cargar modelo NSFW cuando el usuario abre el modal de publicación
 // Así está listo cuando seleccione la primera foto
 document.getElementById('btnPost').addEventListener('click', () => {
+  // Reset modal view
+  document.getElementById('postForm').style.display = 'block';
+  document.getElementById('postSuccess').style.display = 'none';
   ensureNSFW().catch(() => {}); // fire and forget — lazy preload
-}, { once: true });
+}, { once: false });
 
 // También pre-cargar al tocar el área de fotos (segunda oportunidad)
 document.getElementById('photoGrid').addEventListener('pointerenter', () => {

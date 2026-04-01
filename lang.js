@@ -44,6 +44,9 @@ const i18n = {
     "ph_pin": "Ej: 1234",
     "pin_hint": "🔒 Memorízalo: necesitarás este PIN para poder eliminar el anuncio antes de los 6 meses.",
     "btn_publish": "Publicar Anuncio ✦",
+    "post_success_title": "¡Anuncio Publicado! 🚀",
+    "post_success_desc": "Tu anuncio ya está en línea. ¡Compártelo para llegar a más compradores!",
+    "btn_copy_link": "Copiar Enlace",
     "empty_title": "No hay anuncios aquí",
     "empty_desc": "Sé el primero en publicar en esta categoría",
     
@@ -107,6 +110,9 @@ const i18n = {
     "ph_pin": "Ex: 1234",
     "pin_hint": "🔒 Memorize this: you will need this PIN to delete your ad before 6 months.",
     "btn_publish": "Publish Ad ✦",
+    "post_success_title": "Listing Published! 🚀",
+    "post_success_desc": "Your ad is now online. Share it to reach more buyers!",
+    "btn_copy_link": "Copy Link",
     "empty_title": "No ads here yet",
     "empty_desc": "Be the first to post in this category",
     
