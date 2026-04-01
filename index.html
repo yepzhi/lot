@@ -11,18 +11,14 @@
 <script src="/visitors/tracker.js"></script>
 <script src="lang.js"></script>
 <style>
-:root{--bg:#050810;--glass:rgba(255,255,255,0.05);--glass-border:rgba(255,255,255,0.10);--glass-hover:rgba(255,255,255,0.09);--accent:#7DF9FF;--accent2:#FF6BF8;--accent3:#FFD166;--text:#F0F4FF;--muted:rgba(240,244,255,0.45);--card-shadow:0 8px 32px rgba(0,0,0,0.45);--blur:blur(18px);--r:18px;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif}
+:root{--bg:#000;--glass:rgba(255,255,255,0.05);--glass-border:rgba(255,255,255,0.08);--glass-hover:rgba(255,255,255,0.09);--accent:#7DF9FF;--accent2:#FF6BF8;--accent3:#FFD166;--text:#F0F4FF;--muted:rgba(240,244,255,0.4);--card-shadow:0 8px 32px rgba(0,0,0,0.45);--blur:blur(18px);--r:18px;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
-.bg-orbs{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.18;animation:drift 18s ease-in-out infinite alternate}
-.orb-1{width:600px;height:600px;background:#7DF9FF;top:-200px;left:-100px}
-.orb-2{width:500px;height:500px;background:#FF6BF8;top:30%;right:-150px;animation-delay:-6s}
-.orb-3{width:400px;height:400px;background:#FFD166;bottom:-100px;left:30%;animation-delay:-12s}
-@keyframes drift{from{transform:translate(0,0) scale(1)}to{transform:translate(40px,30px) scale(1.08)}}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;position:relative}
+body::before{content:'';position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;background:radial-gradient(circle at 20% 50%, rgba(125,249,255,0.08) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(255,107,248,0.06) 0%, transparent 50%);animation:bgPulse 10s ease-in-out infinite alternate}
+@keyframes bgPulse{from{opacity:0.6}to{opacity:1}}
 .wrapper{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:0 24px}
-header{position:sticky;top:0;z-index:100;background:rgba(5,8,16,.65);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-bottom:1px solid var(--glass-border)}
+header{position:sticky;top:0;z-index:100;background:rgba(0,0,0,0.7);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-bottom:1px solid var(--glass-border)}
 .header-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;max-width:1280px;margin:0 auto}
 .header-right{display:flex;align-items:center;gap:12px}
 .lang-switch{display:flex;gap:4px;font-size:11px;font-weight:700;color:var(--muted);cursor:pointer;user-select:none}
@@ -34,11 +30,11 @@ header{position:sticky;top:0;z-index:100;background:rgba(5,8,16,.65);backdrop-fi
 .logo span{color:var(--muted);-webkit-text-fill-color:var(--muted);font-weight:400;font-size:13px;margin-left:4px}
 .btn-post{flex-shrink:0;padding:10px 22px;border-radius:50px;background:linear-gradient(135deg,#FF3366,#FF0033);color:#fff;font-family:var(--font-head);font-weight:700;font-size:13px;border:none;cursor:pointer;box-shadow:0 0 20px rgba(255,51,102,.3);transition:transform .15s,box-shadow .15s;white-space:nowrap}
 .btn-post:hover{transform:scale(1.04);box-shadow:0 0 30px rgba(255,51,102,.5)}
-.hero{padding:64px 0 32px;text-align:center}
-.hero-tag{display:inline-block;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--accent);border:1px solid rgba(125,249,255,.3);padding:4px 14px;border-radius:50px;background:rgba(125,249,255,.07);margin-bottom:20px;animation:fadeUp .6s ease both}
-.hero h1{font-family:var(--font-head);font-size:clamp(36px,6vw,72px);font-weight:800;line-height:1.05;letter-spacing:-2px;animation:fadeUp .6s .1s ease both}
+.hero{padding:80px 0 40px;text-align:center}
+.hero-tag{display:inline-block;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--accent);border:1px solid rgba(125,249,255,0.2);padding:5px 16px;border-radius:50px;background:rgba(125,249,255,0.05);margin-bottom:28px;animation:fadeUp .6s ease both}
+.hero h1{font-family:var(--font-head);font-size:clamp(40px,7vw,84px);font-weight:800;line-height:1.2;letter-spacing:-2px;margin-bottom:20px;animation:fadeUp .6s .1s ease both}
 .hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.hero p{color:var(--muted);font-size:16px;margin-top:14px;animation:fadeUp .6s .2s ease both}
+.hero p{color:var(--muted);font-size:18px;line-height:1.6;margin-top:20px;animation:fadeUp .6s .2s ease both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 .hero-search-wrap{margin:24px auto 0;max-width:500px;animation:fadeUp .6s .25s ease both}
 .search-bar{position:relative}
@@ -138,7 +134,17 @@ header{position:sticky;top:0;z-index:100;background:rgba(5,8,16,.65);backdrop-fi
 footer{border-top:1px solid #111;background:#03050a;padding:32px 24px;text-align:center;font-size:12px;color:#666}
 footer a{color:#888;text-decoration:none;transition:color .2s}
 footer a:hover{color:var(--text)}
-@media(max-width:640px){.hero{padding:44px 0 24px}.hero h1{font-size:38px}.modal{padding:8px 18px 40px}.logo{font-size:34px}.logo span{font-size:15px}}
+@media(max-width:640px){
+  .hero{padding:50px 0 30px}
+  .hero h1{font-size:44px;line-height:1.15}
+  .hero p{font-size:15px;line-height:1.4}
+  .header-inner{padding:10px 16px}
+  .header-right{gap:8px}
+  .btn-myads{padding:5px 8px;font-size:10px}
+  .btn-post{padding:8px 14px;font-size:11px}
+  .logo{font-size:28px}
+  .logo span{display:none}
+}
 ::-webkit-scrollbar{width:6px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:rgba(125,249,255,.2);border-radius:3px}
@@ -152,11 +158,6 @@ footer a:hover{color:var(--text)}
 </style>
 </head>
 <body>
-<div class="bg-orbs">
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
-</div>
 
 <header>
   <div class="header-inner">
@@ -213,18 +214,19 @@ footer a:hover{color:var(--text)}
 
     <div class="form-group">
       <label data-i18n="lbl_cat">Categoría</label>
-      <select id="postCat">
+      <select id="postCat" onchange="togglePhotoGrid()">
         <option value="" data-i18n="opt_sel">— Selecciona —</option>
         <option value="carros">🚗 Carros</option>
+        <option value="telefonos">📱 Teléfonos</option>
         <option value="fiestas">🎉 Fiestas / Eventos</option>
         <option value="servicios">🔧 Servicios</option>
-        <option value="telefonos">📱 Teléfonos</option>
         <optgroup label="── Otros ──">
           <option value="casas">🏠 Casas / Inmuebles</option>
           <option value="computacion">💻 Computación</option>
           <option value="pantallas">📺 Pantallas / TV</option>
           <option value="ropa">👕 Ropa</option>
           <option value="zapatos">👟 Tenis / Zapatos</option>
+          <option value="love">❤️ Love</option>
           <option value="otros">📦 Otros</option>
         </optgroup>
       </select>
@@ -251,7 +253,7 @@ footer a:hover{color:var(--text)}
       <textarea id="postDesc" data-i18n="ph_desc" placeholder="Describe el artículo, estado, detalles…" maxlength="1000"></textarea>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" id="photoGroup">
       <label data-i18n="lbl_img">Fotos (máx. 4 — se optimizan automáticamente)</label>
       <div class="photo-grid" id="photoGrid">
         <div class="photo-slot" data-idx="0">
@@ -356,9 +358,9 @@ const db = firebase.firestore();
 const CATS = [
   { id:'all',       label:'Todo',       icon:'⚡' },
   { id:'carros',    label:'Carros',     icon:'🚗' },
+  { id:'telefonos', label:'Teléfonos',  icon:'📱' },
   { id:'fiestas',   label:'Fiestas',    icon:'🎉' },
   { id:'servicios', label:'Servicios',  icon:'🔧' },
-  { id:'telefonos', label:'Teléfonos',  icon:'📱' },
   { id:'otros',     label:'Otros',      icon:'📦' },
 ];
 const OTROS_SUBCATS = [
@@ -367,6 +369,7 @@ const OTROS_SUBCATS = [
   { id:'pantallas',   label:'Pantallas',   icon:'📺' },
   { id:'ropa',        label:'Ropa',        icon:'👕' },
   { id:'zapatos',     label:'Zapatos',     icon:'👟' },
+  { id:'love',        label:'Love',        icon:'❤️' },
 ];
 
 // ─── STATE ───────────────────────────────────────────────────
@@ -400,6 +403,21 @@ function daysLeft(expiresAtMs) {
 
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 function closeOnBg(e, id) { if (e.target.id === id) closeModal(id); }
+
+function togglePhotoGrid() {
+  const cat = document.getElementById('postCat').value;
+  const group = document.getElementById('photoGroup');
+  if (cat === 'love') {
+    group.style.display = 'none';
+    photoBlobs.fill(null);
+    document.querySelectorAll('.photo-slot').forEach(s => {
+      s.classList.remove('has-img');
+      s.querySelectorAll('img').forEach(i => i.remove());
+    });
+  } else {
+    group.style.display = 'block';
+  }
+}
 
 // ─── MY ADS (DELETION) ───────────────────────────────────────
 function openMyAds() {
@@ -702,7 +720,7 @@ async function submitPost() {
   try {
     // Upload photos
     const images = [];
-    const photosToUp = photoBlobs.filter(Boolean);
+    const photosToUp = cat === 'love' ? [] : photoBlobs.filter(Boolean);
     for (let i = 0; i < photosToUp.length; i++) {
       btn.textContent = `Subiendo fotos… (${i + 1}/${photosToUp.length})`;
       const url = await uploadToCloudinary(photosToUp[i]);
@@ -748,6 +766,7 @@ function resetForm() {
   ['postCat','postTitle','postPrice','postCity','postDesc','postContact','postPin'].forEach(id =>
     document.getElementById(id).value = ''
   );
+  document.getElementById('photoGroup').style.display = 'block';
   photoBlobs.fill(null);
   document.querySelectorAll('.photo-slot').forEach(s => {
     s.classList.remove('has-img');

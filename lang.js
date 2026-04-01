@@ -2,9 +2,9 @@ const i18n = {
   es: {
     "btn_post": "+ Publicar",
     "btn_my_ads": "Mis Anuncios",
-    "hero_tag": "✦ Marketplace Hermosillo & México",
+    "hero_tag": "✦ Marketplace de Hermosillo (todo México pronto).",
     "hero_title": "Compra. Vende.<br><em>Conecta.</em>",
-    "hero_desc": "Anuncios locales gratuitos. Trato directo sin intermediarios.<br>Las publicaciones duran automáticamente 6 meses.",
+    "hero_desc": "Anuncios locales gratuitos. Directo sin intermediarios.<br>Las publicaciones duran 6 meses.",
     "search_ph": "Busca carros, iphones, servicios…",
     "cat_all": "Todo",
     "cat_cars": "Carros",
@@ -17,8 +17,9 @@ const i18n = {
     "sub_tv": "Pantallas",
     "sub_clothes": "Ropa",
     "sub_shoes": "Zapatos",
+    "sub_love": "Love",
     "loading": "Cargando…",
-    "footer_text": "© 2026, creado por yepzhi.com — Los anuncios son responsabilidad del publicante.",
+    "footer_text": "© 2026, creado por <a href='https://yepzhi.com' target='_blank'>yepzhi.com</a> — Los anuncios son responsabilidad del publicante.",
     "privacy": "Aviso de privacidad",
     
     // modals
@@ -63,9 +64,9 @@ const i18n = {
   en: {
     "btn_post": "+ Post Ad",
     "btn_my_ads": "My Ads",
-    "hero_tag": "✦ Sonora & Mexico Marketplace",
+    "hero_tag": "✦ Hermosillo Marketplace (All Mexico soon).",
     "hero_title": "Buy. Sell.<br><em>Connect.</em>",
-    "hero_desc": "Free local classifieds. Direct deals, no middlemen.<br>Ads automatically expire after 6 months.",
+    "hero_desc": "Free local classifieds. Direct deals, no middlemen.<br>Ads last for 6 months.",
     "search_ph": "Search cars, iphones, services…",
     "cat_all": "All",
     "cat_cars": "Cars",
@@ -78,8 +79,9 @@ const i18n = {
     "sub_tv": "TVs",
     "sub_clothes": "Clothing",
     "sub_shoes": "Shoes",
+    "sub_love": "Love",
     "loading": "Loading…",
-    "footer_text": "© 2026, by yepzhi.com — Ads are the responsibility of the publisher.",
+    "footer_text": "© 2026, by <a href='https://yepzhi.com' target='_blank'>yepzhi.com</a> — Ads are the responsibility of the publisher.",
     "privacy": "Privacy Policy",
     
     // modals
