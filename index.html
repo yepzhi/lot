@@ -110,12 +110,13 @@ header{position:sticky;top:0;z-index:100;background:rgba(0,0,0,0.7);backdrop-fil
 .photo-slot:first-child{border-style:solid;border-color:rgba(125,249,255,.3)}
 .photo-hint{font-size:10px;color:var(--muted);margin-top:6px;display:flex;align-items:center;gap:6px}
 .photo-hint span{color:var(--accent)}
-/* Content warning */
-.content-warning{background:rgba(255,100,100,.08);border:1px solid rgba(255,100,100,.25);border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:12px;color:rgba(255,180,180,.9);display:flex;gap:10px;align-items:flex-start;line-height:1.5}
-.content-warning strong{color:#FF6B6B}
-.btn-submit{width:100%;padding:14px;background:linear-gradient(135deg,#FF3366,#FF0033);color:#fff;font-family:var(--font-head);font-weight:700;font-size:15px;border:none;border-radius:14px;cursor:pointer;margin-top:8px;box-shadow:0 0 24px rgba(255,51,102,.25);transition:transform .15s,box-shadow .15s,opacity .2s;letter-spacing:.3px}
 .btn-submit:hover:not(:disabled){transform:scale(1.01);box-shadow:0 0 34px rgba(255,51,102,.4)}
+.btn-submit:active:not(:disabled){transform:scale(0.98)}
+.btn-submit.loading{opacity:.7;pointer-events:none;filter:grayscale(0.5)}
 .btn-submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
+/* Content warning */
+.content-warning{background:rgba(255,100,100,.08);border:1px solid rgba(255,100,100,.25);border-radius:12px;padding:12px 16px;margin-top:24px;font-size:12px;color:rgba(255,180,180,.9);display:flex;gap:10px;align-items:flex-start;line-height:1.5}
+.content-warning strong{color:#FF6B6B}
 /* Detail */
 .detail-imgs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
 .detail-imgs img{border-radius:12px;object-fit:cover;aspect-ratio:4/3;cursor:pointer}
@@ -198,7 +199,7 @@ footer a:hover{color:var(--text)}
 
 <footer>
   <div><span data-i18n="footer_text">© 2026, creado por yepzhi.com — Los anuncios son responsabilidad del publicante.</span> <a href="privacy.html" data-i18n="privacy">Aviso de privacidad</a>.</div>
-  <div style="font-size:10px; margin-top:6px; opacity:0.5; font-family:var(--font-head); letter-spacing:1px;">LOT v2.8.7</div>
+  <div style="font-size:10px; margin-top:6px; opacity:0.5; font-family:var(--font-head); letter-spacing:1px;">LOT v2.8.8</div>
 </footer>
 
 
@@ -208,10 +209,7 @@ footer a:hover{color:var(--text)}
     <button class="modal-close" onclick="closeModal('postOverlay')">✕</button>
     <h2 data-i18n="post_title_new">Nuevo <em>Anuncio</em></h2>
 
-    <div class="content-warning">
-      <span>⚠️</span>
-      <div><strong data-i18n="post_warn_title">Aviso de contenido:</strong> <span data-i18n="post_warning">Queda estrictamente prohibido publicar imágenes con desnudos, contenido sexual o violento. Las fotos pasan por verificación automática.</span></div>
-    </div>
+
 
     <div class="form-group">
       <label data-i18n="lbl_cat">Categoría</label>
@@ -290,11 +288,16 @@ footer a:hover{color:var(--text)}
       <div style="flex:1;">
         <label data-i18n="lbl_pin" style="color:#FFD166;">PIN de Seguridad (4 dígitos)</label>
         <input type="password" id="postPin" data-i18n="ph_pin" placeholder="Ej: 1234" maxlength="4" pattern="[0-9]{4}" inputmode="numeric" style="border-color:rgba(255,209,102,0.3);">
-        <div style="font-size:10px;color:var(--muted);margin-top:6px" data-i18n="pin_hint">🔒 Memorízalo: si borras tu caché, necesitarás este PIN para poder eliminar el anuncio antes de los 6 meses.</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:6px" data-i18n="pin_hint">👀 🔒 Memorízalo: si borras tu caché, necesitarás este PIN para poder eliminar el anuncio antes de los 6 meses.</div>
       </div>
     </div>
 
     <button class="btn-submit" id="btnSubmit" onclick="submitPost()" data-i18n="btn_publish">Publicar Anuncio ✦</button>
+
+    <div class="content-warning">
+      <span>⚠️</span>
+      <div><strong data-i18n="post_warn_title">Aviso de contenido:</strong> <span data-i18n="post_warning">Queda estrictamente prohibido publicar imágenes con desnudos, contenido sexual o violento. Las fotos pasan por verificación automática.</span></div>
+    </div>
   </div>
 </div>
 
@@ -741,6 +744,7 @@ async function submitPost() {
 
   const btn = document.getElementById('btnSubmit');
   btn.disabled = true;
+  btn.classList.add('loading');
 
   try {
     // Upload photos
