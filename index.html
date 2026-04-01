@@ -196,6 +196,7 @@ footer a:hover{color:var(--text)}
 
 <footer>
   <div><span data-i18n="footer_text">© 2026, creado por yepzhi.com — Los anuncios son responsabilidad del publicante.</span> <a href="privacy.html" data-i18n="privacy">Aviso de privacidad</a>.</div>
+  <div style="font-size:10px; margin-top:6px; opacity:0.5; font-family:var(--font-head); letter-spacing:1px;">LOT v2.6.0</div>
 </footer>
 
 
@@ -268,10 +269,17 @@ footer a:hover{color:var(--text)}
       </div>
     </div>
 
-    <div class="form-group">
-      <label data-i18n="lbl_wa">WhatsApp (10 dígitos — para contacto y seguimiento)</label>
-      <input type="tel" id="postContact" placeholder="6621234567" maxlength="10" pattern="[0-9]{10}" inputmode="numeric">
-      <div style="font-size:10px;color:var(--muted);margin-top:6px" data-i18n="wa_hint">📋 El número se usa para rastrear publicaciones y/o borrarlas.</div>
+    <div class="form-group" style="display:flex; gap:16px;">
+      <div style="flex:1;">
+        <label data-i18n="lbl_wa">WhatsApp (10 dígitos — para contacto y seguimiento)</label>
+        <input type="tel" id="postContact" placeholder="6621234567" maxlength="10" pattern="[0-9]{10}" inputmode="numeric">
+        <div style="font-size:10px;color:var(--muted);margin-top:6px" data-i18n="wa_hint">📋 El número se usa para rastrear publicaciones y/o borrarlas.</div>
+      </div>
+      <div style="flex:1;">
+        <label data-i18n="lbl_pin" style="color:#FFD166;">PIN de Seguridad (4 dígitos)</label>
+        <input type="password" id="postPin" data-i18n="ph_pin" placeholder="Ej: 1234" maxlength="4" pattern="[0-9]{4}" inputmode="numeric" style="border-color:rgba(255,209,102,0.3);">
+        <div style="font-size:10px;color:var(--muted);margin-top:6px" data-i18n="pin_hint">🔒 Memorízalo: si borras tu caché, necesitarás este PIN para poder eliminar el anuncio antes de los 6 meses.</div>
+      </div>
     </div>
 
     <button class="btn-submit" id="btnSubmit" onclick="submitPost()" data-i18n="btn_publish">Publicar Anuncio ✦</button>
@@ -420,16 +428,28 @@ async function fetchMyAds() {
     }
     
     let html = '';
+    const mySavedAds = JSON.parse(localStorage.getItem('lot_my_ads') || '{}');
+    
     snap.forEach(doc => {
       const data = doc.data();
-      const txtDel = i18n[currentLang]?.btn_delete || 'X Borrar Anuncio';
+      const txtDel = i18n[currentLang]?.btn_delete_pin || 'Borrar';
+      const plhPin = i18n[currentLang]?.ph_del_pin || 'PIN (4 dígitos)';
+      const savedPin = mySavedAds[doc.id] || '';
+      
+      const pinBlock = savedPin 
+        ? `<button onclick="deleteMyAd('${doc.id}', '${savedPin}')" style="background:rgba(255,100,100,0.1); border:1px solid rgba(255,100,100,0.3); color:#FF6B6B; padding:6px 12px; border-radius:8px; font-size:12px; cursor:pointer;" data-i18n="btn_delete">X Borrar Anuncio</button>`
+        : `<div style="display:flex; gap:6px;">
+             <input type="password" id="delPin_${doc.id}" placeholder="${plhPin}" maxlength="4" style="width:110px; padding:6px 10px; background:var(--glass); border:1px solid var(--glass-border); border-radius:6px; color:var(--text); font-size:12px;">
+             <button onclick="deleteMyAd('${doc.id}', document.getElementById('delPin_${doc.id}').value)" style="background:rgba(255,100,100,0.1); border:1px solid rgba(255,100,100,0.3); color:#FF6B6B; padding:6px 10px; border-radius:8px; font-size:12px; cursor:pointer;">${txtDel}</button>
+           </div>`;
+
       html += `
         <div style="background:var(--glass); border:1px solid var(--glass-border); padding:12px; border-radius:12px; display:flex; justify-content:space-between; align-items:center;">
           <div>
             <div style="font-size:14px; font-weight:600; color:var(--text);">${data.title}</div>
             <div style="font-size:12px; color:var(--muted);">$${data.price}</div>
           </div>
-          <button onclick="deleteMyAd('${doc.id}')" style="background:rgba(255,100,100,0.1); border:1px solid rgba(255,100,100,0.3); color:#FF6B6B; padding:6px 10px; border-radius:8px; font-size:11px; cursor:pointer;">${txtDel}</button>
+          ${pinBlock}
         </div>
       `;
     });
@@ -441,18 +461,28 @@ async function fetchMyAds() {
   }
 }
 
-async function deleteMyAd(id) {
+async function deleteMyAd(id, pin) {
+  if (!pin || pin.length < 4) return showToast('Requiere PIN de 4 dígitos', true);
   if (!confirm('¿Seguro que deseas eliminar este anuncio?')) return;
   try {
     await db.collection('listings').doc(id).update({
       status: 'deleted',
+      deletePin: pin,
       deletedAt: firebase.firestore.FieldValue.serverTimestamp()
     });
+    
+    // Clean up local storage
+    const myAds = JSON.parse(localStorage.getItem('lot_my_ads') || '{}');
+    if (myAds[id]) {
+      delete myAds[id];
+      localStorage.setItem('lot_my_ads', JSON.stringify(myAds));
+    }
+    
     showToast(i18n[currentLang]?.ad_deleted || 'Anuncio eliminado');
     fetchMyAds(); // Refresh list
     loadListings(); // Refresh main feed
   } catch (err) {
-    showToast('Error al eliminar', true);
+    showToast('Error al eliminar. Revisa tu PIN.', true);
   }
 }
 
@@ -652,10 +682,12 @@ async function submitPost() {
   const city    = document.getElementById('postCity').value.trim() || 'México';
   const desc    = document.getElementById('postDesc').value.trim();
   const contact = document.getElementById('postContact').value.trim();
+  const pin     = document.getElementById('postPin').value.trim();
 
   if (!cat || !title) { showToast('⚠️ Completa categoría y título', true); return; }
   if (title.length < 3) { showToast('⚠️ El título es muy corto', true); return; }
   if (!/^[0-9]{10}$/.test(contact)) { showToast('⚠️ WhatsApp debe tener exactamente 10 dígitos', true); return; }
+  if (!/^[0-9]{4}$/.test(pin)) { showToast('⚠️ Ingresa un PIN de exactamente 4 dígitos', true); return; }
 
   // Layer 3: Check phone ban BEFORE processing anything
   const banned = await isPhoneBanned(contact);
@@ -683,8 +715,8 @@ async function submitPost() {
     const SIX_MONTHS_MS = 180 * 24 * 60 * 60 * 1000;
     const expiresAt = firebase.firestore.Timestamp.fromMillis(Date.now() + SIX_MONTHS_MS);
 
-    await db.collection('listings').add({
-      cat, title, price, city, desc, contact,
+    const docRef = await db.collection('listings').add({
+      cat, title, price, city, desc, contact, pin,
       images,
       status: 'active',
       createdAt: now,
@@ -692,6 +724,11 @@ async function submitPost() {
       views: 0,
       reports: 0
     });
+
+    // Save strictly to local storage
+    const myAds = JSON.parse(localStorage.getItem('lot_my_ads') || '{}');
+    myAds[docRef.id] = pin;
+    localStorage.setItem('lot_my_ads', JSON.stringify(myAds));
 
     closeModal('postOverlay');
     showToast('✦ Anuncio publicado — válido 6 meses');
@@ -708,7 +745,7 @@ async function submitPost() {
 }
 
 function resetForm() {
-  ['postCat','postTitle','postPrice','postCity','postDesc','postContact'].forEach(id =>
+  ['postCat','postTitle','postPrice','postCity','postDesc','postContact','postPin'].forEach(id =>
     document.getElementById(id).value = ''
   );
   photoBlobs.fill(null);

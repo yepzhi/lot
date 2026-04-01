@@ -38,6 +38,9 @@ const i18n = {
     "img_hint": "Imágenes optimizadas automáticamente · WebP · max 0.5MB",
     "lbl_wa": "WhatsApp (10 dígitos — para contacto y seguimiento)",
     "wa_hint": "📋 El número se usa para rastrear publicaciones y/o borrarlas.",
+    "lbl_pin": "PIN de Seguridad (4 dígitos)",
+    "ph_pin": "Ej: 1234",
+    "pin_hint": "🔒 Memorízalo: si borras tu caché, necesitarás este PIN para poder eliminar el anuncio antes de los 6 meses.",
     "btn_publish": "Publicar Anuncio ✦",
     "empty_title": "No hay anuncios aquí",
     "empty_desc": "Sé el primero en publicar en esta categoría",
@@ -52,6 +55,8 @@ const i18n = {
     "my_ads_desc": "Ingresa el número con el que publicaste los anuncios para administrarlos.",
     "btn_search_ads": "Buscar mis anuncios",
     "btn_delete": "X Borrar Anuncio",
+    "btn_delete_pin": "Borrar",
+    "ph_del_pin": "PIN (4 dígitos)",
     "ads_not_found": "No se encontraron anuncios activos con ese número.",
     "ad_deleted": "✦ Anuncio eliminado"
   },
@@ -94,6 +99,9 @@ const i18n = {
     "img_hint": "Images auto optimized · WebP · max 0.5MB",
     "lbl_wa": "WhatsApp (10 digits — for contact and tracking)",
     "wa_hint": "📋 Number is used to track and manage your listings.",
+    "lbl_pin": "Security PIN (4 digits)",
+    "ph_pin": "Ex: 1234",
+    "pin_hint": "🔒 Memorize this: if you clear cache, you'll need this PIN to delete your ad before 6 months.",
     "btn_publish": "Publish Ad ✦",
     "empty_title": "No ads here yet",
     "empty_desc": "Be the first to post in this category",
@@ -108,6 +116,8 @@ const i18n = {
     "my_ads_desc": "Enter the phone number you used to manage your listings.",
     "btn_search_ads": "Find my ads",
     "btn_delete": "X Delete Ad",
+    "btn_delete_pin": "Delete",
+    "ph_del_pin": "PIN (4 digits)",
     "ads_not_found": "No active ads found with that number.",
     "ad_deleted": "✦ Ad deleted"
   }

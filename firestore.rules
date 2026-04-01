@@ -19,9 +19,17 @@ service cloud.firestore {
         (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views'])
           && request.resource.data.views == resource.data.views + 1)
         ||
-        // User deletion (auth-less frictionless deletion, status -> deleted)
-        (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','deletedAt'])
-          && request.resource.data.status == 'deleted');
+        // User deletion (auth-less frictionless deletion)
+        (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','deletedAt','deletePin'])
+          && request.resource.data.status == 'deleted'
+          && (
+               // New ads with a PIN must match exactly
+               ( ('pin' in resource.data) && request.resource.data.deletePin == resource.data.pin ) 
+               || 
+               // Legacy fallback: old ads without a PIN can be deleted just with the phone match (handled by client)
+               ( !('pin' in resource.data) )
+             )
+        );
 
       allow delete: if false;
 
