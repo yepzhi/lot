@@ -1,0 +1,14 @@
+# Environment / secrets — NUNCA subir al repo
+.env
+.env.local
+*.env
+
+# macOS
+.DS_Store
+.DS_Store?
+
+# Logs
+*.log
+
+# Node (si se usa en el futuro)
+node_modules/

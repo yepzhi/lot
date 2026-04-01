@@ -1,0 +1,64 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── LISTINGS ──────────────────────────────────────────────
+    match /listings/{listingId} {
+      allow read: if resource.data.status == 'active';
+
+      allow create: if validateListing(request.resource.data);
+
+      // Only allow: suspend via community (status→suspended) or view increment
+      allow update: if
+        // Community suspension (10 reports reached, triggered by client)
+        (request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['status','suspendedAt','suspendReason'])
+          && request.resource.data.status == 'suspended')
+        ||
+        // View counter increment
+        (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views'])
+          && request.resource.data.views == resource.data.views + 1);
+
+      allow delete: if false;
+
+      // ── REPORTS SUBCOLLECTION (community moderation) ────────
+      // Uses IP as doc ID → natural dedup per IP per listing
+      match /reports/{ipDocId} {
+        // Read to check if IP already reported (client-side dedup check)
+        allow read: if true;
+        // Create only — no updates or deletes
+        allow create: if request.resource.data.keys().hasAll(['ip', 'createdAt'])
+                      && request.resource.data.ip is string
+                      && request.resource.data.ip.size() > 0;
+        allow update, delete: if false;
+      }
+    }
+
+    // ── BANNED PHONES ─────────────────────────────────────────
+    // Read: public (needed to check before posting)
+    // Create: allowed (triggered when listing reaches 10 reports)
+    // No updates or deletes from client
+    match /banned_phones/{phone} {
+      allow read: if true;
+      allow create: if request.resource.data.keys().hasAll(['phone','reason','bannedAt'])
+                    && request.resource.data.phone is string
+                    && request.resource.data.phone.matches('[0-9]{10}');
+      allow update, delete: if false;
+    }
+  }
+
+  function validateListing(data) {
+    return data.keys().hasAll(['cat','title','price','city','contact','images','status','createdAt','expiresAt'])
+      && data.title is string
+      && data.title.size() >= 3
+      && data.title.size() <= 80
+      && data.description is string == false || data.description.size() <= 1000
+      && data.price is number
+      && data.price >= 0
+      && data.contact is string
+      && data.contact.matches('[0-9]{10}')
+      && data.status == 'active'
+      && data.images is list
+      && data.images.size() <= 4;
+  }
+}

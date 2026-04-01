@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<!-- LOT v2.1.0 — Dual moderation: NSFWJS + Community 10-IP reports + Phone ban -->
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LOT — Compra, Vende, Conecta</title>
+<meta name="description" content="Marketplace de clasificados en Hermosillo y México. Carros, teléfonos, servicios y más.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#050810;--glass:rgba(255,255,255,0.05);--glass-border:rgba(255,255,255,0.10);--glass-hover:rgba(255,255,255,0.09);--accent:#7DF9FF;--accent2:#FF6BF8;--accent3:#FFD166;--text:#F0F4FF;--muted:rgba(240,244,255,0.45);--card-shadow:0 8px 32px rgba(0,0,0,0.45);--blur:blur(18px);--r:18px;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+.bg-orbs{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.18;animation:drift 18s ease-in-out infinite alternate}
+.orb-1{width:600px;height:600px;background:#7DF9FF;top:-200px;left:-100px}
+.orb-2{width:500px;height:500px;background:#FF6BF8;top:30%;right:-150px;animation-delay:-6s}
+.orb-3{width:400px;height:400px;background:#FFD166;bottom:-100px;left:30%;animation-delay:-12s}
+@keyframes drift{from{transform:translate(0,0) scale(1)}to{transform:translate(40px,30px) scale(1.08)}}
+.wrapper{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:0 24px}
+header{position:sticky;top:0;z-index:100;background:rgba(5,8,16,.65);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-bottom:1px solid var(--glass-border)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;max-width:1280px;margin:0 auto}
+.logo{font-family:var(--font-head);font-size:26px;font-weight:800;letter-spacing:-1px;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none;cursor:pointer}
+.logo span{color:var(--muted);-webkit-text-fill-color:var(--muted);font-weight:400;font-size:13px;margin-left:4px}
+.btn-post{flex-shrink:0;padding:10px 22px;border-radius:50px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#050810;font-family:var(--font-head);font-weight:700;font-size:13px;border:none;cursor:pointer;box-shadow:0 0 20px rgba(125,249,255,.3);transition:transform .15s,box-shadow .15s;white-space:nowrap}
+.btn-post:hover{transform:scale(1.04);box-shadow:0 0 30px rgba(125,249,255,.5)}
+.hero{padding:64px 0 32px;text-align:center}
+.hero-tag{display:inline-block;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--accent);border:1px solid rgba(125,249,255,.3);padding:4px 14px;border-radius:50px;background:rgba(125,249,255,.07);margin-bottom:20px;animation:fadeUp .6s ease both}
+.hero h1{font-family:var(--font-head);font-size:clamp(36px,6vw,72px);font-weight:800;line-height:1.05;letter-spacing:-2px;animation:fadeUp .6s .1s ease both}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--muted);font-size:16px;margin-top:14px;animation:fadeUp .6s .2s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.hero-search-wrap{margin:24px auto 0;max-width:500px;animation:fadeUp .6s .25s ease both}
+.search-bar{position:relative}
+.search-bar input{width:100%;padding:13px 20px 13px 48px;background:var(--glass);border:1.5px solid var(--glass-border);backdrop-filter:var(--blur);border-radius:50px;color:var(--text);font-family:var(--font-body);font-size:15px;outline:none;transition:border .2s,background .2s,box-shadow .2s}
+.search-bar input:focus{border-color:var(--accent);background:rgba(125,249,255,.06);box-shadow:0 0 0 3px rgba(125,249,255,.08)}
+.search-bar input::placeholder{color:var(--muted)}
+.search-bar .ic{position:absolute;left:17px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+.section-label{font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;padding:0 2px}
+.cats-grid{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px}
+.cat-pill{display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:50px;background:var(--glass);border:1px solid var(--glass-border);backdrop-filter:var(--blur);cursor:pointer;transition:all .2s;font-size:13px;font-weight:500;color:var(--text);user-select:none}
+.cat-pill:hover,.cat-pill.active{background:var(--glass-hover);border-color:var(--accent);color:var(--accent);box-shadow:0 0 16px rgba(125,249,255,.15)}
+.cat-pill .icon{font-size:16px}
+.cat-count{font-size:10px;background:rgba(255,255,255,.1);padding:1px 7px;border-radius:20px;color:var(--muted)}
+.cat-pill.active .cat-count{background:rgba(125,249,255,.2);color:var(--accent)}
+.otros-drawer{display:none;flex-wrap:wrap;gap:8px;background:rgba(12,16,30,.7);border:1px solid var(--glass-border);border-radius:14px;padding:14px 16px;margin-top:-32px;margin-bottom:20px;backdrop-filter:var(--blur);animation:fadeUp .2s ease both}
+.otros-drawer.open{display:flex}
+.otros-drawer-label{width:100%;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.otros-sub{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:50px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);cursor:pointer;font-size:12px;font-weight:500;color:var(--muted);transition:all .15s;user-select:none}
+.otros-sub:hover,.otros-sub.active{background:rgba(200,182,255,.12);border-color:#C8B6FF;color:#C8B6FF}
+.toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.results-info{font-size:13px;color:var(--muted)}
+.results-info strong{color:var(--text)}
+.listing-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:60px}
+@media(min-width:640px){.listing-grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}}
+.card{background:var(--glass);border:1px solid var(--glass-border);backdrop-filter:var(--blur);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s;animation:cardIn .4s ease both}
+.card:hover{transform:translateY(-4px);border-color:rgba(125,249,255,.3);box-shadow:var(--card-shadow),0 0 24px rgba(125,249,255,.1)}
+@keyframes cardIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.card-img-wrap{position:relative;overflow:hidden}
+.card-img-wrap img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+.card-img-placeholder{width:100%;aspect-ratio:4/3;background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;font-size:32px;color:rgba(255,255,255,.15)}
+.card-badge{position:absolute;top:10px;left:10px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:20px;backdrop-filter:var(--blur);color:#050810}
+.card-badge.cat-carros{background:var(--accent)}.card-badge.cat-casas{background:#A8FF78}.card-badge.cat-fiestas{background:var(--accent3)}.card-badge.cat-servicios{background:#80FFE8}.card-badge.cat-telefonos{background:#6B9FFF;color:#fff}.card-badge.cat-computacion{background:#FF8C42;color:#fff}.card-badge.cat-pantallas{background:#C8B6FF}.card-badge.cat-ropa{background:#FF6B9D;color:#fff}.card-badge.cat-zapatos{background:#FFF176}.card-badge.cat-otros{background:rgba(255,255,255,.2);color:#fff}
+.card-imgs-count{position:absolute;bottom:8px;right:10px;font-size:10px;color:rgba(255,255,255,.8);background:rgba(0,0,0,.55);backdrop-filter:blur(4px);padding:2px 8px;border-radius:20px}
+.card-expiry{position:absolute;bottom:8px;left:10px;font-size:9px;color:rgba(255,200,100,.9);background:rgba(0,0,0,.55);backdrop-filter:blur(4px);padding:2px 8px;border-radius:20px}
+.card-body{padding:14px 16px 16px}
+.card-price{font-family:var(--font-head);font-size:20px;font-weight:700;color:var(--accent);margin-bottom:4px}
+.card-price.free{color:#A8FF78}
+.card-title{font-size:14px;font-weight:500;line-height:1.4;margin-bottom:8px;color:var(--text);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card-meta{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--muted)}
+.card-fav{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;color:var(--muted);font-size:14px;transition:color .2s,background .2s;z-index:2}
+.card-fav:hover,.card-fav.active{color:var(--accent2);background:rgba(255,107,248,.15)}
+.skeleton{background:linear-gradient(90deg,rgba(255,255,255,.05) 25%,rgba(255,255,255,.1) 50%,rgba(255,255,255,.05) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:var(--r);aspect-ratio:.75}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.empty{grid-column:1/-1;text-align:center;padding:80px 20px;color:var(--muted)}
+.empty-icon{font-size:48px;margin-bottom:16px}
+.empty h3{font-family:var(--font-head);font-size:20px;color:var(--text);margin-bottom:8px}
+/* MODALES */
+.overlay{position:fixed;inset:0;z-index:200;background:rgba(5,8,16,.8);backdrop-filter:blur(8px);display:flex;align-items:flex-end;justify-content:center;padding:0;opacity:0;pointer-events:none;transition:opacity .25s}
+.overlay.open{opacity:1;pointer-events:all}
+.modal{background:rgba(12,16,30,.97);border:1px solid var(--glass-border);border-radius:24px 24px 0 0;width:100%;max-width:560px;max-height:92dvh;overflow-y:auto;padding:8px 28px 36px;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);position:relative}
+.overlay.open .modal{transform:translateY(0)}
+.modal::before{content:'';display:block;width:36px;height:4px;background:rgba(255,255,255,.15);border-radius:2px;margin:10px auto 18px}
+.modal-close{position:absolute;top:18px;right:18px;width:34px;height:34px;border-radius:50%;background:var(--glass);border:1px solid var(--glass-border);color:var(--muted);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:color .2s,border-color .2s}
+.modal-close:hover{color:var(--text);border-color:var(--accent)}
+.modal h2{font-family:var(--font-head);font-size:22px;font-weight:700;margin-bottom:24px;letter-spacing:-.5px}
+.modal h2 em{font-style:normal;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.form-group{margin-bottom:18px}
+.form-group label{display:block;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:11px 16px;background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;color:var(--text);font-family:var(--font-body);font-size:14px;outline:none;transition:border .2s,background .2s;-webkit-appearance:none}
+.form-group select option{background:#0c101e}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent);background:rgba(125,249,255,.04)}
+.form-group textarea{resize:vertical;min-height:90px}
+.price-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.photo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:4px}
+.photo-slot{aspect-ratio:1;border-radius:12px;border:2px dashed var(--glass-border);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s,background .2s;background:var(--glass);overflow:hidden;position:relative;font-size:11px;color:var(--muted);text-align:center;gap:4px}
+.photo-slot:hover{border-color:var(--accent);background:rgba(125,249,255,.05)}
+.photo-slot input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.photo-slot img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.photo-slot .rm-btn{position:absolute;top:4px;right:4px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.7);border:none;color:#fff;font-size:11px;cursor:pointer;display:none;align-items:center;justify-content:center}
+.photo-slot.has-img .rm-btn{display:flex}
+.photo-slot.has-img input{display:none}
+.photo-slot:first-child{border-style:solid;border-color:rgba(125,249,255,.3)}
+.photo-hint{font-size:10px;color:var(--muted);margin-top:6px;display:flex;align-items:center;gap:6px}
+.photo-hint span{color:var(--accent)}
+/* Content warning */
+.content-warning{background:rgba(255,100,100,.08);border:1px solid rgba(255,100,100,.25);border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:12px;color:rgba(255,180,180,.9);display:flex;gap:10px;align-items:flex-start;line-height:1.5}
+.content-warning strong{color:#FF6B6B}
+.btn-submit{width:100%;padding:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#050810;font-family:var(--font-head);font-weight:700;font-size:15px;border:none;border-radius:14px;cursor:pointer;margin-top:8px;box-shadow:0 0 24px rgba(125,249,255,.25);transition:transform .15s,box-shadow .15s,opacity .2s;letter-spacing:.3px}
+.btn-submit:hover:not(:disabled){transform:scale(1.01);box-shadow:0 0 34px rgba(125,249,255,.4)}
+.btn-submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
+/* Detail */
+.detail-imgs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.detail-imgs img{border-radius:12px;object-fit:cover;aspect-ratio:4/3;cursor:pointer}
+.detail-imgs img:first-child:only-child{width:100%}
+.detail-imgs img:not(:only-child){width:calc(50% - 4px)}
+.detail-price{font-family:var(--font-head);font-size:32px;font-weight:800;color:var(--accent);margin-bottom:6px}
+.detail-title{font-size:20px;font-weight:600;margin-bottom:12px;line-height:1.3}
+.detail-desc{color:var(--muted);font-size:14px;line-height:1.7;margin-bottom:16px;white-space:pre-line}
+.detail-meta{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-bottom:20px}
+.detail-meta span{display:flex;align-items:center;gap:5px}
+.btn-contact{width:100%;padding:13px;background:linear-gradient(135deg,#25D366,#1da855);color:#fff;font-family:var(--font-head);font-weight:700;font-size:14px;border:none;border-radius:14px;cursor:pointer;transition:transform .15s,box-shadow .15s;letter-spacing:.3px;box-shadow:0 0 20px rgba(37,211,102,.3);margin-bottom:10px}
+.btn-contact:hover{transform:scale(1.01);box-shadow:0 0 28px rgba(37,211,102,.5)}
+.btn-share{width:100%;padding:11px;background:var(--glass);border:1px solid var(--glass-border);color:var(--text);font-family:var(--font-body);font-weight:500;font-size:13px;border-radius:14px;cursor:pointer;transition:border-color .2s;margin-bottom:10px}
+.btn-share:hover{border-color:var(--accent);color:var(--accent)}
+.btn-report{background:none;border:none;color:rgba(255,100,100,.5);font-size:11px;cursor:pointer;padding:6px 0;width:100%;text-align:center;transition:color .2s}
+.btn-report:hover{color:#FF6B6B}
+footer{border-top:1px solid var(--glass-border);padding:24px;text-align:center;font-size:12px;color:var(--muted)}
+footer a{color:var(--accent);text-decoration:none}
+@media(max-width:640px){.hero{padding:44px 0 24px}.hero h1{font-size:38px}.modal{padding:8px 18px 40px}}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(125,249,255,.2);border-radius:3px}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(80px);background:rgba(12,16,30,.95);border:1px solid var(--accent);border-radius:50px;padding:12px 24px;font-size:13px;color:var(--accent);backdrop-filter:var(--blur);z-index:9999;transition:transform .3s ease;white-space:nowrap;max-width:90vw;text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.error{border-color:#FF6B6B;color:#FF6B6B}
+/* NSFW checking indicator */
+.checking-nsfw{position:absolute;inset:0;background:rgba(5,8,16,.7);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;color:var(--muted);gap:4px;z-index:3}
+.spinner{width:18px;height:18px;border:2px solid rgba(125,249,255,.2);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="bg-orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<header>
+  <div class="header-inner">
+    <a class="logo" id="logoBtn" href="https://yepzhi.com/lot/">LOT<span>by yepzhi</span></a>
+    <button class="btn-post" id="btnPost">+ Publicar</button>
+  </div>
+</header>
+
+<div class="wrapper">
+  <section class="hero">
+    <div class="hero-tag">✦ Marketplace Hermosillo &amp; México</div>
+    <h1>Compra. Vende.<br><em>Conecta.</em></h1>
+    <p>Anuncios actualizados en tiempo real — gratuito y sin registro.</p>
+    <div class="hero-search-wrap">
+      <div class="search-bar">
+        <svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="searchInput" placeholder="Busca carros, iphones, servicios…" autocomplete="off">
+      </div>
+    </div>
+  </section>
+
+  <div class="section-label">Categorías</div>
+  <div class="cats-grid" id="catsGrid"></div>
+  <div class="otros-drawer" id="otrosDrawer"></div>
+
+  <div class="toolbar">
+    <div class="results-info" id="resultsInfo">Cargando…</div>
+  </div>
+  <div class="listing-grid" id="listingGrid"></div>
+</div>
+
+<footer>
+  <div>© 2025 <a href="https://yepzhi.com">yepzhi.com</a>/lot — Los anuncios son responsabilidad del publicante. <a href="#" onclick="reportGeneral()">Reportar contenido</a></div>
+</footer>
+
+<!-- POST MODAL -->
+<div class="overlay" id="postOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('postOverlay')">✕</button>
+    <h2>Nuevo <em>Anuncio</em></h2>
+
+    <div class="content-warning">
+      <span>⚠️</span>
+      <div><strong>Aviso de contenido:</strong> Queda estrictamente prohibido publicar imágenes con desnudos, contenido sexual o violento. Las fotos pasan por verificación automática. Anuncios inapropiados serán eliminados y el número de WhatsApp bloqueado.</div>
+    </div>
+
+    <div class="form-group">
+      <label>Categoría</label>
+      <select id="postCat">
+        <option value="">— Selecciona —</option>
+        <option value="carros">🚗 Carros</option>
+        <option value="fiestas">🎉 Fiestas / Eventos</option>
+        <option value="servicios">🔧 Servicios</option>
+        <option value="telefonos">📱 Teléfonos</option>
+        <optgroup label="── Otros ──">
+          <option value="casas">🏠 Casas / Inmuebles</option>
+          <option value="computacion">💻 Computación</option>
+          <option value="pantallas">📺 Pantallas / TV</option>
+          <option value="ropa">👕 Ropa</option>
+          <option value="zapatos">👟 Tenis / Zapatos</option>
+          <option value="otros">📦 Otros</option>
+        </optgroup>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Título del anuncio</label>
+      <input type="text" id="postTitle" placeholder="Ej: iPhone 15 Pro 256GB negro" maxlength="80">
+    </div>
+
+    <div class="price-row">
+      <div class="form-group">
+        <label>Precio (MXN) — 0 = Gratis</label>
+        <input type="number" id="postPrice" placeholder="0" min="0">
+      </div>
+      <div class="form-group">
+        <label>Ciudad</label>
+        <input type="text" id="postCity" placeholder="Hermosillo, Son." maxlength="40">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Descripción</label>
+      <textarea id="postDesc" placeholder="Describe el artículo, estado, detalles…" maxlength="1000"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Fotos (máx. 4 — se optimizan automáticamente)</label>
+      <div class="photo-grid" id="photoGrid">
+        <div class="photo-slot" data-idx="0">
+          <input type="file" accept="image/*" onchange="handlePhoto(this,0)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Principal
+        </div>
+        <div class="photo-slot" data-idx="1"><input type="file" accept="image/*" onchange="handlePhoto(this,1)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+        <div class="photo-slot" data-idx="2"><input type="file" accept="image/*" onchange="handlePhoto(this,2)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+        <div class="photo-slot" data-idx="3"><input type="file" accept="image/*" onchange="handlePhoto(this,3)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+      </div>
+      <div class="photo-hint">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+        Imágenes optimizadas automáticamente · <span>WebP · max 0.5MB · verificación de contenido activa</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>WhatsApp (10 dígitos — para contacto y seguimiento)</label>
+      <input type="tel" id="postContact" placeholder="6621234567" maxlength="10" pattern="[0-9]{10}" inputmode="numeric">
+      <div style="font-size:10px;color:var(--muted);margin-top:6px">📋 El número se usa para rastrear publicaciones. Tu anuncio expira en 6 meses automáticamente.</div>
+    </div>
+
+    <button class="btn-submit" id="btnSubmit" onclick="submitPost()">Publicar Anuncio ✦</button>
+  </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="overlay" id="detailOverlay">
+  <div class="modal" id="detailModal">
+    <button class="modal-close" onclick="closeModal('detailOverlay')">✕</button>
+    <div id="detailContent"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Firebase Compat SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+<script>
+// ──────────────────────────────────────────────────────────────
+// LOT — yepzhi.com/lot · v2.0.0
+// Stack: Firebase Firestore + Cloudinary + NSFWJS
+// Sin login: posteo anónimo, tracking por número de WhatsApp
+// ──────────────────────────────────────────────────────────────
+
+// ─── URL CLEANUP ─────────────────────────────────────────────
+if (location.pathname.endsWith('/index.html')) {
+  history.replaceState(null, '', location.pathname.replace('/index.html', '/'));
+}
+
+// ─── CONFIG ──────────────────────────────────────────────────
+// 🔴 PASO 1: Ve a Firebase Console → Proyecto nlot-89d26 →
+//    Configuración del proyecto → Tus apps → Web app → SDK setup
+//    Copia tu objeto firebaseConfig y pégalo aquí:
+const firebaseConfig = {
+  apiKey:            "PEGA_TU_API_KEY_AQUI",
+  authDomain:        "nlot-89d26.firebaseapp.com",
+  projectId:         "nlot-89d26",
+  storageBucket:     "nlot-89d26.firebasestorage.app",
+  messagingSenderId: "PEGA_TU_SENDER_ID",
+  appId:             "PEGA_TU_APP_ID"
+};
+
+// Cloudinary
+const CLOUD_NAME = '__CLOUDINARY_CLOUD_NAME__';
+// 🔴 PASO 2: Cloudinary Console → Settings → Upload → Upload Presets
+//    → Add Upload Preset → Signing Mode: UNSIGNED → Preset Name: __CLOUDINARY_UPLOAD_PRESET__ → Save
+const UPLOAD_PRESET = '__CLOUDINARY_UPLOAD_PRESET__';
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// ─── CATEGORIES ──────────────────────────────────────────────
+const CATS = [
+  { id:'all',       label:'Todo',       icon:'⚡' },
+  { id:'carros',    label:'Carros',     icon:'🚗' },
+  { id:'fiestas',   label:'Fiestas',    icon:'🎉' },
+  { id:'servicios', label:'Servicios',  icon:'🔧' },
+  { id:'telefonos', label:'Teléfonos',  icon:'📱' },
+  { id:'otros',     label:'Otros',      icon:'📦' },
+];
+const OTROS_SUBCATS = [
+  { id:'casas',       label:'Casas',       icon:'🏠' },
+  { id:'computacion', label:'Computación', icon:'💻' },
+  { id:'pantallas',   label:'Pantallas',   icon:'📺' },
+  { id:'ropa',        label:'Ropa',        icon:'👕' },
+  { id:'zapatos',     label:'Zapatos',     icon:'👟' },
+];
+
+// ─── STATE ───────────────────────────────────────────────────
+let listings = [];
+let activeCat = 'all';
+let searchQ = '';
+let otrosOpen = false;
+let activeSubCat = null;
+const photoBlobs = [null, null, null, null];
+let nsfwModel = null;
+let nsfwLoading = false;
+
+// ─── HELPERS ─────────────────────────────────────────────────
+function timeAgo(ts) {
+  const diff = Date.now() - ts;
+  const m = Math.floor(diff / 60000);
+  if (m < 1) return 'ahora';
+  if (m < 60) return `hace ${m}m`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `hace ${h}h`;
+  const d = Math.floor(h / 24);
+  return d < 30 ? `hace ${d}d` : `hace ${Math.floor(d/30)}mes`;
+}
+
+function daysLeft(expiresAtMs) {
+  const d = Math.ceil((expiresAtMs - Date.now()) / 86400000);
+  if (d <= 7) return `⚠️ ${d}d`;
+  if (d <= 30) return `${d}d`;
+  return null; // no mostrar si queda mucho tiempo
+}
+
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function closeOnBg(e, id) { if (e.target.id === id) closeModal(id); }
+
+function showToast(msg, isError = false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (isError ? ' error' : '') + ' show';
+  setTimeout(() => t.className = 'toast', 3500);
+}
+
+function loadScript(src) {
+  return new Promise((res, rej) => {
+    if (document.querySelector(`script[src="${src}"]`)) { res(); return; }
+    const s = document.createElement('script');
+    s.src = src; s.onload = res; s.onerror = rej;
+    document.head.appendChild(s);
+  });
+}
+
+// ─── NSFW CHECK (lazy-loaded) ────────────────────────────────
+// ─── NSFW — Dual-layer moderation ───────────────────────────
+// Layer 1: NSFWJS runs in the browser (WebGL/TF.js) before any upload
+// Model: MobileNetV2 quantized ~2.5MB — classifies into:
+// Neutral | Drawing | Sexy | Porn | Hentai
+// Thresholds: Porn > 0.55 OR Hentai > 0.55 → BLOCKED
+
+let _nsfwPromise = null;
+async function ensureNSFW() {
+  if (nsfwModel) return nsfwModel;
+  if (_nsfwPromise) return _nsfwPromise; // avoid double-load
+  _nsfwPromise = (async () => {
+    try {
+      await loadScript('https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.2.0/dist/tf.min.js');
+      await loadScript('https://cdn.jsdelivr.net/npm/nsfwjs@2.4.2/dist/nsfwjs.min.js');
+      // nsfwjs.load() uses MobileNetV2 quant model hosted on nsfwjs CDN (~2.5MB)
+      nsfwModel = await window.nsfwjs.load();
+      console.log('%c LOT NSFW ', 'background:#FF6BF8;color:#050810;font-weight:bold;border-radius:4px;padding:2px 6px;', 'Modelo listo');
+    } catch(e) {
+      console.warn('NSFW model failed to load — skipping check:', e);
+      nsfwModel = null;
+    }
+    return nsfwModel;
+  })();
+  return _nsfwPromise;
+}
+
+async function checkNSFW(imgEl) {
+  const model = await ensureNSFW();
+  if (!model) return false; // fail-open: si el modelo no carga, no bloqueamos
+  try {
+    const predictions = await model.classify(imgEl);
+    // Log para debug (quitar en producción)
+    console.log('NSFW predictions:', predictions.map(p => `${p.className}:${(p.probability*100).toFixed(1)}%`).join(', '));
+    const harmful = predictions.find(p =>
+      ['Porn', 'Hentai'].includes(p.className) && p.probability > 0.55
+    );
+    return !!harmful;
+  } catch(e) {
+    console.warn('NSFW classify error:', e);
+    return false;
+  }
+}
+
+// ─── IP + PHONE BAN HELPERS ──────────────────────────────────
+async function getPublicIP() {
+  try {
+    const r = await fetch('https://api.ipify.org?format=json');
+    const d = await r.json();
+    return d.ip;
+  } catch {
+    return null;
+  }
+}
+
+function ipToDocId(ip) {
+  // Firestore doc IDs cannot have '.' so replace with '_'
+  return ip.replace(/[.:]/g, '_');
+}
+
+async function isPhoneBanned(phone) {
+  try {
+    const doc = await db.collection('banned_phones').doc(phone).get();
+    return doc.exists;
+  } catch {
+    return false; // fail-open
+  }
+}
+
+async function banPhone(phone, listingId) {
+  try {
+    await db.collection('banned_phones').doc(phone).set({
+      phone,
+      reason: 'nsfw_community_reports',
+      listingId,
+      bannedAt: firebase.firestore.Timestamp.now()
+    });
+  } catch(e) {
+    console.warn('Could not ban phone:', e);
+  }
+}
+
+// ─── PHOTO HANDLING ──────────────────────────────────────────
+async function handlePhoto(input, idx) {
+  const file = input.files[0];
+  if (!file) return;
+
+  const slot = document.querySelector(`.photo-slot[data-idx="${idx}"]`);
+
+  // Show checking indicator
+  const indicator = document.createElement('div');
+  indicator.className = 'checking-nsfw';
+  indicator.innerHTML = '<div class="spinner"></div><span>Verificando…</span>';
+  slot.appendChild(indicator);
+
+  const reader = new FileReader();
+  reader.onload = async e => {
+    const img = new Image();
+    img.onload = async () => {
+      // Compress with Canvas
+      const canvas = document.createElement('canvas');
+      const MAX = 900;
+      let w = img.width, h = img.height;
+      if (w > MAX || h > MAX) {
+        if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
+        else { w = Math.round(w * MAX / h); h = MAX; }
+      }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+
+      canvas.toBlob(async blob => {
+        // NSFW check on compressed image
+        const tempImg = document.createElement('img');
+        const objUrl = URL.createObjectURL(blob);
+        tempImg.src = objUrl;
+        await new Promise(r => { tempImg.onload = r; tempImg.onerror = r; });
+
+        const isNSFW = await checkNSFW(tempImg);
+        URL.revokeObjectURL(objUrl);
+        indicator.remove();
+
+        if (isNSFW) {
+          showToast('🚫 Foto rechazada — contenido inapropiado detectado', true);
+          input.value = '';
+          return;
+        }
+
+        // Save blob and show preview
+        photoBlobs[idx] = blob;
+        slot.classList.add('has-img');
+        let previewImg = slot.querySelector('img');
+        if (!previewImg) {
+          previewImg = document.createElement('img');
+          slot.insertBefore(previewImg, slot.firstChild);
+        }
+        previewImg.src = URL.createObjectURL(blob);
+
+        let rm = slot.querySelector('.rm-btn');
+        if (!rm) {
+          rm = document.createElement('button');
+          rm.className = 'rm-btn'; rm.innerHTML = '✕';
+          rm.onclick = ev => {
+            ev.stopPropagation();
+            photoBlobs[idx] = null;
+            slot.classList.remove('has-img');
+            previewImg.remove();
+            input.value = '';
+          };
+          slot.appendChild(rm);
+        }
+        showToast(`✓ Foto ${idx + 1} lista`);
+      }, 'image/webp', 0.78);
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ─── CLOUDINARY UPLOAD ───────────────────────────────────────
+async function uploadToCloudinary(blob) {
+  const fd = new FormData();
+  fd.append('file', blob);
+  fd.append('upload_preset', UPLOAD_PRESET);
+  fd.append('folder', 'lot');
+  const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+    method: 'POST', body: fd
+  });
+  if (!res.ok) throw new Error('Cloudinary upload failed');
+  const data = await res.json();
+  return data.secure_url;
+}
+
+// ─── SUBMIT POST ─────────────────────────────────────────────
+async function submitPost() {
+  const cat     = document.getElementById('postCat').value;
+  const title   = document.getElementById('postTitle').value.trim();
+  const price   = parseFloat(document.getElementById('postPrice').value) || 0;
+  const city    = document.getElementById('postCity').value.trim() || 'México';
+  const desc    = document.getElementById('postDesc').value.trim();
+  const contact = document.getElementById('postContact').value.trim();
+
+  if (!cat || !title) { showToast('⚠️ Completa categoría y título', true); return; }
+  if (title.length < 3) { showToast('⚠️ El título es muy corto', true); return; }
+  if (!/^[0-9]{10}$/.test(contact)) { showToast('⚠️ WhatsApp debe tener exactamente 10 dígitos', true); return; }
+
+  // Layer 3: Check phone ban BEFORE processing anything
+  const banned = await isPhoneBanned(contact);
+  if (banned) {
+    showToast('🚫 Este número tiene restricción permanente de publicación', true);
+    return;
+  }
+
+  const btn = document.getElementById('btnSubmit');
+  btn.disabled = true;
+
+  try {
+    // Upload photos
+    const images = [];
+    const photosToUp = photoBlobs.filter(Boolean);
+    for (let i = 0; i < photosToUp.length; i++) {
+      btn.textContent = `Subiendo fotos… (${i + 1}/${photosToUp.length})`;
+      const url = await uploadToCloudinary(photosToUp[i]);
+      images.push(url);
+    }
+
+    btn.textContent = 'Guardando anuncio…';
+
+    const now = firebase.firestore.Timestamp.now();
+    const SIX_MONTHS_MS = 180 * 24 * 60 * 60 * 1000;
+    const expiresAt = firebase.firestore.Timestamp.fromMillis(Date.now() + SIX_MONTHS_MS);
+
+    await db.collection('listings').add({
+      cat, title, price, city, desc, contact,
+      images,
+      status: 'active',
+      createdAt: now,
+      expiresAt,
+      views: 0,
+      reports: 0
+    });
+
+    closeModal('postOverlay');
+    showToast('✦ Anuncio publicado — válido 6 meses');
+    resetForm();
+    loadListings();
+
+  } catch (err) {
+    console.error(err);
+    showToast('❌ Error al publicar. Verifica tu conexión.', true);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Publicar Anuncio ✦';
+  }
+}
+
+function resetForm() {
+  ['postCat','postTitle','postPrice','postCity','postDesc','postContact'].forEach(id =>
+    document.getElementById(id).value = ''
+  );
+  photoBlobs.fill(null);
+  document.querySelectorAll('.photo-slot').forEach(s => {
+    s.classList.remove('has-img');
+    s.querySelectorAll('img').forEach(i => i.remove());
+  });
+}
+
+// ─── FIRESTORE LOAD ──────────────────────────────────────────
+async function loadListings() {
+  showSkeleton();
+  try {
+    const snap = await db.collection('listings')
+      .where('status', '==', 'active')
+      .orderBy('createdAt', 'desc')
+      .limit(60)
+      .get();
+
+    const now = Date.now();
+    listings = snap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .filter(l => l.expiresAt && l.expiresAt.toMillis() > now);
+
+    renderAll();
+  } catch (err) {
+    console.error('Firestore error:', err);
+    // Mostrar mensaje útil si faltan índices
+    if (err.code === 'failed-precondition') {
+      document.getElementById('listingGrid').innerHTML =
+        `<div class="empty"><div class="empty-icon">⚙️</div><h3>Configurando base de datos</h3><p>Crea el <strong>índice compuesto</strong> en Firebase Console:<br><code>status ASC + createdAt DESC</code></p></div>`;
+      document.getElementById('resultsInfo').textContent = '';
+    } else {
+      showToast('⚠️ Error al cargar anuncios', true);
+      renderAll();
+    }
+  }
+}
+
+function showSkeleton() {
+  const grid = document.getElementById('listingGrid');
+  grid.innerHTML = Array(8).fill('<div class="skeleton"></div>').join('');
+  document.getElementById('resultsInfo').textContent = 'Cargando…';
+}
+
+// ─── RENDER ──────────────────────────────────────────────────
+function allOtrosIds() { return OTROS_SUBCATS.map(s => s.id); }
+
+function getFiltered() {
+  let list = [...listings];
+  const otrosIds = allOtrosIds();
+  if (activeCat === 'otros') list = list.filter(l => otrosIds.includes(l.cat));
+  else if (activeCat !== 'all') list = list.filter(l => l.cat === activeCat);
+  if (searchQ.trim()) {
+    const q = searchQ.toLowerCase();
+    const exact = list.filter(l =>
+      l.title.toLowerCase().includes(q) || (l.desc || '').toLowerCase().includes(q)
+    );
+    if (exact.length) return { list: exact, similar: false };
+    const words = q.split(/\s+/);
+    return { list: list.filter(l => words.some(w => l.title.toLowerCase().includes(w))), similar: true };
+  }
+  return { list, similar: false };
+}
+
+function renderCats() {
+  const g = document.getElementById('catsGrid');
+  g.innerHTML = '';
+  const otrosIds = allOtrosIds();
+
+  CATS.forEach(c => {
+    const count = c.id === 'all' ? listings.length
+      : c.id === 'otros' ? listings.filter(l => otrosIds.includes(l.cat)).length
+      : listings.filter(l => l.cat === c.id).length;
+
+    const isActive = c.id === 'otros'
+      ? (activeCat === 'otros' || otrosIds.includes(activeCat))
+      : activeCat === c.id;
+
+    const div = document.createElement('div');
+    div.className = 'cat-pill' + (isActive ? ' active' : '');
+    div.innerHTML = `<span class="icon">${c.icon}</span>${c.label}<span class="cat-count">${count}</span>`;
+
+    if (c.id === 'otros') {
+      div.onclick = () => {
+        otrosOpen = !otrosOpen;
+        if (!otrosOpen) { activeCat = 'all'; activeSubCat = null; }
+        else activeCat = 'otros';
+        renderAll();
+      };
+    } else {
+      div.onclick = () => {
+        activeCat = c.id; otrosOpen = false; activeSubCat = null;
+        document.getElementById('searchInput').value = ''; searchQ = '';
+        renderAll();
+      };
+    }
+    g.appendChild(div);
+  });
+
+  // Otros drawer
+  const drawer = document.getElementById('otrosDrawer');
+  drawer.className = 'otros-drawer' + (otrosOpen ? ' open' : '');
+  if (otrosOpen) {
+    drawer.innerHTML = '<div class="otros-drawer-label">Más categorías</div>';
+    OTROS_SUBCATS.forEach(s => {
+      const count = listings.filter(l => l.cat === s.id).length;
+      const pill = document.createElement('div');
+      pill.className = 'otros-sub' + (activeSubCat === s.id ? ' active' : '');
+      pill.innerHTML = `${s.icon} ${s.label} <span class="cat-count" style="margin-left:4px">${count}</span>`;
+      pill.onclick = () => {
+        activeCat = s.id; activeSubCat = s.id;
+        drawer.querySelectorAll('.otros-sub').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        renderListings();
+      };
+      drawer.appendChild(pill);
+    });
+  }
+}
+
+function renderListings() {
+  const grid = document.getElementById('listingGrid');
+  const info = document.getElementById('resultsInfo');
+  const { list, similar } = getFiltered();
+  grid.innerHTML = '';
+
+  info.innerHTML = similar
+    ? `Mostrando <strong>${list.length}</strong> resultados similares a "${searchQ}"`
+    : `Mostrando <strong>${list.length}</strong> anuncio${list.length !== 1 ? 's' : ''}`;
+
+  if (!list.length) {
+    grid.innerHTML = `<div class="empty"><div class="empty-icon">🔍</div><h3>Sin resultados</h3><p>Intenta con otras palabras o categoría.</p></div>`;
+    return;
+  }
+
+  const allCatsList = [...CATS, ...OTROS_SUBCATS];
+
+  list.forEach((item, i) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.style.animationDelay = (i * 0.035) + 's';
+
+    const priceStr = item.price === 0 ? 'Gratis' : '$' + item.price.toLocaleString('es-MX');
+    const priceClass = item.price === 0 ? 'card-price free' : 'card-price';
+    const catLabel = allCatsList.find(c => c.id === item.cat)?.label || item.cat;
+    const ago = timeAgo(item.createdAt?.toMillis?.() || Date.now());
+    const expMsLeft = item.expiresAt?.toMillis?.() || Date.now();
+    const expBadge = daysLeft(expMsLeft);
+
+    const imgEl = item.images?.[0]
+      ? `<img src="${item.images[0]}" alt="${item.title}" loading="lazy">`
+      : `<div class="card-img-placeholder">📷</div>`;
+
+    card.innerHTML = `
+      <div class="card-img-wrap">
+        ${imgEl}
+        <span class="card-badge cat-${item.cat}">${catLabel}</span>
+        ${item.images?.length > 1 ? `<span class="card-imgs-count">📷 ${item.images.length}</span>` : ''}
+        ${expBadge ? `<span class="card-expiry">${expBadge}</span>` : ''}
+        <button class="card-fav" title="Guardar" onclick="event.stopPropagation();this.classList.toggle('active');this.textContent=this.classList.contains('active')?'♥':'♡'">♡</button>
+      </div>
+      <div class="card-body">
+        <div class="${priceClass}">${priceStr}</div>
+        <div class="card-title">${item.title}</div>
+        <div class="card-meta">
+          <span>📍 ${item.city}</span>
+          <span>${ago}</span>
+        </div>
+      </div>`;
+
+    card.onclick = () => openDetail(item);
+    grid.appendChild(card);
+  });
+}
+
+function renderAll() { renderCats(); renderListings(); }
+
+// ─── DETAIL ──────────────────────────────────────────────────
+function openDetail(item) {
+  const priceStr = item.price === 0 ? 'Gratis' : '$' + item.price.toLocaleString('es-MX');
+  const allCatsList = [...CATS, ...OTROS_SUBCATS];
+  const catLabel = allCatsList.find(c => c.id === item.cat)?.label || item.cat;
+  const ago = timeAgo(item.createdAt?.toMillis?.() || Date.now());
+
+  const imgs = (item.images || []).length
+    ? (item.images).map(url =>
+        `<img src="${url}" alt="${item.title}" loading="lazy" onclick="openFullImg('${url}')">`
+      ).join('')
+    : '<div style="font-size:48px;padding:40px;text-align:center;color:var(--muted)">📷</div>';
+
+  document.getElementById('detailContent').innerHTML = `
+    <div class="detail-imgs">${imgs}</div>
+    <div class="detail-price">${priceStr}</div>
+    <div class="detail-title">${item.title}</div>
+    <div class="detail-desc">${(item.desc || '').replace(/</g,'&lt;')}</div>
+    <div class="detail-meta">
+      <span>📍 ${item.city}</span>
+      <span>🕐 ${ago}</span>
+      <span>🏷️ ${catLabel}</span>
+      ${item.views > 0 ? `<span>👁 ${item.views}</span>` : ''}
+    </div>
+    <button class="btn-contact" onclick="contactSeller('${item.contact}')">💬 Contactar por WhatsApp</button>
+    <button class="btn-share" onclick="shareItem('${item.id}','${item.title.replace(/'/g,"\\'")}')">↗ Compartir anuncio</button>
+    <button class="btn-report" onclick="reportListing('${item.id}')">🚩 Reportar contenido inapropiado</button>
+  `;
+
+  document.getElementById('detailOverlay').classList.add('open');
+
+  // Increment view count (fire and forget)
+  db.collection('listings').doc(item.id).update({
+    views: firebase.firestore.FieldValue.increment(1)
+  }).catch(() => {});
+}
+
+function contactSeller(c) {
+  const digits = c.replace(/\D/g, '');
+  const wa = digits.length === 10 ? '52' + digits : digits;
+  window.open(`https://wa.me/${wa}`, '_blank');
+}
+
+function openFullImg(url) {
+  window.open(url, '_blank');
+}
+
+async function shareItem(id, title) {
+  const url = `https://yepzhi.com/lot/`;
+  if (navigator.share) {
+    try { await navigator.share({ title, url }); } catch(e) {}
+  } else {
+    navigator.clipboard.writeText(url).then(() => showToast('🔗 Enlace copiado'));
+  }
+}
+
+// Layer 2: Community moderation — 10 unique IPs → auto-suspend + phone ban
+async function reportListing(listingId) {
+  if (!confirm('¿Reportar este anuncio por contenido inapropiado?\n\nSi 10 usuarios distintos lo reportan, el anuncio se eliminará y el número quedará bloqueado.')) return;
+
+  const ip = await getPublicIP();
+  if (!ip) { showToast('No se pudo verificar tu IP. Intenta de nuevo.', true); return; }
+
+  const docId = ipToDocId(ip);
+  const reportRef = db.collection('listings').doc(listingId).collection('reports').doc(docId);
+
+  try {
+    // Check if this IP already reported this listing
+    const existing = await reportRef.get();
+    if (existing.exists) {
+      showToast('Ya reportaste este anuncio anteriormente');
+      return;
+    }
+
+    // Create the unique IP report (uses IP as doc ID → natural dedup)
+    await reportRef.set({
+      ip,
+      createdAt: firebase.firestore.Timestamp.now()
+    });
+
+    // Count total unique reports
+    const reportsSnap = await db.collection('listings').doc(listingId).collection('reports').get();
+    const totalReports = reportsSnap.size;
+
+    showToast(`✓ Reporte registrado (${totalReports}/10)`);
+
+    // AUTO-SUSPEND at 10 unique IP reports
+    if (totalReports >= 10) {
+      // Get the listing to find the contact phone
+      const listingDoc = await db.collection('listings').doc(listingId).get();
+      const listingData = listingDoc.data();
+
+      // Suspend the listing
+      await db.collection('listings').doc(listingId).update({
+        status: 'suspended',
+        suspendedAt: firebase.firestore.Timestamp.now(),
+        suspendReason: 'community_reports_10'
+      });
+
+      // Permanent phone ban
+      if (listingData?.contact) {
+        await banPhone(listingData.contact, listingId);
+      }
+
+      showToast('🚫 Anuncio reportado por la comunidad y dado de baja');
+      closeModal('detailOverlay');
+      // Reload to remove suspended listing from view
+      loadListings();
+    } else {
+      closeModal('detailOverlay');
+    }
+  } catch(e) {
+    console.error('Report error:', e);
+    showToast('Error al enviar reporte', true);
+  }
+}
+
+function reportGeneral() {
+  showToast('Para reportar contenido, abre el anuncio y toca "Reportar"');
+}
+
+// ─── SEARCH ──────────────────────────────────────────────────
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchQ = e.target.value;
+  activeCat = 'all'; otrosOpen = false;
+  renderAll();
+});
+
+// ─── OPEN POST ───────────────────────────────────────────────
+document.getElementById('btnPost').onclick = () => {
+  document.getElementById('postOverlay').classList.add('open');
+};
+
+// Close on background click
+document.getElementById('postOverlay').onclick = e => { if(e.target.id==='postOverlay') closeModal('postOverlay'); };
+document.getElementById('detailOverlay').onclick = e => { if(e.target.id==='detailOverlay') closeModal('detailOverlay'); };
+
+// Keyboard
+document.addEventListener('keydown', e => {
+  if ((e.metaKey||e.ctrlKey) && e.key==='k') { e.preventDefault(); document.getElementById('searchInput').focus(); }
+  if (e.key==='Escape') { closeModal('postOverlay'); closeModal('detailOverlay'); }
+});
+
+// ─── INIT ────────────────────────────────────────────────────
+loadListings();
+
+// Pre-cargar modelo NSFW cuando el usuario abre el modal de publicación
+// Así está listo cuando seleccione la primera foto
+document.getElementById('btnPost').addEventListener('click', () => {
+  ensureNSFW().catch(() => {}); // fire and forget — lazy preload
+}, { once: true });
+
+// También pre-cargar al tocar el área de fotos (segunda oportunidad)
+document.getElementById('photoGrid').addEventListener('pointerenter', () => {
+  ensureNSFW().catch(() => {});
+}, { once: true });
+
+console.log('%c LOT v2.0 ', 'background:#7DF9FF;color:#050810;font-weight:bold;border-radius:4px;padding:2px 8px;', '— yepzhi.com/lot');
+</script>
+</body>
+</html>
