@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- LOT v3.4.3 — Dual moderation + Improved UI stacking + Multi-photo selection -->
+<!-- LOT v3.4.4 — Dark input fix + console noise reduction -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -117,6 +117,29 @@ header{position:sticky;top:0;z-index:100;background:rgba(0,0,0,0.7);backdrop-fil
 .btn-submit.loading{opacity:.7;pointer-events:none;filter:grayscale(0.5)}
 .btn-submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
 .contact-pin-row{display:grid;grid-template-columns:1fr;gap:20px}
+/* Inputs inside contact-pin-row need explicit dark glass styling */
+.contact-pin-row input,.contact-pin-row select{
+  width:100%;padding:11px 16px;background:var(--glass);border:1px solid var(--glass-border);
+  border-radius:12px;color:var(--text);font-family:var(--font-body);font-size:14px;
+  outline:none;transition:border .2s,background .2s;-webkit-appearance:none;appearance:none;
+  -webkit-text-fill-color:var(--text);caret-color:var(--text);
+  background-clip:padding-box;
+}
+.contact-pin-row select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='rgba(240,244,255,0.4)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 8px center;background-size:14px;padding-right:30px;
+}
+.contact-pin-row input::placeholder{color:var(--muted)}
+.contact-pin-row input:focus,.contact-pin-row select:focus{
+  border-color:var(--accent);background:rgba(125,249,255,.04);
+}
+/* Autofill override for dark theme */
+.contact-pin-row input:-webkit-autofill,.contact-pin-row input:-webkit-autofill:hover,
+.contact-pin-row input:-webkit-autofill:focus{
+  -webkit-box-shadow:0 0 0 1000px #050810 inset;
+  -webkit-text-fill-color:var(--text);
+  caret-color:var(--text);
+}
 /* Content warning */
 .content-warning{background:rgba(255,100,100,.08);border:1px solid rgba(255,100,100,.25);border-radius:12px;padding:12px 16px;margin-top:24px;font-size:12px;color:rgba(255,180,180,.9);display:flex;gap:10px;align-items:flex-start;line-height:1.5}
 .content-warning strong{color:#FF6B6B}
@@ -202,7 +225,7 @@ footer a:hover{color:var(--text)}
 
 <footer>
   <div><span data-i18n="footer_text">© 2026, creado por yepzhi.com — Los anuncios son responsabilidad del publicante.</span> <a href="privacy.html" data-i18n="privacy">Aviso de privacidad</a>.</div>
-  <div style="font-size:10px; margin-top:6px; opacity:0.5; font-family:var(--font-head); letter-spacing:1px;">LOT v3.4.3</div>
+  <div style="font-size:10px; margin-top:6px; opacity:0.5; font-family:var(--font-head); letter-spacing:1px;">LOT v3.4.4</div>
 </footer>
 
 
@@ -281,7 +304,7 @@ footer a:hover{color:var(--text)}
         <div>
           <label data-i18n="lbl_wa">WhatsApp (10 dígitos — para contacto y seguimiento)</label>
           <div style="display:flex; gap:10px;">
-            <select id="postCountry" style="width:85px; flex-shrink:0; font-size:12px; padding:11px 4px 11px 12px; background-position:right 8px center;">
+            <select id="postCountry" style="width:90px; flex-shrink:0;">
               <option value="52">🇲🇽 +52</option>
               <option value="1">🇺🇸 +1</option>
             </select>
@@ -291,7 +314,7 @@ footer a:hover{color:var(--text)}
         </div>
         <div>
           <label data-i18n="lbl_pin" style="color:#FFD166;">PIN de Seguridad (4 dígitos)</label>
-          <input type="password" id="postPin" data-i18n="ph_pin" placeholder="Ej: 1234" maxlength="4" pattern="[0-9]{4}" inputmode="numeric" style="border-color:rgba(255,209,102,0.3);">
+          <input type="password" id="postPin" data-i18n="ph_pin" placeholder="Ej: 1234" maxlength="4" pattern="[0-9]{4}" inputmode="numeric" style="border-color:rgba(255,209,102,0.3); width:100%;">
           <div style="font-size:10px;color:var(--muted);margin-top:8px" data-i18n="pin_hint">🔒 Memorízalo: si borras tu caché, necesitarás este PIN para poder eliminar el anuncio antes de los 6 meses.</div>
         </div>
       </div>
@@ -348,7 +371,7 @@ footer a:hover{color:var(--text)}
 
 <script>
 // ──────────────────────────────────────────────────────────────
-// LOT — yepzhi.com/lot · v3.4.3
+// LOT — yepzhi.com/lot · v3.4.4
 // Stack: Firebase Firestore + Cloudinary + NSFWJS
 // ──────────────────────────────────────────────────────────────
 
@@ -1224,7 +1247,17 @@ document.getElementById('photoGrid').addEventListener('pointerenter', () => {
   ensureNSFW().catch(() => {});
 }, { once: true });
 
-console.log('%c LOT v3.4.3 ', 'background:#7DF9FF;color:#050810;font-weight:bold;border-radius:4px;padding:2px 8px;', '— yepzhi.com/lot');
+// Suppress duplicate TF.js kernel noise from NSFWJS double-load
+(function(){
+  const _warn = console.warn.bind(console);
+  console.warn = (...args) => {
+    const msg = args[0] ? String(args[0]) : '';
+    if (msg.includes('already registered') || msg.includes('Overwriting the platform')) return;
+    _warn(...args);
+  };
+})();
+
+console.log('%c LOT v3.4.4 ', 'background:#7DF9FF;color:#050810;font-weight:bold;border-radius:4px;padding:2px 8px;', '— yepzhi.com/lot');
 </script>
 </body>
 </html>
