@@ -21,6 +21,13 @@ const i18n = {
     "loading": "Cargando…",
     "footer_text": "© 2026, creado por <a href='https://yepzhi.com' target='_blank'>yepzhi.com</a> — Los anuncios son responsabilidad del publicante.",
     "privacy": "Aviso de privacidad",
+    // UI Controls
+    "sort_recent": "Más recientes",
+    "sort_asc": "Menor precio",
+    "sort_desc": "Mayor precio",
+    "sort_az": "A-Z",
+    "view_grid": "Cuadrícula",
+    "view_list": "Lista (compacta)",
     
     // modals
     "post_title_new": "Nuevo <em>Anuncio</em>",
@@ -88,6 +95,13 @@ const i18n = {
     "loading": "Loading…",
     "footer_text": "© 2026, by <a href='https://yepzhi.com' target='_blank'>yepzhi.com</a> — Ads are the responsibility of the publisher.",
     "privacy": "Privacy Policy",
+    // UI Controls
+    "sort_recent": "Newest",
+    "sort_asc": "Lowest price",
+    "sort_desc": "Highest price",
+    "sort_az": "A-Z",
+    "view_grid": "Grid view",
+    "view_list": "List view (compact)",
     
     // modals
     "post_title_new": "New <em>Listing</em>",
