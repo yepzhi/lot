@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- LOT v3.4.7 — Fix: Mis Anuncios search + metadata layout -->
+<!-- LOT v3.4.8 — Feature: in-page photo lightbox viewer -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -160,6 +160,23 @@ header{position:sticky;top:0;z-index:100;background:rgba(0,0,0,0.7);backdrop-fil
 .btn-share:hover{border-color:var(--accent);color:var(--accent)}
 .btn-report{background:none;border:none;color:rgba(255,100,100,.5);font-size:11px;cursor:pointer;padding:6px 0;width:100%;text-align:center;transition:color .2s}
 .btn-report:hover{color:#FF6B6B}
+
+/* ─── LIGHTBOX ───────────────────────────────────────── */
+.lightbox{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.92);backdrop-filter:blur(12px);opacity:0;pointer-events:none;transition:opacity .2s}
+.lightbox.open{opacity:1;pointer-events:all}
+.lb-img-wrap{position:relative;max-width:94vw;max-height:90vh;display:flex;align-items:center;justify-content:center}
+.lb-img-wrap img{max-width:94vw;max-height:84vh;object-fit:contain;border-radius:12px;box-shadow:0 0 80px rgba(0,0,0,.8);user-select:none;-webkit-user-drag:none}
+.lb-close{position:fixed;top:16px;right:20px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;width:40px;height:40px;border-radius:50%;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;z-index:10000}
+.lb-close:hover{background:rgba(255,255,255,.25)}
+.lb-arrow{position:fixed;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;width:44px;height:44px;border-radius:50%;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,opacity .2s;z-index:10000;user-select:none}
+.lb-arrow:hover{background:rgba(255,255,255,.25)}
+.lb-arrow.lb-prev{left:12px}
+.lb-arrow.lb-next{right:12px}
+.lb-arrow[disabled]{opacity:.25;cursor:default;pointer-events:none}
+.lb-counter{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.6);font-size:13px;font-family:var(--font-head);letter-spacing:1px;z-index:10000}
+.lb-dots{display:flex;gap:6px;justify-content:center;margin-top:8px}
+.lb-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.3);transition:background .2s}
+.lb-dot.active{background:#fff}
 footer{border-top:1px solid #111;background:#03050a;padding:32px 24px;text-align:center;font-size:12px;color:#666;letter-spacing:0.5px}
 footer a{color:#888;text-decoration:none;transition:color .2s}
 footer a:hover{color:var(--text)}
@@ -226,7 +243,7 @@ footer a:hover{color:var(--text)}
 
 <footer>
   <div><span data-i18n="footer_text">© 2026, creado por yepzhi.com — Los anuncios son responsabilidad del publicante.</span> <a href="privacy.html" data-i18n="privacy">Aviso de privacidad</a>.</div>
-  <div style="font-size:10px; margin-top:6px; opacity:0.5; font-family:var(--font-head); letter-spacing:1px;">LOT v3.4.7</div>
+  <div style="font-size:10px; margin-top:6px; opacity:0.5; font-family:var(--font-head); letter-spacing:1px;">LOT v3.4.8</div>
 </footer>
 
 
@@ -366,13 +383,24 @@ footer a:hover{color:var(--text)}
 
 <div class="toast" id="toast"></div>
 
+<!-- LIGHTBOX OVERLAY -->
+<div class="lightbox" id="lightbox" onclick="lbClickOutside(event)">
+  <button class="lb-close" onclick="closeLightbox()" title="Cerrar">✕</button>
+  <button class="lb-arrow lb-prev" id="lbPrev" onclick="lbNav(-1)">&#8592;</button>
+  <div class="lb-img-wrap" id="lbImgWrap">
+    <img id="lbImg" src="" alt="" draggable="false">
+  </div>
+  <button class="lb-arrow lb-next" id="lbNext" onclick="lbNav(1)">&#8594;</button>
+  <div class="lb-counter" id="lbCounter"></div>
+</div>
+
 <!-- Firebase Compat SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <script>
 // ──────────────────────────────────────────────────────────────
-// LOT — yepzhi.com/lot · v3.4.7
+// LOT — yepzhi.com/lot · v3.4.8
 // Stack: Firebase Firestore + Cloudinary + NSFWJS
 // ──────────────────────────────────────────────────────────────
 
@@ -1107,8 +1135,8 @@ function openDetail(item) {
   const ago = timeAgo(item.createdAt?.toMillis?.() || Date.now());
 
   const imgs = (item.images || []).length
-    ? (item.images).map(url =>
-        `<img src="${url}" alt="${item.title}" loading="lazy" onclick="openFullImg('${url}')">`
+    ? (item.images).map((url, idx) =>
+        `<img src="${url}" alt="${item.title}" loading="lazy" style="cursor:zoom-in" onclick="openLightbox(${JSON.stringify(item.images)}, ${idx})">`
       ).join('')
     : '<div style="font-size:48px;padding:40px;text-align:center;color:var(--muted)">📷</div>';
 
@@ -1142,9 +1170,64 @@ function contactSeller(c) {
   window.open(`https://wa.me/${wa}`, '_blank');
 }
 
-function openFullImg(url) {
-  window.open(url, '_blank');
+// ─── LIGHTBOX ────────────────────────────────────────────────
+let _lbImages = [];
+let _lbIdx = 0;
+
+function openLightbox(images, idx) {
+  _lbImages = images;
+  _lbIdx = idx;
+  _lbRender();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
 }
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function lbClickOutside(e) {
+  if (e.target.id === 'lightbox') closeLightbox();
+}
+
+function lbNav(dir) {
+  _lbIdx = Math.max(0, Math.min(_lbImages.length - 1, _lbIdx + dir));
+  _lbRender();
+}
+
+function _lbRender() {
+  const img = document.getElementById('lbImg');
+  const counter = document.getElementById('lbCounter');
+  const prev = document.getElementById('lbPrev');
+  const next = document.getElementById('lbNext');
+  img.src = _lbImages[_lbIdx];
+  counter.textContent = _lbImages.length > 1 ? `${_lbIdx + 1} / ${_lbImages.length}` : '';
+  prev.disabled = _lbIdx === 0;
+  next.disabled = _lbIdx === _lbImages.length - 1;
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lightbox').classList.contains('open')) return;
+  if (e.key === 'ArrowLeft')  lbNav(-1);
+  if (e.key === 'ArrowRight') lbNav(1);
+  if (e.key === 'Escape')     closeLightbox();
+});
+
+// Touch swipe support
+(function() {
+  let startX = 0;
+  const lb = document.getElementById('lightbox');
+  lb.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+  lb.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 50) lbNav(dx < 0 ? 1 : -1);
+  }, { passive: true });
+})();
+
+// Keep old shim just in case
+function openFullImg(url) { openLightbox([url], 0); }
 
 async function shareItem(id, title) {
   const url = `${window.location.protocol}//${window.location.host}${window.location.pathname}?ad=${id}`;
@@ -1297,7 +1380,7 @@ document.getElementById('photoGrid').addEventListener('pointerenter', () => {
   };
 })();
 
-console.log('%c LOT v3.4.7 ', 'background:#7DF9FF;color:#050810;font-weight:bold;border-radius:4px;padding:2px 8px;', '— yepzhi.com/lot');
+console.log('%c LOT v3.4.8 ', 'background:#7DF9FF;color:#050810;font-weight:bold;border-radius:4px;padding:2px 8px;', '— yepzhi.com/lot');
 </script>
 </body>
 </html>
