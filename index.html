@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- LOT v3.4.8 — Feature: in-page photo lightbox viewer -->
+<!-- LOT v3.4.9 — Fix: lightbox onclick (JSON.stringify attr bug) -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -243,7 +243,7 @@ footer a:hover{color:var(--text)}
 
 <footer>
   <div><span data-i18n="footer_text">© 2026, creado por yepzhi.com — Los anuncios son responsabilidad del publicante.</span> <a href="privacy.html" data-i18n="privacy">Aviso de privacidad</a>.</div>
-  <div style="font-size:10px; margin-top:6px; opacity:0.5; font-family:var(--font-head); letter-spacing:1px;">LOT v3.4.8</div>
+  <div style="font-size:10px; margin-top:6px; opacity:0.5; font-family:var(--font-head); letter-spacing:1px;">LOT v3.4.9</div>
 </footer>
 
 
@@ -400,7 +400,7 @@ footer a:hover{color:var(--text)}
 
 <script>
 // ──────────────────────────────────────────────────────────────
-// LOT — yepzhi.com/lot · v3.4.8
+// LOT — yepzhi.com/lot · v3.4.9
 // Stack: Firebase Firestore + Cloudinary + NSFWJS
 // ──────────────────────────────────────────────────────────────
 
@@ -1134,9 +1134,12 @@ function openDetail(item) {
   const catLabel = isSub ? (i18n[currentLang]?.[`sub_${item.cat}`] || isSub.label) : (i18n[currentLang]?.[`cat_${item.cat}`] || item.cat);
   const ago = timeAgo(item.createdAt?.toMillis?.() || Date.now());
 
-  const imgs = (item.images || []).length
-    ? (item.images).map((url, idx) =>
-        `<img src="${url}" alt="${item.title}" loading="lazy" style="cursor:zoom-in" onclick="openLightbox(${JSON.stringify(item.images)}, ${idx})">`
+  // Store images globally so onclick only needs a plain index (no JSON in HTML attr)
+  _lbImages = item.images || [];
+
+  const imgs = _lbImages.length
+    ? _lbImages.map((url, idx) =>
+        `<img src="${url}" alt="" loading="lazy" style="cursor:zoom-in" onclick="openLightbox(${idx})">`
       ).join('')
     : '<div style="font-size:48px;padding:40px;text-align:center;color:var(--muted)">📷</div>';
 
@@ -1170,12 +1173,12 @@ function contactSeller(c) {
   window.open(`https://wa.me/${wa}`, '_blank');
 }
 
-// ─── LIGHTBOX ────────────────────────────────────────────────
+// ─── LIGHTBOX ───────────────────────────────────────────────
+// _lbImages is set in openDetail so onclick just passes the index
 let _lbImages = [];
 let _lbIdx = 0;
 
-function openLightbox(images, idx) {
-  _lbImages = images;
+function openLightbox(idx) {
   _lbIdx = idx;
   _lbRender();
   document.getElementById('lightbox').classList.add('open');
@@ -1226,8 +1229,8 @@ document.addEventListener('keydown', e => {
   }, { passive: true });
 })();
 
-// Keep old shim just in case
-function openFullImg(url) { openLightbox([url], 0); }
+// Keep old shim
+function openFullImg(url) { _lbImages = [url]; openLightbox(0); }
 
 async function shareItem(id, title) {
   const url = `${window.location.protocol}//${window.location.host}${window.location.pathname}?ad=${id}`;
@@ -1380,7 +1383,7 @@ document.getElementById('photoGrid').addEventListener('pointerenter', () => {
   };
 })();
 
-console.log('%c LOT v3.4.8 ', 'background:#7DF9FF;color:#050810;font-weight:bold;border-radius:4px;padding:2px 8px;', '— yepzhi.com/lot');
+console.log('%c LOT v3.4.9 ', 'background:#7DF9FF;color:#050810;font-weight:bold;border-radius:4px;padding:2px 8px;', '— yepzhi.com/lot');
 </script>
 </body>
 </html>
