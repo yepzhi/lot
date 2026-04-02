@@ -77,7 +77,7 @@ service cloud.firestore {
       && data.price is number
       && data.price >= 0
       && data.contact is string
-      && data.contact.matches('[0-9]{10}')
+      && data.contact.matches('[0-9]{10,15}')
       && data.status == 'active'
       && data.images is list
       && data.images.size() <= 4;

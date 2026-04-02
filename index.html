@@ -399,8 +399,11 @@ const CLOUD_NAME = '__CLOUDINARY_CLOUD_NAME__';
 //    → Add Upload Preset → Signing Mode: UNSIGNED → Preset Name: __CLOUDINARY_UPLOAD_PRESET__ → Save
 const UPLOAD_PRESET = '__CLOUDINARY_UPLOAD_PRESET__';
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+// Initialize as a named app to avoid conflicts with tracker or other Firebase instances
+const LOT_APP_NAME = 'lot_app';
+const lotApp = firebase.apps.find(a => a.name === LOT_APP_NAME) 
+  || firebase.initializeApp(firebaseConfig, LOT_APP_NAME);
+const db = lotApp.firestore();
 
 // ─── CATEGORIES ──────────────────────────────────────────────
 const CATS = [
@@ -792,7 +795,7 @@ async function submitPost() {
   if (!/^[0-9]{4}$/.test(pin)) { showToast('⚠️ Ingresa un PIN de exactamente 4 dígitos', true); return; }
 
   // Layer 3: Check phone ban BEFORE processing anything
-  const banned = await isPhoneBanned(contact);
+  const banned = await isPhoneBanned(localNumber);
   if (banned) {
     showToast('🚫 Este número tiene restricción permanente de publicación', true);
     return;
@@ -819,7 +822,10 @@ async function submitPost() {
     const expiresAt = firebase.firestore.Timestamp.fromMillis(Date.now() + SIX_MONTHS_MS);
 
     const docRef = await db.collection('listings').add({
-      cat, title, price, city, desc, contact, pin,
+      cat, title, price, city, desc,
+      contact,       // full number with country code for WhatsApp links (e.g. 526621234567)
+      phone: localNumber, // 10-digit local number for Firestore queries and bans
+      pin,
       images,
       status: 'active',
       createdAt: now,
@@ -852,8 +858,13 @@ async function submitPost() {
     loadListings();
 
   } catch (err) {
-    console.error(err);
-    showToast('❌ Error al publicar. Verifica tu conexión.', true);
+    console.error('[LOT] submitPost error:', err.code || err.message || err);
+    const msg = err.code === 'permission-denied'
+      ? '🚫 Sin permisos en la base de datos. Contacta al administrador.'
+      : err.message && err.message.includes('Cloudinary')
+        ? '📸 Error al subir fotos. Intenta con imágenes más pequeñas.'
+        : '❌ Error al publicar: ' + (err.code || err.message || 'Verifica tu conexión.');
+    showToast(msg, true);
   } finally {
     btn.disabled = false;
     btn.textContent = 'Publicar Anuncio ✦';
