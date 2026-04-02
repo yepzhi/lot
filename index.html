@@ -500,12 +500,39 @@ async function fetchMyAds() {
   document.getElementById('myAdsResults').innerHTML = `<div style="text-align:center;color:var(--muted)">${i18n[currentLang]?.loading || 'Cargando…'}</div>`;
   
   try {
-    const snap = await db.collection('listings')
-      .where('contact', '==', phone)
-      .where('status', '==', 'active')
-      .get();
+    // Search by all possible stored formats:
+    // Old listings: contact = "6622056304" (10 digits)
+    // New listings: contact = "526622056304" (with country code)
+    // Newest listings also have: phone = "6622056304"
+    const variants = [phone, '52' + phone, '1' + phone];
+    
+    const queries = variants.map(v =>
+      db.collection('listings')
+        .where('contact', '==', v)
+        .where('status', '==', 'active')
+        .get()
+    );
+    // Also try the 'phone' field (added in v3.4.4+)
+    queries.push(
+      db.collection('listings')
+        .where('phone', '==', phone)
+        .where('status', '==', 'active')
+        .get()
+    );
+    
+    const results = await Promise.all(queries);
+    const seen = new Set();
+    const allDocs = [];
+    results.forEach(snap => {
+      snap.forEach(doc => {
+        if (!seen.has(doc.id)) {
+          seen.add(doc.id);
+          allDocs.push(doc);
+        }
+      });
+    });
       
-    if (snap.empty) {
+    if (!allDocs.length) {
       document.getElementById('myAdsResults').innerHTML = `<div style="text-align:center;color:var(--muted)">${i18n[currentLang]?.ads_not_found || 'No se encontraron anuncios.'}</div>`;
       return;
     }
@@ -513,7 +540,7 @@ async function fetchMyAds() {
     let html = '';
     const mySavedAds = JSON.parse(localStorage.getItem('lot_my_ads') || '{}');
     
-    snap.forEach(doc => {
+    allDocs.forEach(doc => {
       const data = doc.data();
       const txtDel = i18n[currentLang]?.btn_delete_pin || 'Borrar';
       const plhPin = i18n[currentLang]?.ph_del_pin || 'PIN (4 dígitos)';
