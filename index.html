@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- LOT v3.4.1 — Dual moderation + Improved UI stacking + Multi-photo selection -->
+<!-- LOT v3.4.2 — Dual moderation + Improved UI stacking + Multi-photo selection -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -202,7 +202,7 @@ footer a:hover{color:var(--text)}
 
 <footer>
   <div><span data-i18n="footer_text">© 2026, creado por yepzhi.com — Los anuncios son responsabilidad del publicante.</span> <a href="privacy.html" data-i18n="privacy">Aviso de privacidad</a>.</div>
-  <div style="font-size:10px; margin-top:6px; opacity:0.5; font-family:var(--font-head); letter-spacing:1px;">LOT v3.4.1</div>
+  <div style="font-size:10px; margin-top:6px; opacity:0.5; font-family:var(--font-head); letter-spacing:1px;">LOT v3.4.2</div>
 </footer>
 
 
@@ -348,7 +348,7 @@ footer a:hover{color:var(--text)}
 
 <script>
 // ──────────────────────────────────────────────────────────────
-// LOT — yepzhi.com/lot · v3.4.0
+// LOT — yepzhi.com/lot · v3.4.2
 // Stack: Firebase Firestore + Cloudinary + NSFWJS
 // ──────────────────────────────────────────────────────────────
 
@@ -362,12 +362,12 @@ if (location.pathname.endsWith('/index.html')) {
 //    Configuración del proyecto → Tus apps → Web app → SDK setup
 //    Copia tu objeto firebaseConfig y pégalo aquí:
 const firebaseConfig = {
-  apiKey:            "PEGA_TU_API_KEY_AQUI",
+  apiKey:            "__FIREBASE_API_KEY__",
   authDomain:        "nlot-89d26.firebaseapp.com",
   projectId:         "nlot-89d26",
   storageBucket:     "nlot-89d26.firebasestorage.app",
-  messagingSenderId: "PEGA_TU_SENDER_ID",
-  appId:             "PEGA_TU_APP_ID"
+  messagingSenderId: "928352640563",
+  appId:             "__FIREBASE_APP_ID__"
 };
 
 // Cloudinary
@@ -1224,7 +1224,7 @@ document.getElementById('photoGrid').addEventListener('pointerenter', () => {
   ensureNSFW().catch(() => {});
 }, { once: true });
 
-console.log('%c LOT v2.0 ', 'background:#7DF9FF;color:#050810;font-weight:bold;border-radius:4px;padding:2px 8px;', '— yepzhi.com/lot');
+console.log('%c LOT v3.4.2 ', 'background:#7DF9FF;color:#050810;font-weight:bold;border-radius:4px;padding:2px 8px;', '— yepzhi.com/lot');
 </script>
 </body>
 </html>
