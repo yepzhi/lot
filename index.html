@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- LOT v3.4.5 — UI refinements + Fix: placeholder color + text update -->
+<!-- LOT v3.4.6 — UI: New metadata format for ads -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -74,7 +74,8 @@ header{position:sticky;top:0;z-index:100;background:rgba(0,0,0,0.7);backdrop-fil
 .card-price{font-family:var(--font-head);font-size:20px;font-weight:700;color:var(--accent);margin-bottom:4px}
 .card-price.free{color:#A8FF78}
 .card-title{font-size:14px;font-weight:500;line-height:1.4;margin-bottom:8px;color:var(--text);display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.card-meta{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--muted)}
+.card-meta{display:flex;align-items:center;gap:10px;font-size:10px;color:var(--muted);white-space:nowrap;overflow:hidden}
+.card-meta span{display:flex;align-items:center;gap:3px}
 .card-fav{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;color:var(--muted);font-size:14px;transition:color .2s,background .2s;z-index:2}
 .card-fav:hover,.card-fav.active{color:var(--accent2);background:rgba(255,107,248,.15)}
 .skeleton{background:linear-gradient(90deg,rgba(255,255,255,.05) 25%,rgba(255,255,255,.1) 50%,rgba(255,255,255,.05) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:var(--r);aspect-ratio:.75}
@@ -225,7 +226,7 @@ footer a:hover{color:var(--text)}
 
 <footer>
   <div><span data-i18n="footer_text">© 2026, creado por yepzhi.com — Los anuncios son responsabilidad del publicante.</span> <a href="privacy.html" data-i18n="privacy">Aviso de privacidad</a>.</div>
-  <div style="font-size:10px; margin-top:6px; opacity:0.5; font-family:var(--font-head); letter-spacing:1px;">LOT v3.4.5</div>
+  <div style="font-size:10px; margin-top:6px; opacity:0.5; font-family:var(--font-head); letter-spacing:1px;">LOT v3.4.6</div>
 </footer>
 
 
@@ -371,7 +372,7 @@ footer a:hover{color:var(--text)}
 
 <script>
 // ──────────────────────────────────────────────────────────────
-// LOT — yepzhi.com/lot · v3.4.5
+// LOT — yepzhi.com/lot · v3.4.6
 // Stack: Firebase Firestore + Cloudinary + NSFWJS
 // ──────────────────────────────────────────────────────────────
 
@@ -1057,8 +1058,9 @@ function renderListings() {
         <div class="card-title">${item.title}</div>
         <div class="card-meta">
           <span>📍 Hermosillo, MX</span>
-          <span>📅 ${dateShort}</span>
-          <span>👁 ${item.views || 0}</span>
+          <span>Publicado ${dateShort}</span>
+          <span>🏷️ ${catLabel}</span>
+          <span style="margin-left:auto;">👀 ${item.views || 0}</span>
         </div>
       </div>`;
 
@@ -1268,7 +1270,7 @@ document.getElementById('photoGrid').addEventListener('pointerenter', () => {
   };
 })();
 
-console.log('%c LOT v3.4.5 ', 'background:#7DF9FF;color:#050810;font-weight:bold;border-radius:4px;padding:2px 8px;', '— yepzhi.com/lot');
+console.log('%c LOT v3.4.6 ', 'background:#7DF9FF;color:#050810;font-weight:bold;border-radius:4px;padding:2px 8px;', '— yepzhi.com/lot');
 </script>
 </body>
 </html>
