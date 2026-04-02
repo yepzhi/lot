@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- LOT v3.4.4 — Dark input fix + console noise reduction -->
+<!-- LOT v3.4.5 — UI refinements + Fix: placeholder color + text update -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -129,7 +129,7 @@ header{position:sticky;top:0;z-index:100;background:rgba(0,0,0,0.7);backdrop-fil
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='rgba(240,244,255,0.4)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
   background-repeat:no-repeat;background-position:right 8px center;background-size:14px;padding-right:30px;
 }
-.contact-pin-row input::placeholder{color:var(--muted)}
+.contact-pin-row input::placeholder{color:rgba(240,244,255,0.25);font-size:13px}
 .contact-pin-row input:focus,.contact-pin-row select:focus{
   border-color:var(--accent);background:rgba(125,249,255,.04);
 }
@@ -225,7 +225,7 @@ footer a:hover{color:var(--text)}
 
 <footer>
   <div><span data-i18n="footer_text">© 2026, creado por yepzhi.com — Los anuncios son responsabilidad del publicante.</span> <a href="privacy.html" data-i18n="privacy">Aviso de privacidad</a>.</div>
-  <div style="font-size:10px; margin-top:6px; opacity:0.5; font-family:var(--font-head); letter-spacing:1px;">LOT v3.4.4</div>
+  <div style="font-size:10px; margin-top:6px; opacity:0.5; font-family:var(--font-head); letter-spacing:1px;">LOT v3.4.5</div>
 </footer>
 
 
@@ -308,7 +308,7 @@ footer a:hover{color:var(--text)}
               <option value="52">🇲🇽 +52</option>
               <option value="1">🇺🇸 +1</option>
             </select>
-            <input type="tel" id="postContact" placeholder="6621234567" maxlength="10" pattern="[0-9]{10}" inputmode="numeric">
+            <input type="tel" id="postContact" data-i18n="ph_wa" placeholder="" maxlength="10" pattern="[0-9]{10}" inputmode="numeric">
           </div>
           <div style="font-size:10px;color:var(--muted);margin-top:8px" data-i18n="wa_hint">📋 El número se usa para rastrear publicaciones y/o borrarlas.</div>
         </div>
@@ -371,7 +371,7 @@ footer a:hover{color:var(--text)}
 
 <script>
 // ──────────────────────────────────────────────────────────────
-// LOT — yepzhi.com/lot · v3.4.4
+// LOT — yepzhi.com/lot · v3.4.5
 // Stack: Firebase Firestore + Cloudinary + NSFWJS
 // ──────────────────────────────────────────────────────────────
 
@@ -1268,7 +1268,7 @@ document.getElementById('photoGrid').addEventListener('pointerenter', () => {
   };
 })();
 
-console.log('%c LOT v3.4.4 ', 'background:#7DF9FF;color:#050810;font-weight:bold;border-radius:4px;padding:2px 8px;', '— yepzhi.com/lot');
+console.log('%c LOT v3.4.5 ', 'background:#7DF9FF;color:#050810;font-weight:bold;border-radius:4px;padding:2px 8px;', '— yepzhi.com/lot');
 </script>
 </body>
 </html>
