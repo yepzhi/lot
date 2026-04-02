@@ -173,6 +173,14 @@ function setLang(lang) {
     }
   });
 
+  // Actualiza los titles flotantes (ej. tooltips de grid view)
+  document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    const key = el.getAttribute('data-i18n-title');
+    if (i18n[lang][key]) {
+      el.title = i18n[lang][key];
+    }
+  });
+
   // Refresh dynamic info
   if (typeof renderAll === 'function') {
     // Only re-render if categories exist
