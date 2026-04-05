@@ -118,52 +118,208 @@ header{position:sticky;top:0;z-index:100;background:rgba(0,0,0,0.7);backdrop-fil
 .modal h2{font-family:var(--font-head);font-size:22px;font-weight:700;margin-bottom:24px;letter-spacing:-.5px}
 .modal h2 em{font-style:normal;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .form-group{margin-bottom:18px}
-.form-group label{display:block;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
-.form-group input,.form-group select,.form-group textarea{width:100%;padding:11px 16px;background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;color:var(--text);font-family:var(--font-body);font-size:14px;outline:none;transition:border .2s,background .2s;-webkit-appearance:none;appearance:none}
-.form-group select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='rgba(240,244,255,0.4)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:16px;padding-right:40px}
-.form-group select option{background:#0c101e}
-.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent);background:rgba(125,249,255,.04)}
-.form-group textarea{resize:vertical;min-height:90px}
-.price-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.photo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:4px}
-.photo-slot{aspect-ratio:1;border-radius:12px;border:2px dashed var(--glass-border);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s,background .2s;background:var(--glass);overflow:hidden;position:relative;font-size:11px;color:var(--muted);text-align:center;gap:4px}
-.photo-slot:hover{border-color:var(--accent);background:rgba(125,249,255,.05)}
-.photo-slot input{position:absolute;inset:0;opacity:0;cursor:pointer}
-.photo-slot img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
-.photo-slot .rm-btn{position:absolute;top:4px;right:4px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.7);border:none;color:#fff;font-size:11px;cursor:pointer;display:none;align-items:center;justify-content:center}
-.photo-slot.has-img .rm-btn{display:flex}
-.photo-slot.has-img input{display:none}
-.photo-slot:first-child{border-style:solid;border-color:rgba(125,249,255,.3)}
-.photo-hint{font-size:10px;color:var(--muted);margin-top:6px;display:flex;align-items:center;gap:6px}
-.photo-hint span{color:var(--accent)}
-.btn-submit{width:100%;padding:14px;background:linear-gradient(135deg,#FF3366,#FF0033);color:#fff;font-family:var(--font-head);font-weight:700;font-size:15px;border:none;border-radius:14px;cursor:pointer;margin-top:8px;box-shadow:0 0 24px rgba(255,51,102,.25);transition:transform .15s,box-shadow .15s,opacity .2s;letter-spacing:.3px}
-.btn-submit:hover:not(:disabled){transform:scale(1.01);box-shadow:0 0 34px rgba(255,51,102,.4)}
-.btn-submit:active:not(:disabled){transform:scale(0.98)}
-.btn-submit.loading{opacity:.7;pointer-events:none;filter:grayscale(0.5)}
-.btn-submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
-.contact-pin-row{display:grid;grid-template-columns:1fr;gap:20px}
-/* Inputs inside contact-pin-row need explicit dark glass styling */
-.contact-pin-row input,.contact-pin-row select{
-  width:100%;padding:11px 16px;background:var(--glass);border:1px solid var(--glass-border);
-  border-radius:12px;color:var(--text);font-family:var(--font-body);font-size:14px;
-  outline:none;transition:border .2s,background .2s;-webkit-appearance:none;appearance:none;
-  -webkit-text-fill-color:var(--text);caret-color:var(--text);
-  background-clip:padding-box;
+.form-group label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
 }
-.contact-pin-row select{
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='rgba(240,244,255,0.4)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 8px center;background-size:14px;padding-right:30px;
+
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%;
+  padding: 11px 16px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  outline: none;
+  transition: border .2s, background .2s;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-text-fill-color: var(--text);
+  caret-color: var(--text);
+  background-clip: padding-box;
 }
-.contact-pin-row input::placeholder{color:rgba(240,244,255,0.25);font-size:13px}
-.contact-pin-row input:focus,.contact-pin-row select:focus{
-  border-color:var(--accent);background:rgba(125,249,255,.04);
+
+.form-group select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='rgba(240,244,255,0.4)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 40px;
 }
+
+.form-group select option {
+  background: #0c101e;
+}
+
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  border-color: var(--accent);
+  background: rgba(125,249,255, .04);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.6;
+}
+
+.price-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.photo-slot {
+  aspect-ratio: 1;
+  border-radius: 12px;
+  border: 2px dashed var(--glass-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+  background: var(--glass);
+  overflow: hidden;
+  position: relative;
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  gap: 4px;
+}
+
+.photo-slot:hover {
+  border-color: var(--accent);
+  background: rgba(125,249,255, .05);
+}
+
+.photo-slot input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.photo-slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  inset: 0;
+}
+
+.photo-slot .rm-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, .7);
+  border: none;
+  color: #fff;
+  font-size: 11px;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.photo-slot.has-img .rm-btn {
+  display: flex;
+}
+
+.photo-slot.has-img input {
+  display: none;
+}
+
+.photo-slot:first-child {
+  border-style: solid;
+  border-color: rgba(125,249,255, 0.3);
+}
+
+.photo-hint {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.photo-hint span {
+  color: var(--accent);
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #FF3366, #FF0033);
+  color: #fff;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 15px;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  margin-top: 8px;
+  box-shadow: 0 0 24px rgba(255, 51, 102, .25);
+  transition: transform .15s, box-shadow .15s, opacity .2s;
+  letter-spacing: .3px;
+}
+
+.btn-submit:hover:not(:disabled) {
+  transform: scale(1.01);
+  box-shadow: 0 0 34px rgba(255, 51, 102, .4);
+}
+
+.btn-submit:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.btn-submit.loading {
+  opacity: .7;
+  pointer-events: none;
+  filter: grayscale(0.5);
+}
+
+.btn-submit:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.contact-pin-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.contact-pin-row input::placeholder {
+  color: rgba(240, 244, 255, 0.25);
+  font-size: 13px;
+}
+
 /* Autofill override for dark theme */
-.contact-pin-row input:-webkit-autofill,.contact-pin-row input:-webkit-autofill:hover,
-.contact-pin-row input:-webkit-autofill:focus{
-  -webkit-box-shadow:0 0 0 1000px #050810 inset;
-  -webkit-text-fill-color:var(--text);
-  caret-color:var(--text);
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #050810 inset !important;
+  -webkit-text-fill-color: var(--text) !important;
+  caret-color: var(--text) !important;
 }
 /* Content warning */
 .content-warning{background:rgba(255,100,100,.08);border:1px solid rgba(255,100,100,.25);border-radius:12px;padding:12px 16px;margin-top:24px;font-size:12px;color:rgba(255,180,180,.9);display:flex;gap:10px;align-items:flex-start;line-height:1.5}
@@ -244,7 +400,7 @@ footer a:hover{color:var(--text)}
 
 <div class="wrapper">
   <section class="hero">
-    <div class="hero-tag" data-i18n="hero_tag">✦ Marketplace Hermosillo &amp; México</div>
+    <div class="hero-tag" data-i18n="hero_tag">✦ Marketplace abierto para México & USA</div>
     <h1 data-i18n="hero_title">Compra. Vende.<br><em>Conecta.</em></h1>
     <p data-i18n="hero_desc">Anuncios locales gratuitos. Trato directo sin intermediarios.<br>Las publicaciones duran automáticamente 6 meses.</p>
     <div class="hero-search-wrap">
@@ -330,7 +486,84 @@ footer a:hover{color:var(--text)}
         <div class="form-group">
           <label data-i18n="lbl_city">Ciudad</label>
           <select id="postCity">
-            <option value="Hermosillo">Hermosillo, Sonora</option>
+            <option value="" data-i18n="opt_sel">— Selecciona —</option>
+            <optgroup label="── Cobertura Prioritaria ──">
+              <option value="Hermosillo, MX">Hermosillo, MX</option>
+              <option value="Obregon, MX">Obregon, MX</option>
+              <option value="Nogales, MX">Nogales, MX</option>
+              <option value="Navojoa, MX">Navojoa, MX</option>
+              <option value="SLRC, MX">SLRC, MX</option>
+              <option value="Ciudad de México, MX">Ciudad de México, MX</option>
+              <option value="Veracruz, MX">Veracruz, MX</option>
+              <option value="Cancún, MX">Cancún, MX</option>
+              <option value="Playa del Carmen, MX">Playa del Carmen, MX</option>
+            </optgroup>
+            <optgroup label="── México & USA ──">
+              <option value="Acapulco, MX">Acapulco, MX</option>
+              <option value="Aguascalientes, MX">Aguascalientes, MX</option>
+              <option value="Austin, US">Austin, US</option>
+              <option value="Bakersfield, US">Bakersfield, US</option>
+              <option value="Baltimore, US">Baltimore, US</option>
+              <option value="Boston, US">Boston, US</option>
+              <option value="Charlotte, US">Charlotte, US</option>
+              <option value="Chicago, US">Chicago, US</option>
+              <option value="Chihuahua, MX">Chihuahua, MX</option>
+              <option value="Ciudad Juárez, MX">Ciudad Juárez, MX</option>
+              <option value="Coatzacoalcos, MX">Coatzacoalcos, MX</option>
+              <option value="Colorado Springs, US">Colorado Springs, US</option>
+              <option value="Columbus, US">Columbus, US</option>
+              <option value="Cuernavaca, MX">Cuernavaca, MX</option>
+              <option value="Culiacán, MX">Culiacán, MX</option>
+              <option value="Dallas, US">Dallas, US</option>
+              <option value="Denver, US">Denver, US</option>
+              <option value="Durango, MX">Durango, MX</option>
+              <option value="Ensenada, MX">Ensenada, MX</option>
+              <option value="Fort Worth, US">Fort Worth, US</option>
+              <option value="Fresno, US">Fresno, US</option>
+              <option value="Guadalajara, MX">Guadalajara, MX</option>
+              <option value="Houston, US">Houston, US</option>
+              <option value="Indianapolis, US">Indianapolis, US</option>
+              <option value="Jacksonville, US">Jacksonville, US</option>
+              <option value="Kansas City, US">Kansas City, US</option>
+              <option value="Las Vegas, US">Las Vegas, US</option>
+              <option value="León, MX">León, MX</option>
+              <option value="Long Beach, US">Long Beach, US</option>
+              <option value="Los Angeles, US">Los Angeles, US</option>
+              <option value="Matamoros, MX">Matamoros, MX</option>
+              <option value="Memphis, US">Memphis, US</option>
+              <option value="Mexicali, MX">Mexicali, MX</option>
+              <option value="Miami, US">Miami, US</option>
+              <option value="Monterrey, MX">Monterrey, MX</option>
+              <option value="Morelia, MX">Morelia, MX</option>
+              <option value="Nashville, US">Nashville, US</option>
+              <option value="New York City, US">New York City, US</option>
+              <option value="Oakland, US">Oakland, US</option>
+              <option value="Oaxaca, MX">Oaxaca, MX</option>
+              <option value="Oklahoma City, US">Oklahoma City, US</option>
+              <option value="Philadelphia, US">Philadelphia, US</option>
+              <option value="Phoenix, US">Phoenix, US</option>
+              <option value="Puebla, MX">Puebla, MX</option>
+              <option value="Querétaro, MX">Querétaro, MX</option>
+              <option value="Raleigh, US">Raleigh, US</option>
+              <option value="Reynosa, MX">Reynosa, MX</option>
+              <option value="Sacramento, US">Sacramento, US</option>
+              <option value="Saltillo, MX">Saltillo, MX</option>
+              <option value="San Antonio, US">San Antonio, US</option>
+              <option value="San Diego, US">San Diego, US</option>
+              <option value="San Francisco, US">San Francisco, US</option>
+              <option value="San Jose, US">San Jose, US</option>
+              <option value="San Luis Potosí, MX">San Luis Potosí, MX</option>
+              <option value="Seattle, US">Seattle, US</option>
+              <option value="Tampico, MX">Tampico, MX</option>
+              <option value="Tijuana, MX">Tijuana, MX</option>
+              <option value="Toluca, MX">Toluca, MX</option>
+              <option value="Torreón, MX">Torreón, MX</option>
+              <option value="Tucson, US">Tucson, US</option>
+              <option value="Tuxtla Gutiérrez, MX">Tuxtla Gutiérrez, MX</option>
+              <option value="Virginia Beach, US">Virginia Beach, US</option>
+              <option value="Washington DC, US">Washington DC, US</option>
+              <option value="Xalapa, MX">Xalapa, MX</option>
+            </optgroup>
           </select>
         </div>
       </div>
@@ -1180,7 +1413,7 @@ function renderListings() {
         <div class="${priceClass}">${priceStr}</div>
         <div class="card-title">${item.title}</div>
         <div class="card-meta">
-          <span>📍 Hermosillo, MX</span>
+          <span>📍 ${item.city || 'Hermosillo, MX'}</span>
           <span>Publicado ${dateShort}</span>
           <span>🏷️ ${catLabel}</span>
           <span style="margin-left:auto;">👀 ${item.views || 0}</span>
@@ -1217,7 +1450,7 @@ function openDetail(item) {
     <div class="detail-title">${item.title}</div>
     <div class="detail-desc">${(item.desc || '').replace(/</g,'&lt;')}</div>
     <div class="detail-meta">
-      <span>📍 Hermosillo, MX</span>
+      <span>📍 ${item.city || 'Hermosillo, MX'}</span>
       <span>📅 ${formatDateShort(item.createdAt)}</span>
       <span>🏷️ ${catLabel}</span>
       ${item.views > 0 ? `<span>👁 ${item.views}</span>` : ''}

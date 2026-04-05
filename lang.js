@@ -2,7 +2,7 @@ const i18n = {
   es: {
     "btn_post": "+ Publicar",
     "btn_my_ads": "Mis Anuncios",
-    "hero_tag": "✦ Marketplace de Hermosillo (todo México pronto).",
+    "hero_tag": "✦ Marketplace abierto para México & USA",
     "hero_title": "Compra. Vende.<br><em>Conecta.</em>",
     "hero_desc": "Anuncios locales gratuitos. Directo sin intermediarios.<br>Las publicaciones duran 6 meses.",
     "search_ph": "Busca carros, iphones, servicios…",
@@ -76,7 +76,7 @@ const i18n = {
   en: {
     "btn_post": "+ Post Ad",
     "btn_my_ads": "My Ads",
-    "hero_tag": "✦ Hermosillo Marketplace (All Mexico soon).",
+    "hero_tag": "✦ Open Marketplace for México & USA",
     "hero_title": "Buy. Sell.<br><em>Connect.</em>",
     "hero_desc": "Free local classifieds. Direct deals, no middlemen.<br>Ads last for 6 months.",
     "search_ph": "Search cars, iphones, services…",
