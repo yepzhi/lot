@@ -317,9 +317,32 @@ header{position:sticky;top:0;z-index:100;background:rgba(0,0,0,0.7);backdrop-fil
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
-  -webkit-box-shadow: 0 0 0 1000px #050810 inset !important;
   -webkit-text-fill-color: var(--text) !important;
   caret-color: var(--text) !important;
+}
+::placeholder {
+  color: rgba(240, 244, 255, 0.2) !important;
+  font-weight: 300;
+}
+.btn-share-store {
+  cursor: pointer;
+  color: var(--accent2);
+  margin-left: 10px;
+  font-size: 11px;
+  border: 1px solid rgba(255,107,248,0.3);
+  padding: 3px 10px;
+  border-radius: 12px;
+  background: rgba(255,107,248,0.05);
+  font-weight: 600;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.btn-share-store:hover {
+  background: rgba(255,107,248,0.15);
+  border-color: var(--accent2);
+  transform: scale(1.05);
 }
 /* Content warning */
 .content-warning{background:rgba(255,100,100,.08);border:1px solid rgba(255,100,100,.25);border-radius:12px;padding:12px 16px;margin-top:24px;font-size:12px;color:rgba(255,180,180,.9);display:flex;gap:10px;align-items:flex-start;line-height:1.5}
@@ -766,6 +789,8 @@ function formatPriceInput(input) {
   if (v === '') { input.value = ''; return; }
   input.value = Number(v).toLocaleString('en-US');
 }
+
+function getCurrency() { return currentLang === 'en' ? 'USD' : 'MXN'; }
 
 function formatDateShort(ts) {
   if (!ts) return '';
@@ -1229,6 +1254,13 @@ function checkDeepLink() {
     const item = listings.find(l => l.id === adId);
     if (item) openDetail(item);
   }
+
+  // Check for USER STORE
+  const u = urlParams.get('u') || urlParams.get('user');
+  if (u) {
+    filterUser = u.replace(/\D/g, '').slice(-10); // last 10 digits
+    renderAll();
+  }
 }
 
 function clearUserFilter() {
@@ -1367,7 +1399,12 @@ function renderListings() {
   grid.className = _currentView === 'compact' ? 'listing-grid compact-view' : 'listing-grid';
 
   if (filterUser) {
-    info.innerHTML = `Anuncios de <strong>+52 ${filterUser}</strong> <span onclick="clearUserFilter()" style="cursor:pointer; color:var(--accent); margin-left:10px; font-size:12px; border:1px solid var(--accent); padding:2px 8px; border-radius:12px;">✕ Quitar filtro</span>`;
+    const btnTxt = i18n[currentLang]?.btn_share_store || '↗ Compartir Tienda';
+    info.innerHTML = `
+      Anuncios de <strong>+52 ${filterUser}</strong> 
+      <span onclick="clearUserFilter()" style="cursor:pointer; color:var(--accent); margin-left:10px; font-size:12px; border:1px solid var(--accent); padding:2px 8px; border-radius:12px;">✕ Quitar</span>
+      <button class="btn-share-store" onclick="shareStore('${filterUser}')">${btnTxt}</button>
+    `;
   } else {
     info.innerHTML = similar
       ? `Mostrando <strong>${list.length}</strong> resultados similares a "${searchQ}"`
@@ -1388,7 +1425,7 @@ function renderListings() {
     card.className = _currentView === 'compact' ? 'card compact' : 'card';
     card.style.animationDelay = (i * 0.035) + 's';
 
-    const priceStr = item.price === 0 ? (i18n[currentLang]?.lbl_price?.includes('Free') ? 'Free' : 'Gratis') : '$' + item.price.toLocaleString('es-MX');
+    const priceStr = item.price === 0 ? (i18n[currentLang]?.lbl_price?.includes('Free') ? 'Free' : 'Gratis') : '$' + item.price.toLocaleString('es-MX') + ' ' + getCurrency();
     const priceClass = item.price === 0 ? 'card-price free' : 'card-price';
     const isSub = OTROS_SUBCATS.find(c => c.id === item.cat);
     const catLabel = isSub ? (i18n[currentLang]?.[`sub_${item.cat}`] || isSub.label) : (i18n[currentLang]?.[`cat_${item.cat}`] || item.cat);
@@ -1437,7 +1474,7 @@ function renderAll() { renderCats(); renderListings(); }
 
 // ─── DETAIL ──────────────────────────────────────────────────
 function openDetail(item) {
-  const priceStr = item.price === 0 ? (i18n[currentLang]?.lbl_price?.includes('Free') ? 'Free' : 'Gratis') : '$' + item.price.toLocaleString('es-MX');
+  const priceStr = item.price === 0 ? (i18n[currentLang]?.lbl_price?.includes('Free') ? 'Free' : 'Gratis') : '$' + item.price.toLocaleString('es-MX') + ' ' + getCurrency();
   const allCatsList = [...CATS, ...OTROS_SUBCATS];
   const isSub = OTROS_SUBCATS.find(c => c.id === item.cat);
   const catLabel = isSub ? (i18n[currentLang]?.[`sub_${item.cat}`] || isSub.label) : (i18n[currentLang]?.[`cat_${item.cat}`] || item.cat);
@@ -1475,6 +1512,16 @@ function openDetail(item) {
   db.collection('listings').doc(item.id).update({
     views: firebase.firestore.FieldValue.increment(1)
   }).catch(() => {});
+}
+
+function shareStore(phone) {
+  const url = `${window.location.protocol}//${window.location.host}${window.location.pathname}?u=${phone}`;
+  const msg = i18n[currentLang]?.store_shared || 'Enlace de tienda copiado';
+  if (navigator.share) {
+    navigator.share({ title: 'LOT Store', url }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(url).then(() => showToast(msg));
+  }
 }
 
 function contactSeller(c) {

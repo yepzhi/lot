@@ -71,7 +71,9 @@ const i18n = {
     "btn_delete_pin": "Borrar",
     "ph_del_pin": "PIN (4 dígitos)",
     "ads_not_found": "No se encontraron anuncios activos con ese número.",
-    "ad_deleted": "✦ Anuncio eliminado"
+    "ad_deleted": "✦ Anuncio eliminado",
+    "btn_share_store": "↗ Compartir Tienda",
+    "store_shared": "¡Enlace de tienda copiado!"
   },
   en: {
     "btn_post": "+ Post Ad",
@@ -111,7 +113,7 @@ const i18n = {
     "opt_sel": "— Select —",
     "lbl_title": "Ad Title",
     "ph_title": "Ex: iPhone 15 Pro 256GB black",
-    "lbl_price": "Price (MXN)",
+    "lbl_price": "Price (USD)",
     "price_hint": "👀 Please enter real prices. (0 = Free)",
     "lbl_city": "City",
     "ph_city": "Hermosillo, Son.",
@@ -145,7 +147,9 @@ const i18n = {
     "btn_delete_pin": "Delete",
     "ph_del_pin": "PIN (4 digits)",
     "ads_not_found": "No active ads found with that number.",
-    "ad_deleted": "✦ Ad deleted"
+    "ad_deleted": "✦ Ad deleted",
+    "btn_share_store": "↗ Share Store",
+    "store_shared": "Store link copied!"
   }
 };
 
