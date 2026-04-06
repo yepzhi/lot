@@ -321,11 +321,12 @@ input:-webkit-autofill:focus {
   caret-color: var(--text) !important;
 }
 ::placeholder {
-  color: rgba(160, 160, 160, 0.6) !important;
+  color: rgba(255, 255, 255, 0.4) !important;
   font-weight: 300;
 }
 #myAdsPhone::placeholder {
-  color: rgba(100, 100, 100, 0.8) !important;
+  color: #666666 !important;
+  opacity: 1 !important;
 }
 .currency-toggle {
   display: flex;
@@ -412,7 +413,7 @@ input:-webkit-autofill:focus {
 .lb-dots{display:flex;gap:6px;justify-content:center;margin-top:8px}
 .lb-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.3);transition:background .2s}
 .lb-dot.active{background:#fff}
-footer{border-top:1px solid #111;background:#03050a;padding:32px 24px;text-align:center;font-size:12px;color:#666;letter-spacing:0.5px}
+footer{border-top:1px solid rgba(255,255,255,0.05);background:#050810;padding:40px 24px;text-align:center;font-size:12px;color:#555;letter-spacing:0.5px;margin-top:auto}
 footer a{color:#888;text-decoration:none;transition:color .2s}
 footer a:hover{color:var(--text)}
 @media(max-width:640px){
@@ -457,7 +458,7 @@ footer a:hover{color:var(--text)}
   <section class="hero">
     <div class="hero-tag" data-i18n="hero_tag">✦ Marketplace abierto para México & USA</div>
     <h1 data-i18n="hero_title">Compra. Vende.<br><em>Conecta.</em></h1>
-    <p data-i18n="hero_desc">Anuncios locales gratuitos. Trato directo sin intermediarios.<br>Las publicaciones duran automáticamente 6 meses.</p>
+    <p data-i18n="hero_desc">Anuncios locales gratuitos. Los anuncios duran 6 meses.</p>
     <div class="hero-search-wrap">
       <div class="search-bar">
         <svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
