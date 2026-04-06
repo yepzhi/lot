@@ -89,7 +89,7 @@ const i18n = {
   en: {
     "btn_post": "+ Post Ad",
     "btn_my_ads": "My Ads",
-    "hero_tag": "✦ Open Marketplace for México & USA",
+    "hero_tag": "✦ Open Marketplace for Mexico & USA",
     "hero_title": "Buy. Sell.<br><em>Connect.</em>",
     "hero_desc": "Free local classifieds. Ads last for 6 months.",
     "search_ph": "Search cars, iphones, services…",
