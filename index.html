@@ -321,8 +321,40 @@ input:-webkit-autofill:focus {
   caret-color: var(--text) !important;
 }
 ::placeholder {
-  color: rgba(240, 244, 255, 0.2) !important;
+  color: rgba(160, 160, 160, 0.6) !important;
   font-weight: 300;
+}
+#myAdsPhone::placeholder {
+  color: rgba(100, 100, 100, 0.8) !important;
+}
+.currency-toggle {
+  display: flex;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 4px;
+  gap: 4px;
+}
+.curr-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.curr-btn.active {
+  background: var(--accent);
+  color: white;
+  box-shadow: 0 4px 12px rgba(0,210,255,0.3);
+}
+.curr-btn:hover:not(.active) {
+  background: rgba(255,255,255,0.05);
+  color: var(--text);
 }
 .btn-share-store {
   cursor: pointer;
@@ -460,8 +492,9 @@ footer a:hover{color:var(--text)}
   <div class="listing-grid" id="listingGrid"></div>
 </div>
 
+<footer>
   <div><span data-i18n="footer_text">© 2026, creado por yepzhi.com — Los anuncios son responsabilidad del publicante.</span> <a href="privacy.html" data-i18n="privacy">Aviso de privacidad</a>.</div>
-  <div style="font-size:10px; margin-top:6px; opacity:0.5; font-family:var(--font-head); letter-spacing:1px;">LOT v3.5.4</div>
+  <div style="font-size:10px; margin-top:6px; opacity:0.5; font-family:var(--font-head); letter-spacing:1px;">LOT v3.5.5</div>
 </footer>
 
 
@@ -507,10 +540,11 @@ footer a:hover{color:var(--text)}
         </div>
         <div class="form-group">
           <label data-i18n="lbl_currency">Moneda</label>
-          <select id="postCurrency">
-            <option value="MXN">Pesos ($ MXN)</option>
-            <option value="USD">Dólares ($ USD)</option>
-          </select>
+          <div class="currency-toggle">
+            <button type="button" class="curr-btn active" onclick="setPostCurrency('MXN', this)">MXN</button>
+            <button type="button" class="curr-btn" onclick="setPostCurrency('USD', this)">USD</button>
+          </div>
+          <input type="hidden" id="postCurrency" value="MXN">
         </div>
       </div>
       <div class="form-group">
@@ -1254,6 +1288,12 @@ function resetForm() {
     const el = document.getElementById(id);
     if (el) el.value = id === 'postCurrency' ? 'MXN' : '';
   });
+  // Reset currency toggle UI
+  const toggle = document.querySelector('.currency-toggle');
+  if (toggle) {
+    toggle.querySelectorAll('.curr-btn').forEach(b => b.classList.remove('active'));
+    toggle.querySelector('.curr-btn[onclick*="MXN"]').classList.add('active');
+  }
   document.getElementById('photoGroup').style.display = 'block';
   photoBlobs.fill(null);
   document.querySelectorAll('.photo-slot').forEach(s => {
@@ -1375,6 +1415,12 @@ function changeView(view) {
   renderListings();
 }
 
+function setPostCurrency(curr, btn) {
+  document.getElementById('postCurrency').value = curr;
+  btn.parentElement.querySelectorAll('.curr-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
 function renderCats() {
   const g = document.getElementById('catsGrid');
   g.innerHTML = '';
@@ -1417,7 +1463,8 @@ function renderCats() {
   const drawer = document.getElementById('otrosDrawer');
   drawer.className = 'otros-drawer' + (otrosOpen ? ' open' : '');
   if (otrosOpen) {
-    drawer.innerHTML = '<div class="otros-drawer-label">Más categorías</div>';
+    const lblMore = i18n[currentLang]?.lbl_more_cats || 'Más categorías';
+    drawer.innerHTML = `<div class="otros-drawer-label">${lblMore}</div>`;
     OTROS_SUBCATS.forEach(s => {
       const count = listings.filter(l => l.cat === s.id).length;
       const subLabel = i18n[currentLang]?.[`sub_${s.id}`] || s.label;
@@ -1445,15 +1492,23 @@ function renderListings() {
 
   if (filterUser) {
     const btnTxt = i18n[currentLang]?.btn_share_store || '↗ Compartir Tienda';
+    const adsOf = i18n[currentLang]?.ads_of || 'Anuncios de';
+    const btnRem = i18n[currentLang]?.btn_remove || 'Quitar';
     info.innerHTML = `
-      Anuncios de <strong>+52 ${filterUser}</strong> 
-      <span onclick="clearUserFilter()" style="cursor:pointer; color:var(--accent); margin-left:10px; font-size:12px; border:1px solid var(--accent); padding:2px 8px; border-radius:12px;">✕ Quitar</span>
+      ${adsOf} <strong>+52 ${filterUser}</strong> 
+      <span onclick="clearUserFilter()" style="cursor:pointer; color:var(--accent); margin-left:10px; font-size:12px; border:1px solid var(--accent); padding:2px 8px; border-radius:12px;">✕ ${btnRem}</span>
       <button class="btn-share-store" onclick="shareStore('${filterUser}')">${btnTxt}</button>
     `;
   } else {
+    const msgShowing = i18n[currentLang]?.msg_showing || 'Mostrando';
+    const msgSimilar = i18n[currentLang]?.msg_similar || 'resultados similares a';
+    const lblAd = i18n[currentLang]?.lbl_ad || 'anuncio';
+    const lblAds = i18n[currentLang]?.lbl_ads || 'anuncios';
+    const countTxt = list.length === 1 ? lblAd : lblAds;
+
     info.innerHTML = similar
-      ? `Mostrando <strong>${list.length}</strong> resultados similares a "${searchQ}"`
-      : `Mostrando <strong>${list.length}</strong> anuncio${list.length !== 1 ? 's' : ''}`;
+      ? `${msgShowing} <strong>${list.length}</strong> ${msgSimilar} "${searchQ}"`
+      : `${msgShowing} <strong>${list.length}</strong> ${countTxt}`;
   }
 
   if (!list.length) {
@@ -1504,7 +1559,7 @@ function renderListings() {
         <div class="card-title">${item.title}</div>
         <div class="card-meta">
           <span>📍 ${item.city || 'Hermosillo, MX'}</span>
-          <span>Publicado ${dateShort}</span>
+          <span>${i18n[currentLang]?.lbl_posted || 'Publicado'} ${dateShort}</span>
           <span>🏷️ ${catLabel}</span>
           <span style="margin-left:auto;">👀 ${item.views || 0}</span>
         </div>
