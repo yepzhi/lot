@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- LOT v3.5.2 — UI: View sorter, compact list view toggle & translation fix -->
+<!-- LOT v3.5.3 — UI: Store View redirection, 5-photo limit & direct management -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -177,7 +177,7 @@ header{position:sticky;top:0;z-index:100;background:rgba(0,0,0,0.7);backdrop-fil
 
 .photo-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 10px;
   margin-top: 4px;
 }
@@ -439,7 +439,7 @@ footer a:hover{color:var(--text)}
 
 <footer>
   <div><span data-i18n="footer_text">© 2026, creado por yepzhi.com — Los anuncios son responsabilidad del publicante.</span> <a href="privacy.html" data-i18n="privacy">Aviso de privacidad</a>.</div>
-  <div style="font-size:10px; margin-top:6px; opacity:0.5; font-family:var(--font-head); letter-spacing:1px;">LOT v3.5.2</div>
+  <div style="font-size:10px; margin-top:6px; opacity:0.5; font-family:var(--font-head); letter-spacing:1px;">LOT v3.5.3</div>
 </footer>
 
 
@@ -584,10 +584,11 @@ footer a:hover{color:var(--text)}
           <div class="photo-slot" data-idx="1"><input type="file" accept="image/*" onchange="handlePhoto(this,1)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
           <div class="photo-slot" data-idx="2"><input type="file" accept="image/*" onchange="handlePhoto(this,2)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
           <div class="photo-slot" data-idx="3"><input type="file" accept="image/*" onchange="handlePhoto(this,3)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+          <div class="photo-slot" data-idx="4"><input type="file" accept="image/*" onchange="handlePhoto(this,4)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
         </div>
         <div class="photo-hint">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-          <span data-i18n="img_hint">Imágenes optimizadas automáticamente · WebP · max 0.5MB</span>
+          <span data-i18n="img_hint">Imágenes optimizadas automáticamente · WebP · máx 5</span>
         </div>
       </div>
 
@@ -673,7 +674,7 @@ footer a:hover{color:var(--text)}
 
 <script>
 // ──────────────────────────────────────────────────────────────
-// LOT — yepzhi.com/lot · v3.5.2
+// LOT — yepzhi.com/lot · v3.5.3
 // Stack: Firebase Firestore + Cloudinary + NSFWJS
 // ──────────────────────────────────────────────────────────────
 
@@ -734,7 +735,7 @@ let activeSubCat = null;
 let _currentSort = 'recent';
 let _currentView = 'grid';
 let filterUser = null;
-const photoBlobs = [null, null, null, null];
+const photoBlobs = [null, null, null, null, null];
 let nsfwModel = null;
 let nsfwLoading = false;
 
@@ -804,10 +805,6 @@ async function fetchMyAds() {
   document.getElementById('myAdsResults').innerHTML = `<div style="text-align:center;color:var(--muted)">${i18n[currentLang]?.loading || 'Cargando…'}</div>`;
   
   try {
-    // Search by all possible stored formats:
-    // Old listings: contact = "6622056304" (10 digits)
-    // New listings: contact = "526622056304" (with country code)
-    // Newest listings also have: phone = "6622056304"
     const variants = [phone, '52' + phone, '1' + phone];
     
     const queries = variants.map(v =>
@@ -816,7 +813,6 @@ async function fetchMyAds() {
         .where('status', '==', 'active')
         .get()
     );
-    // Also try the 'phone' field (added in v3.4.4+)
     queries.push(
       db.collection('listings')
         .where('phone', '==', phone)
@@ -825,49 +821,19 @@ async function fetchMyAds() {
     );
     
     const results = await Promise.all(queries);
-    const seen = new Set();
-    const allDocs = [];
-    results.forEach(snap => {
-      snap.forEach(doc => {
-        if (!seen.has(doc.id)) {
-          seen.add(doc.id);
-          allDocs.push(doc);
-        }
-      });
-    });
+    let hasAds = false;
+    results.forEach(snap => { if (!snap.empty) hasAds = true; });
       
-    if (!allDocs.length) {
+    if (!hasAds) {
       document.getElementById('myAdsResults').innerHTML = `<div style="text-align:center;color:var(--muted)">${i18n[currentLang]?.ads_not_found || 'No se encontraron anuncios.'}</div>`;
       return;
     }
     
-    let html = '';
-    const mySavedAds = JSON.parse(localStorage.getItem('lot_my_ads') || '{}');
-    
-    allDocs.forEach(doc => {
-      const data = doc.data();
-      const txtDel = i18n[currentLang]?.btn_delete_pin || 'Borrar';
-      const plhPin = i18n[currentLang]?.ph_del_pin || 'PIN (4 dígitos)';
-      const savedPin = mySavedAds[doc.id] || '';
-      
-      const pinBlock = savedPin 
-        ? `<button onclick="deleteMyAd('${doc.id}', '${savedPin}')" style="background:rgba(255,100,100,0.1); border:1px solid rgba(255,100,100,0.3); color:#FF6B6B; padding:6px 12px; border-radius:8px; font-size:12px; cursor:pointer;" data-i18n="btn_delete">X Borrar Anuncio</button>`
-        : `<div style="display:flex; gap:6px;">
-             <input type="password" id="delPin_${doc.id}" placeholder="${plhPin}" maxlength="4" style="width:110px; padding:6px 10px; background:var(--glass); border:1px solid var(--glass-border); border-radius:6px; color:var(--text); font-size:12px;">
-             <button onclick="deleteMyAd('${doc.id}', document.getElementById('delPin_${doc.id}').value)" style="background:rgba(255,100,100,0.1); border:1px solid rgba(255,100,100,0.3); color:#FF6B6B; padding:6px 10px; border-radius:8px; font-size:12px; cursor:pointer;">${txtDel}</button>
-           </div>`;
-
-      html += `
-        <div style="background:var(--glass); border:1px solid var(--glass-border); padding:12px; border-radius:12px; display:flex; justify-content:space-between; align-items:center;">
-          <div>
-            <div style="font-size:14px; font-weight:600; color:var(--text);">${data.title}</div>
-            <div style="font-size:12px; color:var(--muted);">$${data.price}</div>
-          </div>
-          ${pinBlock}
-        </div>
-      `;
-    });
-    document.getElementById('myAdsResults').innerHTML = html;
+    // Switch to Store View
+    filterUser = phone;
+    closeModal('myAdsOverlay');
+    renderAll();
+    showToast('✦ Vista de Usuario Activada');
   } catch (err) {
     showToast('Error al buscar anuncios', true);
   } finally {
@@ -893,10 +859,21 @@ async function deleteMyAd(id, pin) {
     }
     
     showToast(i18n[currentLang]?.ad_deleted || 'Anuncio eliminado');
-    fetchMyAds(); // Refresh list
     loadListings(); // Refresh main feed
   } catch (err) {
     showToast('Error al eliminar. Revisa tu PIN.', true);
+  }
+}
+
+function manageAd(id, phone) {
+  const mySavedAds = JSON.parse(localStorage.getItem('lot_my_ads') || '{}');
+  const savedPin = mySavedAds[id];
+  
+  if (savedPin) {
+    deleteMyAd(id, savedPin);
+  } else {
+    const pin = prompt('Ingresa tu PIN de 4 dígitos para borrar este anuncio:');
+    if (pin) deleteMyAd(id, pin);
   }
 }
 
@@ -1246,18 +1223,11 @@ async function loadListings() {
 function checkDeepLink() {
   const urlParams = new URLSearchParams(window.location.search);
   
-  // 1. Check for specific AD
+  // Check for specific AD
   const adId = urlParams.get('ad');
   if (adId) {
     const item = listings.find(l => l.id === adId);
     if (item) openDetail(item);
-  }
-
-  // 2. Check for USER filter (phone number)
-  const userParam = urlParams.get('u') || urlParams.get('user');
-  if (userParam && /^[0-9]{10}$/.test(userParam)) {
-    filterUser = userParam;
-    renderAll();
   }
 }
 
@@ -1432,12 +1402,19 @@ function renderListings() {
 
     const dateShort = formatDateShort(item.createdAt);
 
+    // Management Button (only in Store View)
+    let manageBtn = '';
+    if (filterUser && item.phone === filterUser) {
+      manageBtn = `<button class="card-manage" onclick="event.stopPropagation(); manageAd('${item.id}', '${item.phone}')" style="position:absolute; top:40px; right:10px; background:rgba(255,51,102,0.9); color:white; border:none; padding:4px 8px; border-radius:8px; font-size:10px; font-weight:bold; cursor:pointer; z-index:5;">🗑️ Borrar</button>`;
+    }
+
     card.innerHTML = `
       <div class="card-img-wrap">
         ${imgEl}
         <span class="card-badge cat-${item.cat}">${catLabel}</span>
         ${item.images?.length > 1 ? `<span class="card-imgs-count">📷 ${item.images.length}</span>` : ''}
         ${expBadge ? `<span class="card-expiry">${expBadge}</span>` : ''}
+        ${manageBtn}
         <button class="card-fav" title="Guardar" onclick="event.stopPropagation();this.classList.toggle('active');this.textContent=this.classList.contains('active')?'♥':'♡'">♡</button>
       </div>
       <div class="card-body">
