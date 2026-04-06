@@ -733,6 +733,7 @@ let otrosOpen = false;
 let activeSubCat = null;
 let _currentSort = 'recent';
 let _currentView = 'grid';
+let filterUser = null;
 const photoBlobs = [null, null, null, null];
 let nsfwModel = null;
 let nsfwLoading = false;
@@ -1244,11 +1245,30 @@ async function loadListings() {
 
 function checkDeepLink() {
   const urlParams = new URLSearchParams(window.location.search);
+  
+  // 1. Check for specific AD
   const adId = urlParams.get('ad');
   if (adId) {
     const item = listings.find(l => l.id === adId);
     if (item) openDetail(item);
   }
+
+  // 2. Check for USER filter (phone number)
+  const userParam = urlParams.get('u') || urlParams.get('user');
+  if (userParam && /^[0-9]{10}$/.test(userParam)) {
+    filterUser = userParam;
+    renderAll();
+  }
+}
+
+function clearUserFilter() {
+  filterUser = null;
+  // Clean URL without refresh
+  const url = new URL(window.location);
+  url.searchParams.delete('u');
+  url.searchParams.delete('user');
+  window.history.replaceState({}, '', url);
+  renderAll();
 }
 
 function showSkeleton() {
@@ -1262,9 +1282,16 @@ function allOtrosIds() { return OTROS_SUBCATS.map(s => s.id); }
 
 function getFiltered() {
   let list = [...listings];
+  
+  // High priority: User filter
+  if (filterUser) {
+    list = list.filter(l => l.phone === filterUser);
+  }
+
   const otrosIds = allOtrosIds();
   if (activeCat === 'otros') list = list.filter(l => otrosIds.includes(l.cat));
   else if (activeCat !== 'all') list = list.filter(l => l.cat === activeCat);
+  
   if (searchQ.trim()) {
     const q = searchQ.toLowerCase();
     const exact = list.filter(l =>
@@ -1369,9 +1396,13 @@ function renderListings() {
   grid.innerHTML = '';
   grid.className = _currentView === 'compact' ? 'listing-grid compact-view' : 'listing-grid';
 
-  info.innerHTML = similar
-    ? `Mostrando <strong>${list.length}</strong> resultados similares a "${searchQ}"`
-    : `Mostrando <strong>${list.length}</strong> anuncio${list.length !== 1 ? 's' : ''}`;
+  if (filterUser) {
+    info.innerHTML = `Anuncios de <strong>+52 ${filterUser}</strong> <span onclick="clearUserFilter()" style="cursor:pointer; color:var(--accent); margin-left:10px; font-size:12px; border:1px solid var(--accent); padding:2px 8px; border-radius:12px;">✕ Quitar filtro</span>`;
+  } else {
+    info.innerHTML = similar
+      ? `Mostrando <strong>${list.length}</strong> resultados similares a "${searchQ}"`
+      : `Mostrando <strong>${list.length}</strong> anuncio${list.length !== 1 ? 's' : ''}`;
+  }
 
   if (!list.length) {
     const txtTitle = i18n[currentLang]?.empty_title || 'No hay anuncios aquí';
