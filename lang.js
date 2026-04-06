@@ -7,17 +7,18 @@ const i18n = {
     "hero_desc": "Anuncios locales gratuitos. Directo sin intermediarios.<br>Las publicaciones duran 6 meses.",
     "search_ph": "Busca carros, iphones, servicios…",
     "cat_all": "Todo",
-    "cat_cars": "Carros",
-    "cat_parties": "Fiestas",
-    "cat_services": "Servicios",
-    "cat_phones": "Teléfonos",
-    "cat_others": "Otros",
-    "sub_houses": "Casas",
-    "sub_comp": "Computación",
-    "sub_tv": "Pantallas",
-    "sub_clothes": "Ropa",
-    "sub_shoes": "Zapatos",
-    "sub_love": "Love",
+    "cat_cars": "🚗 Carros",
+    "cat_parties": "🎉 Fiestas",
+    "cat_services": "🔧 Servicios",
+    "cat_phones": "📱 Teléfonos",
+    "cat_others": "📦 Otros",
+    "lbl_opt_others": "── Otros ──",
+    "sub_houses": "🏠 Casas",
+    "sub_comp": "💻 Computación",
+    "sub_tv": "📺 Pantallas",
+    "sub_clothes": "👕 Ropa",
+    "sub_shoes": "👟 Zapatos",
+    "sub_love": "❤️ Love",
     "loading": "Cargando…",
     "footer_text": "© 2026, creado por <a href='https://yepzhi.com' target='_blank'>yepzhi.com</a> — Los anuncios son responsabilidad del publicante.",
     "privacy": "Aviso de privacidad",
@@ -84,17 +85,18 @@ const i18n = {
     "hero_desc": "Free local classifieds. Direct deals, no middlemen.<br>Ads last for 6 months.",
     "search_ph": "Search cars, iphones, services…",
     "cat_all": "All",
-    "cat_cars": "Cars",
-    "cat_parties": "Parties",
-    "cat_services": "Services",
-    "cat_phones": "Phones",
-    "cat_others": "Others",
-    "sub_houses": "Real Estate",
-    "sub_comp": "Computers",
-    "sub_tv": "TVs",
-    "sub_clothes": "Clothing",
-    "sub_shoes": "Shoes",
-    "sub_love": "Love",
+    "cat_cars": "🚗 Cars",
+    "cat_parties": "🎉 Parties",
+    "cat_services": "🔧 Services",
+    "cat_phones": "📱 Phones",
+    "cat_others": "📦 Others",
+    "lbl_opt_others": "── Others ──",
+    "sub_houses": "🏠 Real Estate",
+    "sub_comp": "💻 Computers",
+    "sub_tv": "📺 TVs",
+    "sub_clothes": "👕 Clothing",
+    "sub_shoes": "👟 Shoes",
+    "sub_love": "❤️ Love",
     "loading": "Loading…",
     "footer_text": "© 2026, by <a href='https://yepzhi.com' target='_blank'>yepzhi.com</a> — Ads are the responsibility of the publisher.",
     "privacy": "Privacy Policy",
@@ -176,6 +178,14 @@ function setLang(lang) {
       } else {
         el.innerHTML = i18n[lang][key];
       }
+    }
+  });
+
+  // Update labels (for optgroups)
+  document.querySelectorAll('[data-i18n-label]').forEach(el => {
+    const key = el.getAttribute('data-i18n-label');
+    if (i18n[lang][key]) {
+      el.label = i18n[lang][key];
     }
   });
 
