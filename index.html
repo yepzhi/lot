@@ -502,13 +502,21 @@ footer a:hover{color:var(--text)}
 
       <div class="price-row" style="align-items: flex-start;">
         <div class="form-group">
-          <label data-i18n="lbl_price">Precio (MXN)</label>
+          <label data-i18n="lbl_price">Precio</label>
           <input type="text" id="postPrice" placeholder="0" oninput="formatPriceInput(this)">
           <div style="font-size:10px;color:var(--muted);margin-top:6px" data-i18n="price_hint">👀 Favor de colocar precios reales. (0 = Gratis)</div>
         </div>
         <div class="form-group">
-          <label data-i18n="lbl_city">Ciudad</label>
-          <select id="postCity">
+          <label data-i18n="lbl_currency">Moneda</label>
+          <select id="postCurrency">
+            <option value="MXN">Pesos ($ MXN)</option>
+            <option value="USD">Dólares ($ USD)</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label data-i18n="lbl_city">Ciudad</label>
+        <select id="postCity">
             <option value="" data-i18n="opt_sel">— Selecciona —</option>
             <optgroup label="── Cobertura Prioritaria ──">
               <option value="Hermosillo, MX">Hermosillo, MX</option>
@@ -761,6 +769,41 @@ let filterUser = null;
 const photoBlobs = [null, null, null, null, null];
 let nsfwModel = null;
 let nsfwLoading = false;
+let usdToMxn = 17.5; // fallback
+
+async function fetchExchangeRate() {
+  try {
+    const res = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+    const data = await res.json();
+    if (data && data.rates && data.rates.MXN) {
+      usdToMxn = data.rates.MXN;
+      sessionStorage.setItem('lot_rate', usdToMxn);
+      console.log('✓ Exchange Rate:', usdToMxn);
+    }
+  } catch (e) {
+    usdToMxn = parseFloat(sessionStorage.getItem('lot_rate')) || 17.5;
+  }
+}
+fetchExchangeRate();
+
+function formatPrice(val, itemCurrency) {
+  if (val === 0) return i18n[currentLang]?.lbl_price?.includes('Free') ? 'Free' : 'Gratis';
+  
+  let finalVal = val;
+  let finalCurrency = getCurrency(); // USD if EN, MXN if ES
+
+  if (currentLang === 'en') {
+    // Target: USD
+    if (itemCurrency === 'MXN') finalVal = val / usdToMxn;
+  } else {
+    // Target: MXN
+    if (itemCurrency === 'USD') finalVal = val * usdToMxn;
+  }
+
+  // Rounding for clean UI
+  const rounded = finalVal < 10 ? finalVal.toFixed(2) : Math.round(finalVal).toLocaleString('es-MX');
+  return `$${rounded} ${finalCurrency}`;
+}
 
 // ─── HELPERS ─────────────────────────────────────────────────
 function timeAgo(ts) {
@@ -1122,6 +1165,7 @@ async function submitPost() {
   const localNumber = document.getElementById('postContact').value.trim();
   const contact = country + localNumber;
   const pin     = document.getElementById('postPin').value.trim();
+  const currency= document.getElementById('postCurrency').value;
 
   if (!cat || !title) { showToast('⚠️ Completa categoría y título', true); return; }
   if (title.length < 3) { showToast('⚠️ El título es muy corto', true); return; }
@@ -1161,6 +1205,7 @@ async function submitPost() {
       phone: localNumber, // 10-digit local number for Firestore queries and bans
       pin,
       images,
+      currency,
       status: 'active',
       createdAt: now,
       expiresAt,
@@ -1206,9 +1251,10 @@ async function submitPost() {
 }
 
 function resetForm() {
-  ['postCat','postTitle','postPrice','postCity','postDesc','postContact','postPin'].forEach(id =>
-    document.getElementById(id).value = ''
-  );
+  ['postCat','postTitle','postPrice','postCity','postDesc','postContact','postPin','postCurrency'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = id === 'postCurrency' ? 'MXN' : '';
+  });
   document.getElementById('photoGroup').style.display = 'block';
   photoBlobs.fill(null);
   document.querySelectorAll('.photo-slot').forEach(s => {
@@ -1425,7 +1471,7 @@ function renderListings() {
     card.className = _currentView === 'compact' ? 'card compact' : 'card';
     card.style.animationDelay = (i * 0.035) + 's';
 
-    const priceStr = item.price === 0 ? (i18n[currentLang]?.lbl_price?.includes('Free') ? 'Free' : 'Gratis') : '$' + item.price.toLocaleString('es-MX') + ' ' + getCurrency();
+    const priceStr = formatPrice(item.price, item.currency || 'MXN');
     const priceClass = item.price === 0 ? 'card-price free' : 'card-price';
     const isSub = OTROS_SUBCATS.find(c => c.id === item.cat);
     const catLabel = isSub ? (i18n[currentLang]?.[`sub_${item.cat}`] || isSub.label) : (i18n[currentLang]?.[`cat_${item.cat}`] || item.cat);
@@ -1474,7 +1520,7 @@ function renderAll() { renderCats(); renderListings(); }
 
 // ─── DETAIL ──────────────────────────────────────────────────
 function openDetail(item) {
-  const priceStr = item.price === 0 ? (i18n[currentLang]?.lbl_price?.includes('Free') ? 'Free' : 'Gratis') : '$' + item.price.toLocaleString('es-MX') + ' ' + getCurrency();
+  const priceStr = formatPrice(item.price, item.currency || 'MXN');
   const allCatsList = [...CATS, ...OTROS_SUBCATS];
   const isSub = OTROS_SUBCATS.find(c => c.id === item.cat);
   const catLabel = isSub ? (i18n[currentLang]?.[`sub_${item.cat}`] || isSub.label) : (i18n[currentLang]?.[`cat_${item.cat}`] || item.cat);
