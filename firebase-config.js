@@ -5,12 +5,12 @@
 
 const firebaseConfig = {
   apiKey:            "__FIREBASE_API_KEY__",
-  authDomain:        "nlot-89d26.firebaseapp.com",
-  projectId:         "nlot-89d26",
-  storageBucket:     "nlot-89d26.firebasestorage.app",
-  messagingSenderId: "928352640563",
+  authDomain:        "__FIREBASE_AUTH_DOMAIN__",
+  projectId:         "__FIREBASE_PROJECT_ID__",
+  storageBucket:     "__FIREBASE_STORAGE_BUCKET__",
+  messagingSenderId: "__FIREBASE_MESSAGING_SENDER_ID__",
   appId:             "__FIREBASE_APP_ID__",
-  measurementId:     "G-KE9MFKBGV5"
+  measurementId:     "__FIREBASE_MEASUREMENT_ID__"
 };
 
 // Cloudinary — Imágenes sin costo (25GB gratis)

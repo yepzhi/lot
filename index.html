@@ -808,18 +808,19 @@ if (location.pathname.endsWith('/index.html')) {
 //    Copia tu objeto firebaseConfig y pégalo aquí:
 const firebaseConfig = {
   apiKey:            "__FIREBASE_API_KEY__",
-  authDomain:        "nlot-89d26.firebaseapp.com",
-  projectId:         "nlot-89d26",
-  storageBucket:     "nlot-89d26.firebasestorage.app",
-  messagingSenderId: "928352640563",
-  appId:             "__FIREBASE_APP_ID__"
+  authDomain:        "__FIREBASE_AUTH_DOMAIN__",
+  projectId:         "__FIREBASE_PROJECT_ID__",
+  storageBucket:     "__FIREBASE_STORAGE_BUCKET__",
+  messagingSenderId: "__FIREBASE_MESSAGING_SENDER_ID__",
+  appId:             "__FIREBASE_APP_ID__",
+  measurementId:     "__FIREBASE_MEASUREMENT_ID__"
 };
 
 // Cloudinary
-const CLOUD_NAME = '__CLOUDINARY_CLOUD_NAME__';
+const CLOUD_NAME = "__CLOUDINARY_CLOUD_NAME__";
 // 🔴 PASO 2: Cloudinary Console → Settings → Upload → Upload Presets
 //    → Add Upload Preset → Signing Mode: UNSIGNED → Preset Name: __CLOUDINARY_UPLOAD_PRESET__ → Save
-const UPLOAD_PRESET = '__CLOUDINARY_UPLOAD_PRESET__';
+const UPLOAD_PRESET = "__CLOUDINARY_UPLOAD_PRESET__";
 
 // Initialize as a named app to avoid conflicts with tracker or other Firebase instances
 const LOT_APP_NAME = 'lot_app';
