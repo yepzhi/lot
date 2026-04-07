@@ -31,6 +31,25 @@ const i18n = {
     "lbl_more_cats": "Más categorías",
     "footer_text": "© 2026, creado por <a href='https://yepzhi.com' target='_blank'>yepzhi.com</a> — Los anuncios son responsabilidad del publicante.",
     "privacy": "Aviso de privacidad",
+
+    // SEO
+    "site_title": "LOT — Compra, Vende, Conecta",
+    "site_desc": "Marketplace de clasificados en México. Sin registros, sin apps, trato directo por WhatsApp.",
+
+    // FAQ
+    "faq_title": "Preguntas <em>Frecuentes</em>",
+    "faq_q1": "¿Qué es LOT?",
+    "faq_a1": "LOT es un marketplace local diseñado para ser <strong>frictionless</strong>. Sin registros, sin contraseñas y sin intermediarios. Conectamos compradores con vendedores directamente vía WhatsApp.",
+    "faq_q2": "¿Cómo publico un anuncio?",
+    "faq_a2": "Haz clic en '+ Publicar', elige categoría, sube hasta 5 fotos y define un PIN de 4 dígitos. Tu número de WhatsApp servirá como tu identificador único.",
+    "faq_q3": "¿Para qué sirve el PIN?",
+    "faq_a3": "Es tu llave de seguridad. Como no usamos cuentas ni contraseñas, necesitarás este PIN para poder borrar tus anuncios manualmente antes de que expiren.",
+    "faq_q4": "¿Cómo comparto mi tienda?",
+    "faq_a4": "Entra en 'Mi Tienda', ingresa tu número y verás la lista de tus anuncios activos. Ahí encontrarás un botón para copiar el enlace único de tu perfil/tienda.",
+    "faq_q5": "¿Cuánto duran los anuncios?",
+    "faq_a5": "Todos los anuncios tienen una vigencia de 6 meses. Después de ese tiempo se eliminan automáticamente para mantener el marketplace fresco.",
+    "faq_q6": "¿Es gratis?",
+    "faq_a6": "Sí. Publicar en LOT es y siempre será gratuito. No cobramos comisiones por venta.",
     // UI Controls
     "sort_recent": "Más recientes",
     "sort_asc": "Menor precio",
@@ -76,7 +95,7 @@ const i18n = {
     
     // my ads
     "my_ads_title": "Mis <em>Anuncios</em>",
-    "my_ads_desc": "Ingresa el número con el que publicaste los anuncios para administrarlos.",
+    "my_ads_desc": "Ingresa el número con el que publicaste los anuncios para administrarlos. Ver y compartir tu tienda con solo tus anuncios.",
     "btn_search_ads": "Buscar mis anuncios",
     "btn_delete": "X Borrar Anuncio",
     "btn_delete_pin": "Borrar",
@@ -118,6 +137,25 @@ const i18n = {
     "lbl_more_cats": "More categories",
     "footer_text": "© 2026, by <a href='https://yepzhi.com' target='_blank'>yepzhi.com</a> — Ads are the responsibility of the publisher.",
     "privacy": "Privacy Policy",
+    
+    // SEO
+    "site_title": "LOT — Buy, Sell, Connect",
+    "site_desc": "Global local marketplace. No registration, no apps, direct deal via WhatsApp.",
+
+    // FAQ
+    "faq_title": "Frequently Asked <em>Questions</em>",
+    "faq_q1": "What is LOT?",
+    "faq_a1": "LOT is a local marketplace designed to be <strong>frictionless</strong>. No registration, no passwords, and no middlemen. We connect buyers and sellers directly via WhatsApp.",
+    "faq_q2": "How do I post an ad?",
+    "faq_a2": "Click '+ Post Ad', pick a category, upload up to 5 photos, and set a 4-digit PIN. Your WhatsApp number will serve as your unique identifier.",
+    "faq_q3": "What is the PIN for?",
+    "faq_a3": "It's your security key. Since we don't use accounts or passwords, you'll need this PIN to manually delete your ads before they expire.",
+    "faq_q4": "How do I share my store?",
+    "faq_a4": "Go to 'My Store', enter your number, and you'll see the list of your active ads. There you'll find a button to copy the unique link to your profile/store.",
+    "faq_q5": "How long do ads last?",
+    "faq_a5": "All ads are valid for 6 months. After that time, they are automatically deleted to keep the marketplace fresh.",
+    "faq_q6": "Is it free?",
+    "faq_a6": "Yes. Posting on LOT is and will always be free. We don't charge sales commissions.",
     // UI Controls
     "sort_recent": "Newest",
     "sort_asc": "Lowest price",
@@ -163,7 +201,7 @@ const i18n = {
     
     // my ads
     "my_ads_title": "My <em>Ads</em>",
-    "my_ads_desc": "Enter the phone number you used to manage your listings.",
+    "my_ads_desc": "Enter the phone number you used to manage your listings. View and share your store with only your ads.",
     "btn_search_ads": "Find my ads",
     "btn_delete": "X Delete Ad",
     "btn_delete_pin": "Delete",
@@ -182,6 +220,23 @@ function setLang(lang) {
   localStorage.setItem('lot_lang', lang);
   document.documentElement.lang = lang;
   
+  // SEO Updates
+  if (i18n[lang].site_title) {
+    document.title = i18n[lang].site_title;
+    const ogTitle = document.getElementById('ogTitle');
+    const twTitle = document.getElementById('twTitle');
+    if (ogTitle) ogTitle.setAttribute('content', i18n[lang].site_title);
+    if (twTitle) twTitle.setAttribute('content', i18n[lang].site_title);
+  }
+  if (i18n[lang].site_desc) {
+    const sDesc = document.getElementById('siteDesc');
+    const ogDesc = document.getElementById('ogDesc');
+    const twDesc = document.getElementById('twDesc');
+    if (sDesc) sDesc.setAttribute('content', i18n[lang].site_desc);
+    if (ogDesc) ogDesc.setAttribute('content', i18n[lang].site_desc);
+    if (twDesc) twDesc.setAttribute('content', i18n[lang].site_desc);
+  }
+
   // Highlight switcher
   document.querySelectorAll('.lang-btn').forEach(b => {
     b.style.opacity = b.dataset.lang === lang ? '1' : '0.5';

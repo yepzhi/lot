@@ -1,16 +1,31 @@
 <!DOCTYPE html>
-<!-- LOT v3.6.2 — UI: My Store redirection, Multi-Language Hero Update -->
+<!-- LOT v3.6.4 — UI: My Store Onboarding Refinement & Cache Sync -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LOT — Compra, Vende, Conecta</title>
-<meta name="description" content="Marketplace de clasificados en Hermosillo y México. Carros, teléfonos, servicios y más.">
+<title id="siteTitle">LOT — Compra, Vende, Conecta</title>
+<meta name="description" id="siteDesc" content="Marketplace de clasificados en Hermosillo y México. Carros, teléfonos, servicios y más.">
+
+<!-- Open Graph / Social Media Meta Tags -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yepzhi.com/lot">
+<meta property="og:title" id="ogTitle" content="LOT — Compra, Vende, Conecta">
+<meta property="og:description" id="ogDesc" content="Marketplace local gratuito en Hermosillo y México. Sin intermediarios, sin registros.">
+<meta property="og:image" content="https://yepzhi.com/lot/og-image.jpg">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://yepzhi.com/lot">
+<meta property="twitter:title" id="twTitle" content="LOT — Compra, Vende, Conecta">
+<meta property="twitter:description" id="twDesc" content="Marketplace local gratuito. Sin intermediarios, sin registros.">
+<meta property="twitter:image" content="https://yepzhi.com/lot/og-image.jpg">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <script>window.NEOSYS_SITE_ID = 'lot';</script>
 <script src="/visitors/tracker.js"></script>
-<script src="lang.js?v=3.6.2"></script>
+<script src="lang.js?v=3.6.4"></script>
 <style>
 :root{--bg:#000;--glass:rgba(255,255,255,0.05);--glass-border:rgba(255,255,255,0.08);--glass-hover:rgba(255,255,255,0.09);--accent:#7DF9FF;--accent2:#FF6BF8;--accent3:#FFD166;--text:#F0F4FF;--muted:rgba(240,244,255,0.4);--card-shadow:0 8px 32px rgba(0,0,0,0.45);--blur:blur(18px);--r:18px;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -447,10 +462,11 @@ footer a:hover{color:var(--text)}
   <div class="header-inner">
     <a class="logo" id="logoBtn" href="https://yepzhi.com/lot/">LOT<span>by yepzhi</span></a>
     <div class="header-right">
+      <button class="btn-myads" onclick="openModal('faqOverlay')" style="width:32px; height:32px; padding:0; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:800; border-radius:50%;">?</button>
       <div class="lang-switch">
         <span class="lang-btn" data-lang="en" onclick="setLang('en')">EN</span> / <span class="lang-btn" data-lang="es" onclick="setLang('es')">ES</span>
       </div>
-      <button class="btn-myads" onclick="openMyAds()" data-i18n="btn_my_ads">Mis Anuncios</button>
+      <button class="btn-myads" id="myStoreBtn" onclick="openMyAds()" data-i18n="btn_my_ads">Mi Tienda</button>
       <button class="btn-post" id="btnPost" data-i18n="btn_post">+ Publicar</button>
     </div>
   </div>
@@ -497,7 +513,7 @@ footer a:hover{color:var(--text)}
 
 <footer>
   <div><span data-i18n="footer_text">© 2026, creado por yepzhi.com — Los anuncios son responsabilidad del publicante.</span> <a href="privacy.html" data-i18n="privacy">Aviso de privacidad</a>.</div>
-  <div style="font-size:10px; margin-top:6px; opacity:0.5; font-family:var(--font-head); letter-spacing:1px;">LOT v3.6.2</div>
+  <div style="font-size:10px; margin-top:6px; opacity:0.5; font-family:var(--font-head); letter-spacing:1px;">LOT v3.6.4</div>
 </footer>
 
 
@@ -738,9 +754,46 @@ footer a:hover{color:var(--text)}
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
+<!-- FAQ MODAL -->
+<div class="overlay" id="faqOverlay">
+  <div class="modal" style="max-width: 600px;">
+    <button class="modal-close" onclick="closeModal('faqOverlay')">✕</button>
+    <h2 data-i18n="faq_title" style="margin-bottom: 24px;">Preguntas <em>Frecuentes</em></h2>
+    
+    <div style="max-height: 70vh; overflow-y: auto; padding-right: 10px; display: flex; flex-direction: column; gap: 24px;">
+      <div class="faq-item">
+        <h4 data-i18n="faq_q1" style="color: var(--accent); margin-bottom: 8px;">¿Qué es LOT?</h4>
+        <p data-i18n="faq_a1" style="font-size: 14px; color: var(--muted); line-height: 1.6;"></p>
+      </div>
+      <div class="faq-item">
+        <h4 data-i18n="faq_q2" style="color: var(--accent); margin-bottom: 8px;">¿Cómo publico?</h4>
+        <p data-i18n="faq_a2" style="font-size: 14px; color: var(--muted); line-height: 1.6;"></p>
+      </div>
+      <div class="faq-item">
+        <h4 data-i18n="faq_q3" style="color: var(--accent); margin-bottom: 8px;">¿PIN de seguridad?</h4>
+        <p data-i18n="faq_a3" style="font-size: 14px; color: var(--muted); line-height: 1.6;"></p>
+      </div>
+      <div class="faq-item">
+        <h4 data-i18n="faq_q4" style="color: var(--accent); margin-bottom: 8px;">¿Compartir tienda?</h4>
+        <p data-i18n="faq_a4" style="font-size: 14px; color: var(--muted); line-height: 1.6;"></p>
+      </div>
+      <div class="faq-item">
+        <h4 data-i18n="faq_q5" style="color: var(--accent); margin-bottom: 8px;">¿Duración de anuncios?</h4>
+        <p data-i18n="faq_a5" style="font-size: 14px; color: var(--muted); line-height: 1.6;"></p>
+      </div>
+      <div class="faq-item">
+        <h4 data-i18n="faq_q6" style="color: var(--accent); margin-bottom: 8px;">¿Es gratis?</h4>
+        <p data-i18n="faq_a6" style="font-size: 14px; color: var(--muted); line-height: 1.6;"></p>
+      </div>
+    </div>
+    
+    <button class="btn-post" style="width: 100%; margin-top: 30px;" onclick="closeModal('faqOverlay')">Entendido</button>
+  </div>
+</div>
+
 <script>
 // ──────────────────────────────────────────────────────────────
-// LOT — yepzhi.com/lot · v3.5.3
+// LOT — yepzhi.com/lot · v3.6.3
 // Stack: Firebase Firestore + Cloudinary + NSFWJS
 // ──────────────────────────────────────────────────────────────
 
@@ -1841,7 +1894,7 @@ document.getElementById('photoGrid').addEventListener('pointerenter', () => {
   };
 })();
 
-console.log('%c LOT v3.6.2 ', 'background:#7DF9FF;color:#050810;font-weight:bold;border-radius:4px;padding:2px 8px;', '— yepzhi.com/lot');
+console.log('%c LOT v3.6.4 ', 'background:#7DF9FF;color:#050810;font-weight:bold;border-radius:4px;padding:2px 8px;', '— yepzhi.com/lot');
 </script>
 </body>
 </html>
