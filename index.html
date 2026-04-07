@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- LOT v3.6.8 — UI: Share Store Link Prominence & Cache Sync -->
+<!-- LOT v3.7.0 — UI: Aesthetic Sync & 100% SEO Optimization -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -22,17 +22,97 @@
 <meta property="twitter:image" content="https://yepzhi.com/lot/og-image.jpg">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="canonical" href="https://yepzhi.com/lot">
+<meta name="keywords" content="Marketplace Hermosillo, Clasificados México, Compras locales, Ventas Hermosillo, LOT, Comprar y vender, Anuncios gratis, yepzhi">
+<meta name="author" content="yepzhi.com">
+<meta name="robots" content="index, follow">
+
+<!-- Structured Data (JSON-LD) -->
+<script type="application/ld+json">
+[{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "LOT Marketplace",
+  "alternateName": "LOT Clasificados",
+  "url": "https://yepzhi.com/lot",
+  "description": "Marketplace de clasificados local rápido y sin fricción. Sin cuentas, solo tu número.",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://yepzhi.com/lot?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+},
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "LOT Marketplace",
+  "image": "https://yepzhi.com/lot/og-image.jpg",
+  "@id": "https://yepzhi.com/lot",
+  "url": "https://yepzhi.com/lot",
+  "telephone": "",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "",
+    "addressLocality": "Hermosillo",
+    "addressRegion": "Sonora",
+    "postalCode": "",
+    "addressCountry": "MX"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 29.073,
+    "longitude": -110.9559
+  },
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": [
+      "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+    ],
+    "opens": "00:00",
+    "closes": "23:59"
+  }
+}]
+</script>
+
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <script>window.NEOSYS_SITE_ID = 'lot';</script>
 <script src="/visitors/tracker.js"></script>
-<script src="lang.js?v=3.6.8"></script>
+<script src="lang.js?v=3.7.0"></script>
 <style>
-:root{--bg:#000;--glass:rgba(255,255,255,0.05);--glass-border:rgba(255,255,255,0.08);--glass-hover:rgba(255,255,255,0.09);--accent:#7DF9FF;--accent2:#FF6BF8;--accent3:#FFD166;--text:#F0F4FF;--muted:rgba(240,244,255,0.4);--card-shadow:0 8px 32px rgba(0,0,0,0.45);--blur:blur(18px);--r:18px;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif}
+:root{
+  --bg: #000;
+  --glass: rgba(0, 0, 0, 0.25);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-hover: rgba(255, 255, 255, 0.15);
+  --accent: #7DF9FF;
+  --accent2: #FF6BF8;
+  --accent3: #FFD166;
+  --text: #F0F4FF;
+  --muted: rgba(240, 244, 255, 0.6);
+  --card-shadow: 0 12px 48px rgba(0, 0, 0, 0.6);
+  --blur: blur(24px);
+  --r: 20px;
+  --font-head: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;position:relative}
-body::before{content:'';position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;background:radial-gradient(circle at 20% 50%, rgba(125,249,255,0.08) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(255,107,248,0.06) 0%, transparent 50%);animation:bgPulse 10s ease-in-out infinite alternate}
-@keyframes bgPulse{from{opacity:0.6}to{opacity:1}}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  background: linear-gradient(180deg, #1e208c 0%, #4e8bbc 100%);
+  animation: bgPulse 15s ease-in-out infinite alternate;
+}
+@keyframes bgPulse {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
 .wrapper{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:0 24px}
 header{position:sticky;top:0;z-index:100;background:rgba(0,0,0,0.7);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-bottom:1px solid var(--glass-border)}
 .header-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;max-width:1280px;margin:0 auto}
@@ -521,7 +601,7 @@ footer a:hover{color:var(--text)}
 
 <footer>
   <div><span data-i18n="footer_text">© 2026, creado por yepzhi.com — Los anuncios son responsabilidad del publicante.</span> <a href="privacy.html" data-i18n="privacy">Aviso de privacidad</a>.</div>
-  <div style="font-size:10px; margin-top:6px; opacity:0.5; font-family:var(--font-head); letter-spacing:1px;">LOT v3.6.8</div>
+  <div style="font-size:10px; margin-top:6px; opacity:0.5; font-family:var(--font-head); letter-spacing:1px;">LOT v3.7.0</div>
 </footer>
 
 
@@ -1904,7 +1984,7 @@ document.getElementById('photoGrid').addEventListener('pointerenter', () => {
   };
 })();
 
-console.log('%c LOT v3.6.8 ', 'background:#7DF9FF;color:#050810;font-weight:bold;border-radius:4px;padding:2px 8px;', '— yepzhi.com/lot');
+console.log('%c LOT v3.7.0 ', 'background:#1e208c;color:#fff;font-weight:bold;border-radius:4px;padding:2px 8px;', '— yepzhi.com/lot');
 </script>
 </body>
 </html>
