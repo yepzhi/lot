@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- LOT v3.7.4 — UI: Footer Contrast Final Polish (Solid Black Text) -->
+<!-- LOT v3.7.5 — UI: Seamless Black Gradient & Pill-Button Footer -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -79,7 +79,7 @@
 <link rel="alternate icon" href="favicon.svg">
 <script>window.NEOSYS_SITE_ID = 'lot';</script>
 <script src="/visitors/tracker.js"></script>
-<script src="lang.js?v=3.7.4"></script>
+<script src="lang.js?v=3.7.5"></script>
 <style>
 :root{
   --bg: #000;
@@ -108,7 +108,7 @@ body::before {
   height: 100%;
   pointer-events: none;
   z-index: 0;
-  background: linear-gradient(180deg, #050810 0%, #1e208c 40%, #4e8bbc 100%);
+  background: linear-gradient(180deg, #000 0%, #050810 20%, #1e208c 70%, #1e208c 100%);
   animation: bgPulse 15s ease-in-out infinite alternate;
 }
 @keyframes bgPulse {
@@ -520,8 +520,11 @@ input:-webkit-autofill:focus {
 .lb-dots{display:flex;gap:6px;justify-content:center;margin-top:8px}
 .lb-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.3);transition:background .2s}
 .lb-dot.active{background:#fff}
-footer{border-top:1px solid rgba(0,0,0,0.1);background:var(--accent);padding:40px 24px;text-align:center;font-size:12px;color:#000!important;font-weight:700;letter-spacing:0.5px;margin-top:auto}
-footer a{color:#000!important;text-decoration:underline;transition:opacity .2s;font-weight:800}
+footer{border-top:1px solid var(--glass-border);background:rgba(5,8,16,0.9);backdrop-filter:var(--blur);padding:60px 24px;text-align:center;font-size:12px;color:var(--muted);letter-spacing:0.5px;margin-top:auto}
+footer .f-pills{display:flex;justify-content:center;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+footer .f-pill{display:inline-flex;align-items:center;padding:8px 18px;border-radius:30px;background:var(--glass);border:1px solid var(--glass-border);color:var(--text);text-decoration:none;font-weight:600;font-size:11px;transition:all .2s;gap:6px}
+footer .f-pill:hover{background:var(--glass-hover);border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+footer .f-copy{opacity:0.4;font-size:11px}
 footer a:hover{opacity:0.7}
 @media(max-width:640px){
   .hero{padding:50px 0 30px}
@@ -602,8 +605,12 @@ footer a:hover{opacity:0.7}
 </div>
 
 <footer>
-  <div><span data-i18n="footer_text">© 2026, creado por yepzhi.com — Los anuncios son responsabilidad del publicante.</span> <a href="privacy.html" data-i18n="privacy">Aviso de privacidad</a>.</div>
-  <div style="font-size:10px; margin-top:6px; font-family:var(--font-head); letter-spacing:1px; color:#000; font-weight:800;">LOT v3.7.4</div>
+  <div class="f-pills">
+    <a href="https://yepzhi.com" class="f-pill"><span>🌐</span> yepzhi.com</a>
+    <a href="privacy.html" class="f-pill" data-i18n="privacy"><span>🛡️</span> Aviso de privacidad</a>
+    <div class="f-pill active" style="border-color:var(--accent2); color:var(--accent2)">V v3.7.5</div>
+  </div>
+  <div class="f-copy" data-i18n="footer_text">© 2026, creado por yepzhi.com — Los anuncios son responsabilidad del publicante.</div>
 </footer>
 
 
@@ -1986,7 +1993,7 @@ document.getElementById('photoGrid').addEventListener('pointerenter', () => {
   };
 })();
 
-console.log('%c LOT v3.7.4 ', 'background:#1e208c;color:#fff;font-weight:bold;border-radius:4px;padding:2px 8px;', '— yepzhi.com/lot');
+console.log('%c LOT v3.7.5 ', 'background:#1e208c;color:#fff;font-weight:bold;border-radius:4px;padding:2px 8px;', '— yepzhi.com/lot');
 </script>
 </body>
 </html>
