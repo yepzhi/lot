@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- LOT v3.5.6 — UI: Cache-bust, i18n Fixes & Double Emoji Removal -->
+<!-- LOT v3.6.0 — UI: Ultra-Dark Placeholders & Cache Synchronization -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -10,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <script>window.NEOSYS_SITE_ID = 'lot';</script>
 <script src="/visitors/tracker.js"></script>
-<script src="lang.js?v=3.5.9"></script>
+<script src="lang.js?v=3.6.0"></script>
 <style>
 :root{--bg:#000;--glass:rgba(255,255,255,0.05);--glass-border:rgba(255,255,255,0.08);--glass-hover:rgba(255,255,255,0.09);--accent:#7DF9FF;--accent2:#FF6BF8;--accent3:#FFD166;--text:#F0F4FF;--muted:rgba(240,244,255,0.4);--card-shadow:0 8px 32px rgba(0,0,0,0.45);--blur:blur(18px);--r:18px;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -326,7 +326,7 @@ input:-webkit-autofill:focus {
   font-weight: 300;
 }
 #myAdsPhone::placeholder, #postContact::placeholder {
-  color: #262626 !important;
+  color: #1a1a1a !important;
 }
 .currency-toggle {
   display: flex;
@@ -495,7 +495,7 @@ footer a:hover{color:var(--text)}
 
 <footer>
   <div><span data-i18n="footer_text">© 2026, creado por yepzhi.com — Los anuncios son responsabilidad del publicante.</span> <a href="privacy.html" data-i18n="privacy">Aviso de privacidad</a>.</div>
-  <div style="font-size:10px; margin-top:6px; opacity:0.5; font-family:var(--font-head); letter-spacing:1px;">LOT v3.5.9</div>
+  <div style="font-size:10px; margin-top:6px; opacity:0.5; font-family:var(--font-head); letter-spacing:1px;">LOT v3.6.0</div>
 </footer>
 
 
@@ -1839,7 +1839,7 @@ document.getElementById('photoGrid').addEventListener('pointerenter', () => {
   };
 })();
 
-console.log('%c LOT v3.5.9 ', 'background:#7DF9FF;color:#050810;font-weight:bold;border-radius:4px;padding:2px 8px;', '— yepzhi.com/lot');
+console.log('%c LOT v3.6.0 ', 'background:#7DF9FF;color:#050810;font-weight:bold;border-radius:4px;padding:2px 8px;', '— yepzhi.com/lot');
 </script>
 </body>
 </html>
