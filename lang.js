@@ -4,7 +4,7 @@ const i18n = {
     "btn_my_ads": "Mi Tienda",
     "hero_tag": "✦ Marketplace abierto para México & USA",
     "hero_title": "Compra. Vende.<br><em>Conecta.</em>",
-    "hero_desc": "Anuncios locales gratuitos. Los anuncios duran 6 meses.<br>Crea tu tienda y compártela gratis.",
+    "hero_desc": "Anuncios locales gratuitos. Los anuncios duran 6 meses.<br>Crea tu tienda y compártela gratis. Sin cuentas. Sin contraseñas. Solo tu número y listo.",
     "search_ph": "Busca carros, iphones, servicios…",
     "cat_all": "Todo",
     "cat_carros": "Carros",
@@ -39,17 +39,21 @@ const i18n = {
     // FAQ
     "faq_title": "Preguntas <em>Frecuentes</em>",
     "faq_q1": "¿Qué es LOT?",
-    "faq_a1": "LOT es un marketplace local diseñado para ser <strong>frictionless</strong>. Sin registros, sin contraseñas y sin intermediarios. Conectamos compradores con vendedores directamente vía WhatsApp.",
+    "faq_a1": "LOT es un marketplace local diseñado para ser simple y sin fricción. No necesitas crear cuentas ni recordar contraseñas. Publicas en minutos y automáticamente tienes tu propia tienda personal para compartir.",
     "faq_q2": "¿Cómo publico un anuncio?",
-    "faq_a2": "Haz clic en '+ Publicar', elige categoría, sube hasta 5 fotos y define un PIN de 4 dígitos. Tu número de WhatsApp servirá como tu identificador único.",
-    "faq_q3": "¿Para qué sirve el PIN?",
-    "faq_a3": "Es tu llave de seguridad. Como no usamos cuentas ni contraseñas, necesitarás este PIN para poder borrar tus anuncios manualmente antes de que expiren.",
-    "faq_q4": "¿Cómo comparto mi tienda?",
-    "faq_a4": "Entra en 'Mi Tienda', ingresa tu número y verás la lista de tus anuncios activos. Ahí encontrarás un botón para copiar el enlace único de tu perfil/tienda.",
-    "faq_q5": "¿Cuánto duran los anuncios?",
-    "faq_a5": "Todos los anuncios tienen una vigencia de 6 meses. Después de ese tiempo se eliminan automáticamente para mantener el marketplace fresco.",
-    "faq_q6": "¿Es gratis?",
-    "faq_a6": "Sí. Publicar en LOT es y siempre será gratuito. No cobramos comisiones por venta.",
+    "faq_a2": "Haz clic en “+ Publicar”, selecciona una categoría, sube hasta 5 fotos y define un PIN de 4 dígitos. Tu número de WhatsApp creará tu tienda personal y será tu identificador.",
+    "faq_q3": "¿Qué es mi tienda personal?",
+    "faq_a3": "Es tu espacio dentro de LOT donde se agrupan todos tus anuncios en un solo enlace. Puedes compartirlo y mostrar todo lo que vendes sin necesidad de una página web.",
+    "faq_q4": "¿Para qué sirve el PIN?",
+    "faq_a4": "El PIN es tu clave de seguridad. Te permite administrar o eliminar tus anuncios en cualquier momento, sin necesidad de una cuenta.",
+    "faq_q5": "¿Cómo administro mi tienda?",
+    "faq_a5": "Ve a “Mis anuncios”, ingresa tu número de WhatsApp y accede a tu tienda personal con todos tus anuncios activos. Desde ahí puedes eliminarlos o compartir tu enlace.",
+    "faq_q6": "¿Cómo comparto mi tienda?",
+    "faq_a6": "Dentro de “Mis anuncios” encontrarás tu enlace único. Ese enlace es tu tienda personal: compártelo por WhatsApp, redes sociales o donde quieras.",
+    "faq_q7": "¿Cuánto duran los anuncios?",
+    "faq_a7": "Cada anuncio permanece activo durante 6 meses. Tu tienda se actualiza automáticamente con los anuncios activos.",
+    "faq_q8": "¿Tiene costo publicar en LOT?",
+    "faq_a8": "No. Publicar en LOT y tener tu tienda personal es completamente gratis. No cobramos comisiones por venta.",
     // UI Controls
     "sort_recent": "Más recientes",
     "sort_asc": "Menor precio",
@@ -94,8 +98,22 @@ const i18n = {
     "btn_report": "🚩 Reportar contenido inapropiado",
     
     // my ads
-    "my_ads_title": "Mis <em>Anuncios</em>",
-    "my_ads_desc": "Ingresa el número con el que publicaste los anuncios para administrarlos. Ver y compartir tu tienda con solo tus anuncios.",
+    "my_ads_title": "Mis anuncios",
+    "my_ads_desc": `
+      <div style="text-align:left; gap:16px; display:flex; flex-direction:column;">
+        <p style="font-size:15px; font-weight:600; color:var(--text); margin:0;">Administra tu tienda personal de forma rápida y segura.</p>
+        <p style="font-size:13px; color:var(--muted); margin:0;">Ingresa el número de WhatsApp que usaste al publicar para acceder a todos tus anuncios en un solo lugar.</p>
+        <div style="margin-top:8px;">
+          <label style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:4px;">WhatsApp (10 dígitos)</label>
+          <p style="font-size:12px; color:var(--muted); margin:0;">Tu número es tu identificador único y crea automáticamente tu tienda personal con todos tus anuncios.</p>
+        </div>
+        <div style="padding:12px; border-radius:12px; background:rgba(125,249,255,0.05); border:1px solid rgba(125,249,255,0.1);">
+          <p style="font-size:13px; color:var(--text); margin-bottom:4px;">Tu tienda personal reúne todos tus anuncios en un solo enlace.</p>
+          <p style="font-size:13px; font-weight:600; color:var(--accent2); margin:0;">Compártelo fácilmente y vende más desde un solo lugar.</p>
+        </div>
+        <p style="font-size:13px; color:var(--muted); margin:0;">Accede en segundos, gestiona tus anuncios y comparte tu tienda con quien quieras.</p>
+      </div>
+    `,
     "btn_search_ads": "Buscar mis anuncios",
     "btn_delete": "X Borrar Anuncio",
     "btn_delete_pin": "Borrar",
@@ -110,7 +128,7 @@ const i18n = {
     "btn_my_ads": "My Store",
     "hero_tag": "✦ Open Marketplace for Mexico & USA",
     "hero_title": "Buy. Sell.<br><em>Connect.</em>",
-    "hero_desc": "Free local classifieds. Ads last for 6 months.<br>Create your store and share it for free.",
+    "hero_desc": "Free local classifieds. Ads last for 6 months.<br>Create your store and share it for free. No accounts. No passwords. Just your number and you're set.",
     "search_ph": "Search cars, iphones, services…",
     "cat_all": "All",
     "cat_carros": "Cars",
@@ -145,17 +163,21 @@ const i18n = {
     // FAQ
     "faq_title": "Frequently Asked <em>Questions</em>",
     "faq_q1": "What is LOT?",
-    "faq_a1": "LOT is a local marketplace designed to be <strong>frictionless</strong>. No registration, no passwords, and no middlemen. We connect buyers and sellers directly via WhatsApp.",
+    "faq_a1": "LOT is a local marketplace built to be simple and frictionless. No accounts, no passwords. Post in minutes and instantly get your own personal store to share.",
     "faq_q2": "How do I post an ad?",
-    "faq_a2": "Click '+ Post Ad', pick a category, upload up to 5 photos, and set a 4-digit PIN. Your WhatsApp number will serve as your unique identifier.",
-    "faq_q3": "What is the PIN for?",
-    "faq_a3": "It's your security key. Since we don't use accounts or passwords, you'll need this PIN to manually delete your ads before they expire.",
-    "faq_q4": "How do I share my store?",
-    "faq_a4": "Go to 'My Store', enter your number, and you'll see the list of your active ads. There you'll find a button to copy the unique link to your profile/store.",
-    "faq_q5": "How long do ads last?",
-    "faq_a5": "All ads are valid for 6 months. After that time, they are automatically deleted to keep the marketplace fresh.",
-    "faq_q6": "Is it free?",
-    "faq_a6": "Yes. Posting on LOT is and will always be free. We don't charge sales commissions.",
+    "faq_a2": "Click “+ Post Ad”, choose a category, upload up to 5 photos, and set a 4-digit PIN. Your WhatsApp number creates your personal store and works as your identifier.",
+    "faq_q3": "What is my personal store?",
+    "faq_a3": "It’s your space inside LOT where all your listings are grouped into one single link. You can share it and showcase everything you sell without needing a website.",
+    "faq_q4": "What is the PIN for?",
+    "faq_a4": "The PIN is your security key. It allows you to manage or delete your ads anytime, without needing an account.",
+    "faq_q5": "How do I manage my store?",
+    "faq_a5": "Go to “My Ads”, enter your WhatsApp number, and access your personal store with all your active listings. From there you can delete or share them.",
+    "faq_q6": "How do I share my store?",
+    "faq_a6": "Inside “My Ads” you’ll find your unique link. That link is your personal store — share it via WhatsApp, social media, or anywhere.",
+    "faq_q7": "How long do ads last?",
+    "faq_a7": "Each ad stays active for 6 months. Your store updates automatically with active listings.",
+    "faq_q8": "Is it free?",
+    "faq_a8": "Yes. Posting on LOT and having your personal store is completely free. We don’t charge any sales commissions.",
     // UI Controls
     "sort_recent": "Newest",
     "sort_asc": "Lowest price",
@@ -200,8 +222,22 @@ const i18n = {
     "btn_report": "🚩 Report inappropriate content",
     
     // my ads
-    "my_ads_title": "My <em>Ads</em>",
-    "my_ads_desc": "Enter the phone number you used to manage your listings. View and share your store with only your ads.",
+    "my_ads_title": "My ads",
+    "my_ads_desc": `
+      <div style="text-align:left; gap:16px; display:flex; flex-direction:column;">
+        <p style="font-size:15px; font-weight:600; color:var(--text); margin:0;">Manage your personal store quickly and securely.</p>
+        <p style="font-size:13px; color:var(--muted); margin:0;">Enter the WhatsApp number you used when posting to access all your ads in one place.</p>
+        <div style="margin-top:8px;">
+          <label style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:4px;">WhatsApp (10 digits)</label>
+          <p style="font-size:12px; color:var(--muted); margin:0;">Your number is your unique identifier and automatically creates your personal store with all your ads.</p>
+        </div>
+        <div style="padding:12px; border-radius:12px; background:rgba(125,249,255,0.05); border:1px solid rgba(125,249,255,0.1);">
+          <p style="font-size:13px; color:var(--text); margin-bottom:4px;">Your personal store brings all your ads together in a single link.</p>
+          <p style="font-size:13px; font-weight:600; color:var(--accent2); margin:0;">Share it easily and sell more from one place.</p>
+        </div>
+        <p style="font-size:13px; color:var(--muted); margin:0;">Access in seconds, manage your ads and share your store with anyone you want.</p>
+      </div>
+    `,
     "btn_search_ads": "Find my ads",
     "btn_delete": "X Delete Ad",
     "btn_delete_pin": "Delete",
