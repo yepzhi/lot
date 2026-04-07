@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- LOT v3.6.7 — UI: Secure Deployment Activation & History Purge -->
+<!-- LOT v3.6.8 — UI: Share Store Link Prominence & Cache Sync -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -25,7 +25,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <script>window.NEOSYS_SITE_ID = 'lot';</script>
 <script src="/visitors/tracker.js"></script>
-<script src="lang.js?v=3.6.7"></script>
+<script src="lang.js?v=3.6.8"></script>
 <style>
 :root{--bg:#000;--glass:rgba(255,255,255,0.05);--glass-border:rgba(255,255,255,0.08);--glass-hover:rgba(255,255,255,0.09);--accent:#7DF9FF;--accent2:#FF6BF8;--accent3:#FFD166;--text:#F0F4FF;--muted:rgba(240,244,255,0.4);--card-shadow:0 8px 32px rgba(0,0,0,0.45);--blur:blur(18px);--r:18px;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -376,23 +376,26 @@ input:-webkit-autofill:focus {
 }
 .btn-share-store {
   cursor: pointer;
-  color: var(--accent2);
-  margin-left: 10px;
-  font-size: 11px;
-  border: 1px solid rgba(255,107,248,0.3);
-  padding: 3px 10px;
-  border-radius: 12px;
-  background: rgba(255,107,248,0.05);
-  font-weight: 600;
-  transition: all 0.2s;
+  color: #fff;
+  margin-left: 14px;
+  font-size: 13px;
+  border: 1px solid var(--accent2);
+  padding: 6px 16px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(255,107,248,0.2) 0%, rgba(255,107,248,0.1) 100%);
+  font-weight: 700;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+  box-shadow: 0 4px 15px rgba(255,107,248,0.2);
 }
 .btn-share-store:hover {
-  background: rgba(255,107,248,0.15);
-  border-color: var(--accent2);
-  transform: scale(1.05);
+  background: linear-gradient(135deg, rgba(255,107,248,0.4) 0%, rgba(255,107,248,0.3) 100%);
+  border-color: #fff;
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(255,107,248,0.4);
+}
 }
 /* Content warning */
 .content-warning{background:rgba(255,100,100,.08);border:1px solid rgba(255,100,100,.25);border-radius:12px;padding:12px 16px;margin-top:24px;font-size:12px;color:rgba(255,180,180,.9);display:flex;gap:10px;align-items:flex-start;line-height:1.5}
@@ -513,7 +516,7 @@ footer a:hover{color:var(--text)}
 
 <footer>
   <div><span data-i18n="footer_text">© 2026, creado por yepzhi.com — Los anuncios son responsabilidad del publicante.</span> <a href="privacy.html" data-i18n="privacy">Aviso de privacidad</a>.</div>
-  <div style="font-size:10px; margin-top:6px; opacity:0.5; font-family:var(--font-head); letter-spacing:1px;">LOT v3.6.7</div>
+  <div style="font-size:10px; margin-top:6px; opacity:0.5; font-family:var(--font-head); letter-spacing:1px;">LOT v3.6.8</div>
 </footer>
 
 
@@ -1896,7 +1899,7 @@ document.getElementById('photoGrid').addEventListener('pointerenter', () => {
   };
 })();
 
-console.log('%c LOT v3.6.7 ', 'background:#7DF9FF;color:#050810;font-weight:bold;border-radius:4px;padding:2px 8px;', '— yepzhi.com/lot');
+console.log('%c LOT v3.6.8 ', 'background:#7DF9FF;color:#050810;font-weight:bold;border-radius:4px;padding:2px 8px;', '— yepzhi.com/lot');
 </script>
 </body>
 </html>
