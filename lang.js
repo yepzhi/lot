@@ -1,10 +1,10 @@
 const i18n = {
   es: {
     "btn_post": "+ Publicar",
-    "btn_my_ads": "Mis Anuncios",
+    "btn_my_ads": "Mi Tienda",
     "hero_tag": "✦ Marketplace abierto para México & USA",
     "hero_title": "Compra. Vende.<br><em>Conecta.</em>",
-    "hero_desc": "Anuncios locales gratuitos. Los anuncios duran 6 meses.",
+    "hero_desc": "Anuncios locales gratuitos. Los anuncios duran 6 meses.<br>Crea tu tienda y compártela gratis.",
     "search_ph": "Busca carros, iphones, servicios…",
     "cat_all": "Todo",
     "cat_carros": "Carros",
@@ -88,10 +88,10 @@ const i18n = {
   },
   en: {
     "btn_post": "+ Post Ad",
-    "btn_my_ads": "My Ads",
+    "btn_my_ads": "My Store",
     "hero_tag": "✦ Open Marketplace for Mexico & USA",
     "hero_title": "Buy. Sell.<br><em>Connect.</em>",
-    "hero_desc": "Free local classifieds. Ads last for 6 months.",
+    "hero_desc": "Free local classifieds. Ads last for 6 months.<br>Create your store and share it for free.",
     "search_ph": "Search cars, iphones, services…",
     "cat_all": "All",
     "cat_carros": "Cars",
