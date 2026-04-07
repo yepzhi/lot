@@ -1,9 +1,10 @@
-name: Deploy LOT to GitHub Pages
-
 on:
   push:
     branches:
       - main
+
+permissions:
+  contents: write
 
 jobs:
   build-and-deploy:
