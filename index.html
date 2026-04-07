@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- LOT v3.7.8 — UI: Deep Indigo Aesthetic & Footer Duplication Fix -->
+<!-- LOT v3.7.9 — UI: Full Brand Identity Sync (Cyan-Pink Neon) -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -79,7 +79,7 @@
 <link rel="alternate icon" href="favicon.svg">
 <script>window.NEOSYS_SITE_ID = 'lot';</script>
 <script src="/visitors/tracker.js"></script>
-<script src="lang.js?v=3.7.8"></script>
+<script src="lang.js?v=3.7.9"></script>
 <style>
 :root{
   --bg: #000;
@@ -108,7 +108,7 @@ body::before {
   height: 100%;
   pointer-events: none;
   z-index: 0;
-  background: linear-gradient(180deg, #000 0%, #000 12%, #14175e 45%, rgba(125,249,255,0.3) 80%, rgba(125,249,255,0.1) 100%);
+  background: linear-gradient(135deg, #000 0%, #050810 20%, #14175e 60%, rgba(125,249,255,0.2) 85%, rgba(255,107,248,0.1) 100%);
   animation: bgPulse 15s ease-in-out infinite alternate;
 }
 @keyframes bgPulse {
@@ -130,8 +130,8 @@ header{position:sticky;top:0;z-index:100;background:rgba(0,0,0,0.7);backdrop-fil
 .btn-post:hover{transform:scale(1.04);box-shadow:0 0 30px rgba(255,51,102,.5)}
 .hero{padding:40px 0 20px;text-align:center}
 .hero-tag{display:inline-block;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--accent);border:1px solid rgba(125,249,255,0.2);padding:4px 12px;border-radius:50px;background:rgba(125,249,255,0.05);margin-bottom:16px;animation:fadeUp .6s ease both}
-  .hero h1{font-family:var(--font-head);font-size:clamp(32px,6vw,56px);font-weight:800;line-height:1.2;letter-spacing:-0.5px;margin-bottom:12px;animation:fadeUp .6s .1s ease both}
-.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .hero h1{font-family:var(--font-head);font-size:clamp(32px,6vw,56px);font-weight:800;line-height:1.2;letter-spacing:-0.5px;margin-bottom:12px;animation:fadeUp .6s .1s ease both;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero h1 em{font-style:normal}
 .hero p{color:var(--muted);font-size:16px;line-height:1.5;margin-top:0;animation:fadeUp .6s .2s ease both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 .hero-search-wrap{margin:16px auto 0;max-width:500px;animation:fadeUp .6s .25s ease both}
@@ -603,7 +603,7 @@ footer a:hover{opacity:0.7}
 </div>
 
 <footer>
-  <span data-i18n="footer_text">© 2026, creado por <a href="https://yepzhi.com">yepzhi.com</a> — Los anuncios son responsabilidad del publicante.</span> <a href="privacy.html" data-i18n="privacy">Aviso de Privacidad</a>. v3.7.8
+  <span data-i18n="footer_text">© 2026, creado por <a href="https://yepzhi.com">yepzhi.com</a> — Los anuncios son responsabilidad del publicante.</span> <a href="privacy.html" data-i18n="privacy">Aviso de Privacidad</a>. v3.7.9
 </footer>
 
 
@@ -1986,7 +1986,7 @@ document.getElementById('photoGrid').addEventListener('pointerenter', () => {
   };
 })();
 
-console.log('%c LOT v3.7.8 ', 'background:#14175e;color:#fff;font-weight:bold;border-radius:4px;padding:2px 8px;', '— yepzhi.com/lot');
+console.log('%c LOT v3.7.9 ', 'background:linear-gradient(90deg,#7DF9FF,#FF6BF8);color:#000;font-weight:bold;border-radius:4px;padding:2px 8px;', '— yepzhi.com/lot');
 </script>
 </body>
 </html>
