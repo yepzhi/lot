@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- LOT v3.8.0 — UI: Enhanced Footer Visibility & Aesthetic Final Lock -->
+<!-- LOT v3.9.0 SP1 — UI: Enhanced Footer Visibility & Aesthetic Final Lock -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -79,7 +79,7 @@
 <link rel="alternate icon" href="favicon.svg">
 <script>window.NEOSYS_SITE_ID = 'lot';</script>
 <script src="/visitors/tracker.js"></script>
-<script src="lang.js?v=3.8.0"></script>
+<script src="lang.js?v=3.9.0-sp1"></script>
 <style>
 :root{
   --bg: #000;
@@ -487,23 +487,6 @@ input:-webkit-autofill:focus {
 
 .content-warning{background:rgba(255,100,100,.08);border:1px solid rgba(255,100,100,.25);border-radius:12px;padding:12px 16px;margin-top:24px;font-size:12px;color:rgba(255,180,180,.9);display:flex;gap:10px;align-items:flex-start;line-height:1.5}
 .content-warning strong{color:#FF6B6B}
-/* Detail */
-.detail-imgs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
-.detail-imgs img{border-radius:12px;object-fit:cover;aspect-ratio:4/3;cursor:pointer}
-.detail-imgs img:first-child:only-child{width:100%}
-.detail-imgs img:not(:only-child){width:calc(50% - 4px)}
-.detail-price{font-family:var(--font-head);font-size:32px;font-weight:800;color:var(--accent);margin-bottom:6px}
-.detail-title{font-size:20px;font-weight:600;margin-bottom:12px;line-height:1.3}
-.detail-desc{color:var(--muted);font-size:14px;line-height:1.7;margin-bottom:16px;white-space:pre-line}
-.detail-meta{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-bottom:20px}
-.detail-meta span{display:flex;align-items:center;gap:5px}
-.btn-contact{width:100%;padding:13px;background:linear-gradient(135deg,#25D366,#1da855);color:#fff;font-family:var(--font-head);font-weight:700;font-size:14px;border:none;border-radius:14px;cursor:pointer;transition:transform .15s,box-shadow .15s;letter-spacing:.3px;box-shadow:0 0 20px rgba(37,211,102,.3);margin-bottom:10px}
-.btn-contact:hover{transform:scale(1.01);box-shadow:0 0 28px rgba(37,211,102,.5)}
-.btn-share{width:100%;padding:11px;background:var(--glass);border:1px solid var(--glass-border);color:var(--text);font-family:var(--font-body);font-weight:500;font-size:13px;border-radius:14px;cursor:pointer;transition:border-color .2s;margin-bottom:10px}
-.btn-share:hover{border-color:var(--accent);color:var(--accent)}
-.btn-report{background:none;border:none;color:rgba(255,100,100,.5);font-size:11px;cursor:pointer;padding:6px 0;width:100%;text-align:center;transition:color .2s}
-.btn-report:hover{color:#FF6B6B}
-
 /* ─── LIGHTBOX ───────────────────────────────────────── */
 .lightbox{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.92);backdrop-filter:blur(12px);opacity:0;pointer-events:none;transition:opacity .2s}
 .lightbox.open{opacity:1;pointer-events:all}
@@ -603,7 +586,7 @@ footer a:hover{opacity:0.7}
 </div>
 
 <footer>
-  <span data-i18n="footer_text">© 2026, creado por <a href="https://yepzhi.com">yepzhi.com</a> — Los anuncios son responsabilidad del publicante.</span> <a href="privacy.html" data-i18n="privacy">Aviso de Privacidad</a>. v3.8.0
+  <span data-i18n="footer_text">© 2026, creado por <a href="https://yepzhi.com">yepzhi.com</a> — Los anuncios son responsabilidad del publicante.</span> <a href="privacy.html" data-i18n="privacy">Aviso de Privacidad</a>. v3.9.0 SP1
 </footer>
 
 
@@ -883,7 +866,7 @@ footer a:hover{opacity:0.7}
 
 <script>
 // ──────────────────────────────────────────────────────────────
-// LOT — yepzhi.com/lot · v3.6.3
+// LOT — yepzhi.com/lot · v3.9.0 SP1
 // Stack: Firebase Firestore + Cloudinary + NSFWJS
 // ──────────────────────────────────────────────────────────────
 
@@ -966,7 +949,10 @@ async function fetchExchangeRate() {
 fetchExchangeRate();
 
 function formatPrice(val, itemCurrency) {
-  if (val === 0) return i18n[currentLang]?.lbl_price?.includes('Free') ? 'Free' : 'Gratis';
+  if (val === 0) {
+    if (currentLang === 'en') return 'Free';
+    return i18n[currentLang]?.lbl_price_free || 'Gratis';
+  }
   
   let finalVal = val;
   let finalCurrency = getCurrency(); // USD if EN, MXN if ES
@@ -1092,8 +1078,21 @@ async function fetchMyAds() {
 async function deleteMyAd(id, pin) {
   if (!pin || pin.length < 4) return showToast('Requiere PIN de 4 dígitos', true);
   if (!confirm('¿Seguro que deseas eliminar este anuncio?')) return;
+  
   try {
-    await db.collection('listings').doc(id).update({
+    const docRef = db.collection('listings').doc(id);
+    const docSnap = await docRef.get();
+    
+    if (!docSnap.exists) {
+      return showToast('El anuncio ya no existe.', true);
+    }
+    
+    const data = docSnap.data();
+    if (data.pin !== pin) {
+      return showToast('PIN incorrecto. No se pudo eliminar.', true);
+    }
+
+    await docRef.update({
       status: 'deleted',
       deletePin: pin,
       deletedAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -1232,7 +1231,7 @@ async function handlePhoto(input, idx) {
   if (files.length > 1) {
     for (let i = 0; i < files.length; i++) {
       const targetIdx = idx + i;
-      if (targetIdx > 3) break; // Max 4 photos
+      if (targetIdx > 4) break; // Max 5 photos
       
       // Create a dummy input-like object for the specific file
       const singleFileInput = { files: [files[i]] };
@@ -1431,9 +1430,9 @@ async function submitPost() {
 }
 
 function resetForm() {
-  ['postCat','postTitle','postPrice','postCity','postDesc','postContact','postPin','postCurrency'].forEach(id => {
+  ['postCat','postTitle','postPrice','postCity','postDesc','postContact','postPin','postCurrency','postCountry'].forEach(id => {
     const el = document.getElementById(id);
-    if (el) el.value = id === 'postCurrency' ? 'MXN' : '';
+    if (el) el.value = id === 'postCurrency' ? 'MXN' : (id === 'postCountry' ? '52' : '');
   });
   // Reset currency toggle UI
   const toggle = document.querySelector('.currency-toggle');
@@ -1441,7 +1440,6 @@ function resetForm() {
     toggle.querySelectorAll('.curr-btn').forEach(b => b.classList.remove('active'));
     toggle.querySelector('.curr-btn[onclick*="MXN"]').classList.add('active');
   }
-  document.getElementById('photoGroup').style.display = 'block';
   photoBlobs.fill(null);
   document.querySelectorAll('.photo-slot').forEach(s => {
     s.classList.remove('has-img');
@@ -1736,21 +1734,32 @@ function openDetail(item) {
       ).join('')
     : '<div style="font-size:48px;padding:40px;text-align:center;color:var(--muted)">📷</div>';
 
+  // Fix XSS: Escape user-provided data before injecting into innerHTML
+  const _safeTitle = item.title.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const _safeCity  = (item.city || 'Hermosillo, MX').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const _safeDesc  = (item.desc || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
   document.getElementById('detailContent').innerHTML = `
     <div class="detail-imgs">${imgs}</div>
     <div class="detail-price">${priceStr}</div>
-    <div class="detail-title">${item.title}</div>
-    <div class="detail-desc">${(item.desc || '').replace(/</g,'&lt;')}</div>
+    <div class="detail-title">${_safeTitle}</div>
+    <div class="detail-desc">${_safeDesc}</div>
     <div class="detail-meta">
-      <span>📍 ${item.city || 'Hermosillo, MX'}</span>
+      <span>📍 ${_safeCity}</span>
       <span>📅 ${formatDateShort(item.createdAt)}</span>
       <span>🏷️ ${catLabel}</span>
       ${item.views > 0 ? `<span>👁 ${item.views}</span>` : ''}
     </div>
-    <button class="btn-contact" onclick="contactSeller('${item.contact}')">${i18n[currentLang]?.btn_contact || '💬 Contactar por WhatsApp'}</button>
-    <button class="btn-share" onclick="shareItem('${item.id}','${item.title.replace(/'/g,"\\'")}')">${i18n[currentLang]?.btn_share || '↗ Compartir anuncio'}</button>
-    <button class="btn-report" onclick="reportListing('${item.id}')">${i18n[currentLang]?.btn_report || '🚩 Reportar contenido inapropiado'}</button>
+    <button class="btn-contact" id="detailBtnContact">${i18n[currentLang]?.btn_contact || '💬 Contactar por WhatsApp'}</button>
+    <button class="btn-share" id="detailBtnShare">${i18n[currentLang]?.btn_share || '↗ Compartir anuncio'}</button>
+    <button class="btn-report" id="detailBtnReport">${i18n[currentLang]?.btn_report || '🚩 Reportar contenido inapropiado'}</button>
   `;
+
+  // Attach safe handlers via JS closures (no user data in direct HTML attributes)
+  const _contact = item.contact, _id = item.id, _title = item.title;
+  document.getElementById('detailBtnContact').onclick = () => contactSeller(_contact);
+  document.getElementById('detailBtnShare').onclick   = () => shareItem(_id, _title);
+  document.getElementById('detailBtnReport').onclick  = () => reportListing(_id);
 
   document.getElementById('detailOverlay').classList.add('open');
   history.replaceState(null, '', `?ad=${item.id}`);
@@ -1813,13 +1822,7 @@ function _lbRender() {
   next.disabled = _lbIdx === _lbImages.length - 1;
 }
 
-// Keyboard navigation
-document.addEventListener('keydown', e => {
-  if (!document.getElementById('lightbox').classList.contains('open')) return;
-  if (e.key === 'ArrowLeft')  lbNav(-1);
-  if (e.key === 'ArrowRight') lbNav(1);
-  if (e.key === 'Escape')     closeLightbox();
-});
+
 
 // Touch swipe support
 (function() {
@@ -1927,8 +1930,21 @@ document.getElementById('detailOverlay').onclick = e => { if(e.target.id==='deta
 
 // Keyboard
 document.addEventListener('keydown', e => {
+  // Global Shortcut
   if ((e.metaKey||e.ctrlKey) && e.key==='k') { e.preventDefault(); document.getElementById('searchInput').focus(); }
-  if (e.key==='Escape') { closeModal('postOverlay'); closeModal('detailOverlay'); }
+
+  // Overlays / Modals
+  if (e.key === 'Escape') { 
+    closeModal('postOverlay'); 
+    closeModal('detailOverlay'); 
+    if (document.getElementById('lightbox').classList.contains('open')) closeLightbox();
+  }
+
+  // Lightbox Nav
+  if (document.getElementById('lightbox').classList.contains('open')) {
+    if (e.key === 'ArrowLeft')  lbNav(-1);
+    if (e.key === 'ArrowRight') lbNav(1);
+  }
 });
 
 // ─── INIT ────────────────────────────────────────────────────
@@ -1955,7 +1971,7 @@ async function trackVisit() {
       city: geo.city,
       country: geo.country,
       country_code: geo.country_code,
-      createdAt: firebase.firestore.Timestamp.now(),
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       userAgent: navigator.userAgent
     });
   } catch(e) {}
@@ -1986,7 +2002,7 @@ document.getElementById('photoGrid').addEventListener('pointerenter', () => {
   };
 })();
 
-console.log('%c LOT v3.8.0 ', 'background:linear-gradient(90deg,#7DF9FF,#FF6BF8);color:#000;font-weight:bold;border-radius:4px;padding:2px 8px;', '— yepzhi.com/lot');
+console.log('%c LOT v3.9.0 SP1 ', 'background:linear-gradient(90deg,#7DF9FF,#FF6BF8);color:#000;font-weight:bold;border-radius:4px;padding:2px 8px;', '— yepzhi.com/lot');
 </script>
 </body>
 </html>
