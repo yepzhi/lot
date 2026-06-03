@@ -168,7 +168,7 @@ header{position:sticky;top:0;z-index:100;background:rgba(0,0,0,0.7);backdrop-fil
 .card:hover{transform:translateY(-4px);border-color:rgba(125,249,255,.3);box-shadow:var(--card-shadow),0 0 24px rgba(125,249,255,.1)}
 @keyframes cardIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 .card-img-wrap{position:relative;overflow:hidden}
-.card-img-wrap img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+.card-img-wrap img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;display:block}
 .card-img-placeholder{width:100%;aspect-ratio:4/3;background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;font-size:32px;color:rgba(255,255,255,.15)}
 .card-badge{position:absolute;top:10px;left:10px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:20px;backdrop-filter:var(--blur);color:#050810}
 .card-badge.cat-carros{background:var(--accent)}.card-badge.cat-casas{background:#A8FF78}.card-badge.cat-fiestas{background:var(--accent3)}.card-badge.cat-servicios{background:#80FFE8}.card-badge.cat-telefonos{background:#6B9FFF;color:#fff}.card-badge.cat-computacion{background:#FF8C42;color:#fff}.card-badge.cat-pantallas{background:#C8B6FF}.card-badge.cat-ropa{background:#FF6B9D;color:#fff}.card-badge.cat-zapatos{background:#FFF176}.card-badge.cat-otros{background:rgba(255,255,255,.2);color:#fff}
@@ -817,7 +817,7 @@ footer a:hover{opacity:0.7}
 <div class="overlay" id="postOverlay">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('postOverlay')">✕</button>
-    <h2 data-i18n="post_title_new">Nuevo <em>Anuncio</em></h2>
+    <h2 id="postModalTitle" data-i18n="post_title_new">Nuevo <em>Anuncio</em></h2>
 
 
 
@@ -959,10 +959,10 @@ footer a:hover{opacity:0.7}
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
             <span data-i18n="lbl_img_main">Principal</span>
           </div>
-          <div class="photo-slot" data-idx="1"><input type="file" accept="image/*" onchange="handlePhoto(this,1)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
-          <div class="photo-slot" data-idx="2"><input type="file" accept="image/*" onchange="handlePhoto(this,2)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
-          <div class="photo-slot" data-idx="3"><input type="file" accept="image/*" onchange="handlePhoto(this,3)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
-          <div class="photo-slot" data-idx="4"><input type="file" accept="image/*" onchange="handlePhoto(this,4)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+          <div class="photo-slot" data-idx="1"><input type="file" accept="image/*" multiple onchange="handlePhoto(this,1)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+          <div class="photo-slot" data-idx="2"><input type="file" accept="image/*" multiple onchange="handlePhoto(this,2)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+          <div class="photo-slot" data-idx="3"><input type="file" accept="image/*" multiple onchange="handlePhoto(this,3)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+          <div class="photo-slot" data-idx="4"><input type="file" accept="image/*" multiple onchange="handlePhoto(this,4)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
         </div>
         <div class="photo-hint">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
@@ -1222,7 +1222,18 @@ function daysLeft(expiresAtMs) {
 }
 
 function openModal(id) { document.getElementById(id).classList.add('open'); }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  if (id === 'postOverlay') {
+    // Reset view to form on close so next open is clean
+    setTimeout(() => {
+      document.getElementById('postForm').style.display = 'block';
+      document.getElementById('postSuccess').style.display = 'none';
+      const titleEl = document.getElementById('postModalTitle');
+      if (titleEl) titleEl.style.display = 'block';
+    }, 300);
+  }
+}
 function closeOnBg(e, id) { if (e.target.id === id) closeModal(id); }
 
 function formatPriceInput(input) {
@@ -1631,6 +1642,8 @@ async function submitPost() {
 
     // Show Success UI
     document.getElementById('postForm').style.display = 'none';
+    const titleEl = document.getElementById('postModalTitle');
+    if (titleEl) titleEl.style.display = 'none';
     const successDiv = document.getElementById('postSuccess');
     successDiv.style.display = 'block';
     
