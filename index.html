@@ -78,8 +78,8 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="alternate icon" href="favicon.svg">
 <script>window.NEOSYS_SITE_ID = 'lot';</script>
-<script src="/visitors/tracker.js"></script>
-<script src="lang.js?v=3.9.0-sp1"></script>
+<script defer src="/visitors/tracker.js"></script>
+<script defer src="lang.js?v=3.9.0-sp1"></script>
 <style>
 :root{
   --bg: #000;
@@ -528,6 +528,229 @@ footer a:hover{opacity:0.7}
 .checking-nsfw{position:absolute;inset:0;background:rgba(5,8,16,.7);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;color:var(--muted);gap:4px;z-index:3}
 .spinner{width:18px;height:18px;border:2px solid rgba(125,249,255,.2);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
+
+/* ─── DETAIL VIEW CONTROLS & PHOTO CAROUSEL ─────────────────── */
+.detail-viewer-wrap {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+}
+.detail-main-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4/3;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.detail-main-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: zoom-in;
+  transition: opacity 0.2s ease-in-out;
+}
+.detail-img-placeholder {
+  width: 100%;
+  aspect-ratio: 4/3;
+  background: rgba(255,255,255,.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  color: rgba(255,255,255,.15);
+  border-radius: var(--r);
+}
+.detail-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid var(--glass-border);
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, opacity 0.2s;
+  user-select: none;
+  z-index: 2;
+}
+.detail-arrow:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+.detail-arrow.detail-prev {
+  left: 12px;
+}
+.detail-arrow.detail-next {
+  right: 12px;
+}
+.detail-arrow[disabled] {
+  opacity: 0;
+  pointer-events: none;
+}
+.detail-img-counter {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-family: var(--font-head);
+  letter-spacing: 0.5px;
+}
+.detail-thumbnails {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+.detail-thumbnails::-webkit-scrollbar {
+  height: 4px;
+}
+.detail-thumbnails::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+}
+.detail-thumb {
+  width: 64px;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.15s;
+  opacity: 0.6;
+}
+.detail-thumb:hover {
+  opacity: 0.9;
+}
+.detail-thumb.active {
+  border-color: var(--accent);
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+/* ─── DETAIL FIELD STYLING ──────────────────────────────────── */
+.detail-price {
+  font-family: var(--font-head);
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--accent);
+  margin-top: 14px;
+  margin-bottom: 8px;
+}
+.detail-title {
+  font-family: var(--font-head);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+.detail-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(240, 244, 255, 0.85);
+  margin-bottom: 20px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.detail-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 11px;
+  color: var(--muted);
+  border-top: 1px solid var(--glass-border);
+  border-bottom: 1px solid var(--glass-border);
+  padding: 12px 2px;
+  margin-bottom: 20px;
+}
+.detail-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.btn-contact {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #25D366, #128C7E);
+  color: #fff;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 14px;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.25);
+  transition: transform .15s, box-shadow .15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-contact:hover {
+  transform: scale(1.01);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+}
+.btn-contact:active {
+  transform: scale(0.98);
+}
+.btn-share {
+  width: 100%;
+  padding: 12px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 13px;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: background .2s, border-color .2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.btn-share:hover {
+  background: var(--glass-hover);
+  border-color: var(--accent);
+}
+.btn-report {
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 100, 100, 0.6);
+  font-family: var(--font-body);
+  font-size: 11px;
+  cursor: pointer;
+  transition: color .2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+.btn-report:hover {
+  color: rgba(255, 100, 100, 1);
+}
 </style>
 </head>
 <body>
@@ -873,6 +1096,15 @@ footer a:hover{opacity:0.7}
 // ─── URL CLEANUP ─────────────────────────────────────────────
 if (location.pathname.endsWith('/index.html')) {
   history.replaceState(null, '', location.pathname.replace('/index.html', '/'));
+}
+
+// ─── CLOUDINARY UTILITY ──────────────────────────────────────
+function getCloudinaryUrl(url, transform) {
+  if (!url) return '';
+  if (url.includes('res.cloudinary.com')) {
+    return url.replace('/upload/', `/upload/${transform}/`);
+  }
+  return url;
 }
 
 // ─── CONFIG ──────────────────────────────────────────────────
@@ -1678,8 +1910,12 @@ function renderListings() {
     const expMsLeft = item.expiresAt?.toMillis?.() || Date.now();
     const expBadge = daysLeft(expMsLeft);
 
-    const imgEl = item.images?.[0]
-      ? `<img src="${item.images[0]}" alt="${item.title}" loading="lazy">`
+    const isFirstFew = i < 2;
+    const fetchPriorityAttr = isFirstFew ? 'fetchpriority="high"' : '';
+    const loadingAttr = isFirstFew ? 'loading="eager"' : 'loading="lazy"';
+    const imgUrl = item.images?.[0] ? getCloudinaryUrl(item.images[0], 'w_400,h_300,c_fill,q_auto,f_auto') : '';
+    const imgEl = imgUrl
+      ? `<img src="${imgUrl}" alt="${item.title}" ${fetchPriorityAttr} ${loadingAttr} width="400" height="300">`
       : `<div class="card-img-placeholder">📷</div>`;
 
     const dateShort = formatDateShort(item.createdAt);
@@ -1727,20 +1963,36 @@ function openDetail(item) {
 
   // Store images globally so onclick only needs a plain index (no JSON in HTML attr)
   _lbImages = item.images || [];
-
-  const imgs = _lbImages.length
-    ? _lbImages.map((url, idx) =>
-        `<img src="${url}" alt="" loading="lazy" style="cursor:zoom-in" onclick="openLightbox(${idx})">`
-      ).join('')
-    : '<div style="font-size:48px;padding:40px;text-align:center;color:var(--muted)">📷</div>';
+  _detailActiveIdx = 0;
 
   // Fix XSS: Escape user-provided data before injecting into innerHTML
   const _safeTitle = item.title.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   const _safeCity  = (item.city || 'Hermosillo, MX').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   const _safeDesc  = (item.desc || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
+  let viewerHtml = '';
+  if (_lbImages.length > 0) {
+    viewerHtml = `
+      <div class="detail-viewer-wrap">
+        <div class="detail-main-wrap">
+          <img id="detailMainImg" src="${getCloudinaryUrl(_lbImages[0], 'w_800,c_limit,q_auto,f_auto')}" alt="${_safeTitle}" class="detail-main-img" onclick="openLightbox(_detailActiveIdx)" width="800" height="600">
+          <button class="detail-arrow detail-prev" id="detailPrevBtn" onclick="detailNav(-1)" disabled>&#8592;</button>
+          <button class="detail-arrow detail-next" id="detailNextBtn" onclick="detailNav(1)" ${_lbImages.length <= 1 ? 'disabled' : ''}>&#8594;</button>
+          <div class="detail-img-counter" id="detailImgCounter">${_lbImages.length > 1 ? `1 / ${_lbImages.length}` : ''}</div>
+        </div>
+        <div class="detail-thumbnails" id="detailThumbnails">
+          ${_lbImages.length > 1 ? _lbImages.map((url, idx) => `
+            <img src="${getCloudinaryUrl(url, 'w_100,h_75,c_fill,q_auto,f_auto')}" alt="" class="detail-thumb ${idx === 0 ? 'active' : ''}" onclick="detailSetImg(${idx})" width="100" height="75">
+          `).join('') : ''}
+        </div>
+      </div>
+    `;
+  } else {
+    viewerHtml = `<div class="detail-img-placeholder">📷</div>`;
+  }
+
   document.getElementById('detailContent').innerHTML = `
-    <div class="detail-imgs">${imgs}</div>
+    ${viewerHtml}
     <div class="detail-price">${priceStr}</div>
     <div class="detail-title">${_safeTitle}</div>
     <div class="detail-desc">${_safeDesc}</div>
@@ -1785,10 +2037,11 @@ function contactSeller(c) {
   window.open(`https://wa.me/${wa}`, '_blank');
 }
 
-// ─── LIGHTBOX ───────────────────────────────────────────────
+// ─── LIGHTBOX & DETAIL SLIDER GLOBALS ───────────────────────
 // _lbImages is set in openDetail so onclick just passes the index
 let _lbImages = [];
 let _lbIdx = 0;
+let _detailActiveIdx = 0;
 
 function openLightbox(idx) {
   _lbIdx = idx;
@@ -1816,11 +2069,69 @@ function _lbRender() {
   const counter = document.getElementById('lbCounter');
   const prev = document.getElementById('lbPrev');
   const next = document.getElementById('lbNext');
-  img.src = _lbImages[_lbIdx];
+  img.src = getCloudinaryUrl(_lbImages[_lbIdx], 'q_auto,f_auto');
   counter.textContent = _lbImages.length > 1 ? `${_lbIdx + 1} / ${_lbImages.length}` : '';
   prev.disabled = _lbIdx === 0;
   next.disabled = _lbIdx === _lbImages.length - 1;
 }
+
+// ─── DETAIL MAIN IMAGE SLIDER FUNCTIONS ──────────────────────
+function detailSetImg(idx) {
+  if (idx < 0 || idx >= _lbImages.length) return;
+  _detailActiveIdx = idx;
+
+  const mainImg = document.getElementById('detailMainImg');
+  const counter = document.getElementById('detailImgCounter');
+  const prevBtn = document.getElementById('detailPrevBtn');
+  const nextBtn = document.getElementById('detailNextBtn');
+  
+  if (mainImg) {
+    mainImg.src = getCloudinaryUrl(_lbImages[_detailActiveIdx], 'w_800,c_limit,q_auto,f_auto');
+  }
+  
+  if (counter) {
+    counter.textContent = _lbImages.length > 1 ? `${_detailActiveIdx + 1} / ${_lbImages.length}` : '';
+  }
+  
+  if (prevBtn && nextBtn) {
+    prevBtn.disabled = _detailActiveIdx === 0;
+    nextBtn.disabled = _detailActiveIdx === _lbImages.length - 1;
+  }
+  
+  const thumbs = document.querySelectorAll('.detail-thumb');
+  thumbs.forEach((thumb, tIdx) => {
+    thumb.classList.toggle('active', tIdx === _detailActiveIdx);
+  });
+}
+
+function detailNav(dir) {
+  detailSetImg(_detailActiveIdx + dir);
+}
+
+// Detail Swipe support
+(function() {
+  let startX = 0;
+  const overlay = document.getElementById('detailOverlay');
+  overlay.addEventListener('touchstart', e => {
+    const wrap = e.target.closest('.detail-main-wrap');
+    if (wrap) {
+      startX = e.touches[0].clientX;
+    } else {
+      startX = 0;
+    }
+  }, { passive: true });
+  
+  overlay.addEventListener('touchend', e => {
+    if (startX === 0) return;
+    const wrap = e.target.closest('.detail-main-wrap');
+    if (!wrap) return;
+    
+    const dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 50) {
+      detailNav(dx < 0 ? 1 : -1);
+    }
+  }, { passive: true });
+})();
 
 
 
@@ -1913,10 +2224,14 @@ function reportGeneral() {
 }
 
 // ─── SEARCH ──────────────────────────────────────────────────
+let searchTimeout;
 document.getElementById('searchInput').addEventListener('input', e => {
   searchQ = e.target.value;
   activeCat = 'all'; otrosOpen = false;
-  renderAll();
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    renderAll();
+  }, 250);
 });
 
 // ─── OPEN POST ───────────────────────────────────────────────
@@ -1944,6 +2259,13 @@ document.addEventListener('keydown', e => {
   if (document.getElementById('lightbox').classList.contains('open')) {
     if (e.key === 'ArrowLeft')  lbNav(-1);
     if (e.key === 'ArrowRight') lbNav(1);
+  }
+
+  // Detail Overlay Arrow Nav (when lightbox is closed)
+  if (document.getElementById('detailOverlay').classList.contains('open') &&
+      !document.getElementById('lightbox').classList.contains('open')) {
+    if (e.key === 'ArrowLeft')  detailNav(-1);
+    if (e.key === 'ArrowRight') detailNav(1);
   }
 });
 
