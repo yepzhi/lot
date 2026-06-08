@@ -1159,6 +1159,7 @@ let activeSubCat = null;
 let _currentSort = 'recent';
 let _currentView = 'grid';
 let filterUser = null;
+let isOwnerView = false;
 const photoBlobs = [null, null, null, null, null];
 let nsfwModel = null;
 let nsfwLoading = false;
@@ -1307,6 +1308,7 @@ async function fetchMyAds() {
     
     // Switch to Store View
     filterUser = phone;
+    isOwnerView = true;
     closeModal('myAdsOverlay');
     renderAll();
     showToast('✦ Vista de Usuario Activada');
@@ -1739,6 +1741,7 @@ function checkDeepLink() {
 
 function clearUserFilter() {
   filterUser = null;
+  isOwnerView = false;
   // Clean URL without refresh
   const url = new URL(window.location);
   url.searchParams.delete('u');
@@ -1932,9 +1935,11 @@ function renderListings() {
 
     const dateShort = formatDateShort(item.createdAt);
 
-    // Management Button (only in Store View)
+    // Management Button (only in Store View for the owner or if locally owned)
     let manageBtn = '';
-    if (filterUser && item.phone === filterUser) {
+    const mySavedAds = JSON.parse(localStorage.getItem('lot_my_ads') || '{}');
+    const isLocalAd = mySavedAds[item.id] !== undefined;
+    if (isLocalAd || (filterUser && item.phone === filterUser && isOwnerView)) {
       manageBtn = `<button class="card-manage" onclick="event.stopPropagation(); manageAd('${item.id}', '${item.phone}')" style="position:absolute; top:40px; right:10px; background:rgba(255,51,102,0.9); color:white; border:none; padding:4px 8px; border-radius:8px; font-size:10px; font-weight:bold; cursor:pointer; z-index:5;">🗑️ Borrar</button>`;
     }
 
