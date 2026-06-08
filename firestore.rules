@@ -80,6 +80,6 @@ service cloud.firestore {
       && data.contact.matches('[0-9]{10,15}')
       && data.status == 'active'
       && data.images is list
-      && data.images.size() <= 4;
+      && data.images.size() <= 5;
   }
 }
